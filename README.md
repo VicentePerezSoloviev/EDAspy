@@ -28,7 +28,8 @@ EDA = EDAd(MAX_IT=200, DEAD_ITER=20, SIZE_GEN=30, ALPHA=0.7, vector=vector,
             cost_function=check_solution_in_model, aim='minimize')
 
 bestcost, solution, history = EDA.run(output=True)
-print(bestcost, solution)
+print(bestcost)
+print(solution)
 print(history)
 ```
 
@@ -65,7 +66,8 @@ vector.loc['max'] = 100
 EDA = EDAc(SIZE_GEN=40, MAX_ITER=200, DEAD_ITER=20, ALPHA=0.7, vector=vector, 
             aim='minimize', cost_function=cost_function)
 bestcost, params, history = EDA.run()
-print(bestcost, params)
+print(bestcost)
+print(params)
 print(history)
 ```
 
