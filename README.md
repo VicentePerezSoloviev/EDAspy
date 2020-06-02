@@ -118,4 +118,4 @@ R must be installed to use the multivariate EDA, with installed libraries c("bnl
 To manage R from python, rpy2 package must also be installed.
 
 #### Installing
-
+`pip install git+https://github.com/vicenteperezsoloviev/EDApy.git#egg=EDApy`
