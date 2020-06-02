@@ -64,7 +64,7 @@ vector.loc['max'] = 100
 
 EDA = EDAc(SIZE_GEN=40, MAX_ITER=200, DEAD_ITER=20, ALPHA=0.7, vector=vector, 
             aim='minimize', cost_function=cost_function)
-bestcost, params, history = EDAc.run()
+bestcost, params, history = EDA.run()
 print(bestcost, params)
 print(history)
 ```
