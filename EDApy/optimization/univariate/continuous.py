@@ -164,7 +164,7 @@ class UMDAc:
             mu, std = norm.fit(array)
 
             # std should never be 0
-            if std == 0:
+            if std < 1:
                 std = 1
 
             # update the vector probabilities

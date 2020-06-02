@@ -108,6 +108,7 @@ In this case, the output is the self class that can be saved as a pickle in orde
 from EDApy import print_structure
 print_structure(structure=structure, var2optimize=['param2', 'param3', 'param4'], evidences=['param1', 'param5'])
 ```
+
 ![Structure praph plot](/structure.PNG "Structure of the optimum generation found by the EDA")
 
 ## Getting started
