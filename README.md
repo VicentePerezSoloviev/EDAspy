@@ -14,7 +14,7 @@ Three EDAs have been implemented:
 #### Binary univariate EDA
 It can be used as a simple example of EDA, or to use it for feature selection. The cost function to optimize is the metric of the model. An example is shown.
 ```python
-from EDApy import EDA_discrete as EDAd
+from EDApy.optimization.univariate import EDA_discrete as EDAd
 import pandas as pd
 
 def check_solution_in_model(dictionary):
@@ -42,7 +42,7 @@ Vector probabilities are usually initialized to 0.5 to start from an equilibrium
 
 This EDA is used when some continuous parameters must be optimized. 
 ```python
-from EDApy import EDA_continuous as EDAc
+from EDApy.optimization.univariate import EDA_continuous as EDAc
 import pandas as pd
 import numpy as np
 
@@ -79,7 +79,7 @@ In this case, dependencies among the variables are considered and managed with a
 The optimizer will find the optimum values of the non-evidence-variables based on the value of the evidences. This is widely used in problems where dependencies among variables must be considered.
 
 ```python
-from EDApy import EDA_multivariate as EDAm
+from EDApy.optimization.multivariate import EDA_multivariate as EDAm
 import pandas as pd
 
 blacklist = pd.DataFrame(columns=['from', 'to'])
