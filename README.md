@@ -105,7 +105,7 @@ Due to the evidences, to help the structure learning algorithm to find the arcs,
 
 In this case, the output is the self class that can be saved as a pickle in order to explore the attributes. One of the attributes is the optimum structure of the optimum generation, from which the structure can be plotted and observe the dependencies among the variables. The function to plot the structure is the following:
 ```python
-from EDApy import print_structure
+from EDApy.optimization.multivariate import print_structure
 print_structure(structure=structure, var2optimize=['param2', 'param3', 'param4'], evidences=['param1', 'param5'])
 ```
 
