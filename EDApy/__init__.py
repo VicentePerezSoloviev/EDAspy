@@ -11,8 +11,9 @@ import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 from sklearn.cluster import KMeans
 
-from EDApy.optimization.multivariate.EDA_multivariate import EDAgbn as EDA_multivariate
-from EDApy.optimization.univariate.discrete import UMDAd as EDA_discrete
-from EDApy.optimization.univariate.continuous import UMDAc as EDA_continuous
+from .optimization.multivariate.EDA_multivariate import EDAgbn as EDA_multivariate
+from .optimization.univariate.discrete import UMDAd as EDA_discrete
+from .optimization.univariate.continuous import UMDAc as EDA_continuous
 
-from EDApy.optimization.multivariate.__BayesianNetwork import print_structure as print_structure
+from .optimization.multivariate.__BayesianNetwork import print_structure as print_structure
+
