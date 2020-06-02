@@ -2,17 +2,17 @@
 
 ## Description
 
-This is a package in which some Estimation of Distribution Algorithms (EDAs) are implemented. EDAs are a type of evolutionary algorithms. Depending on the type of EDA, dependencies among the variables can be considered.
+In this package some Estimation of Distribution Algorithms (EDAs) are implemented. EDAs are a type of evolutionary algorithms. Depending on the type of EDA, different dependencies among the variables can be considered.
 
-At the moment, three EDAs are implemented:
-* Binary univariate EDA. Can be used as a simple example of EDA, or to use as a feature selection.
+Three EDAs have been implemented:
+* Binary univariate EDA. It can be used as a simple example of EDA, or to use it for feature selection.
 * Continuous univariate EDA. 
 * Continuous multivariate EDA. 
 
 ## Examples
 
 #### Binary univariate EDA
-Can be used as a simple EDA or for feature selection. The cost function to optimize is the metric of the model to optimize. An example is shown.
+It can be used as a simple example of EDA, or to use it for feature selection. The cost function to optimize is the metric of the model. An example is shown.
 ```python
 from EDApy import EDA_discrete as EDAd
 import pandas as pd
@@ -32,11 +32,11 @@ print(bestcost, solution)
 print(history)
 ```
 
-The example is an implementation for feature selection (FS) for a prediction model (prediction_model). Being prediction_model a model which predicts depending on some variables. The prediction model, receives a dictionary with keys 'param_N' (N from 1 to number of parameters) and values 1 or 0 depending if variables should be included or not. The model returns a MAE which we intend to minimize.
+The example is an implementation for feature selection (FS) for a prediction model (prediction_model). prediction_model depends on some variables. The prediction model, receives a dictionary with keys 'param_N' (N from 1 to number of parameters) and values 1 or 0 depending if that variables should be included or not. The model returns a MAE which we intend to minimize.
 
-The EDA receives as input the maximum number of iterations, the number of iterations with no best global cost improvement, the generations size, the percentage of generations to select as best individuals, the initial vector of probabilities for each variables to being chosen, the cost functions to optimize, and the aim ('minimize' or 'maximize') of the optimizer.
+The EDA receives as input the maximum number of iterations, the number of iterations with no best global cost improvement, the generations size, the percentage of generations to select as best individuals, the initial vector of probabilities for each variable to be used, the cost functions to optimize, and the aim ('minimize' or 'maximize') of the optimizer.
 
-Vector probabilities is usually initialized to 0.5 to start from an equilibrium situation. EDA returns the best cost found, the best combination of variables, and the history os costs found, if wanted to be plotted.
+Vector probabilities are usually initialized to 0.5 to start from an equilibrium situation. EDA returns the best cost found, the best combination of variables, and the history os costs found to be plotted.
 
 #### Continuous univariate EDA
 
@@ -75,7 +75,7 @@ As in the binary EDA, the best cost found, the solution and the cost evolution i
 
 #### Continuous multivariate EDA
 
-In this case, dependencies among the variables are considered and managed with a Gaussian Bayesian Network. This EDA must be initialized with an historical in order to try to find the optimum based on it. A parameter (beta) is included to control the influence of the historic in the final solution. Some of the variables can be evidences (fixed values for which we want to find the optimum of the other variables). 
+In this case, dependencies among the variables are considered and managed with a Gaussian Bayesian Network. This EDA must be initialized with historical records in order to try to find the optimum result. A parameter (beta) is included to control the influence of the historical records in the final solution. Some of the variables can be evidences (fixed values for which we want to find the optimum of the other variables). 
 The optimizer will find the optimum values of the non-evidence-variables based on the value of the evidences. This is widely used in problems where dependencies among variables must be considered.
 
 ```python
@@ -103,7 +103,7 @@ This is the most complex EDA implemented. Bayesian networks are used to represen
 In this case the cost function is a simple sum of the parameters. The evidences are variables that have fixed values and are not optimized. In this problem, the output would be the optimum value of the parameters which are not in the evidences list.
 Due to the evidences, to help the structure learning algorithm to find the arcs, a clustering by the similar values is implemented. Thus, the number of clusters is an input, as well as the variables that are considered in the clustering.
 
-In this case, the output is the self class that can be saved as a pickle in order to explore the attributes. One of the attributes is the optimum structure of the optimum generation, from which the structure can be plotted and observe the dependencies among the variables. Function the plot the structure is the following:
+In this case, the output is the self class that can be saved as a pickle in order to explore the attributes. One of the attributes is the optimum structure of the optimum generation, from which the structure can be plotted and observe the dependencies among the variables. The function to plot the structure is the following:
 ```python
 from EDApy import print_structure
 print_structure(structure=structure, var2optimize=['param2', 'param3', 'param4'], evidences=['param1', 'param5'])
@@ -115,7 +115,7 @@ print_structure(structure=structure, var2optimize=['param2', 'param3', 'param4']
 
 #### Prerequisites
 R must be installed to use the multivariate EDA, with installed libraries c("bnlearn", "dbnR", "data.table")
-To manage R from python, rpy2 package must be also installed.
+To manage R from python, rpy2 package must also be installed.
 
 #### Installing
 
