@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from scipy.stats import norm
 
 '''
 In this version of UMDA, instead of a vector of probabilities, a vector of univariate normal distributions is found
@@ -160,7 +161,6 @@ class UMDAc:
             array = self.generation[var].values
 
             # calculate mu and std from data
-            from scipy.stats import norm
             mu, std = norm.fit(array)
 
             # std should never be 0
@@ -220,3 +220,4 @@ class UMDAc:
                 print('IT ', i, 'best cost ', best_mae_local)
 
         return self.best_mae_global, self.best_ind_global, self.history
+

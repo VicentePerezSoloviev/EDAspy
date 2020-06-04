@@ -5,26 +5,28 @@ import pandas as pd
 import rpy2.robjects.packages as rp
 import numpy as np
 
-from .__BayesianNetwork import learn_structure, calculate_fit
-from .__clustering import clustering
-from .__matrix import nearestPD, normalizacion, is_invertible
+from EDApy.optimization.multivariate.__BayesianNetwork import learn_structure, calculate_fit
+from EDApy.optimization.multivariate.__matrix import nearestPD, normalizacion, is_invertible
+from EDApy.optimization.multivariate.__clustering import clustering
 
 utils = rp.importr('utils')
 utils.chooseCRANmirror(ind=1)
-bnlearn_package = rp.importr("bnlearn")
+bnlearnPac = rp.importr("bnlearn")
 dbnRPac = rp.importr("dbnR")
 
 
 class EDAgbn:
-    # initializations
-    # structure = -1
+    generation = -1
 
-    # best_ind_global = -1
-    # best_cost_global = 999999999999
-    # best_structure = -1
-    # history = -1
-    # history_cost = []
-    # dispersion = []
+    historic_fit = -1
+    dt_aux = -1  # data with the clustering selection
+    structure = -1
+
+    best_ind_global = -1
+    best_cost_global = 999999999999
+    best_structure = -1
+    history = -1
+    history_cost = []
 
     def __init__(self, MAX_ITER, DEAD_ITER, data, ALPHA, BETA, cost_function,
                  evidences, black_list, n_clusters, cluster_vars):
@@ -56,6 +58,7 @@ class EDAgbn:
             raise Exception('ERROR setting cost function. Cost function must be callable')
 
         self.evidences = evidences
+        self.history = pd.DataFrame(columns=data.columns)
 
         # calculate historic fit
         self.historic_fit = calculate_fit(data, 'hc', black_list)
@@ -80,18 +83,7 @@ class EDAgbn:
             cluster.loc[index, 'COSTE'] = cost
         self.dt_aux = cluster.nsmallest(self.length, 'COSTE')  # assign cost to clustering selection
 
-        # initializations
-        self.__best_cost_global = 99999999999
-        self.__best_structure = -1
-        self.__history = pd.DataFrame(columns=data.columns)
-        self.__history_cost = []
-        self.__dispersion = []
-        self.__best_ind_global = -1
-
-        self.structure = -1
-
     def __initialize_data__(self):
-
         """
         Initialize the dataset. Assign a column cost to each individual
         :return: update initial generation
@@ -107,14 +99,13 @@ class EDAgbn:
             self.generation.loc[index, 'COSTE'] = cost
 
     def truncate(self):
-
         """
         Select the best individuals of the generation. In this case, not only the cost is considered. Also the
         likelihood of the individual in the initial generation. This influence is controlled by beta parameter
         :return: update generation
         """
 
-        likelihood_estimation = bnlearn_package.logLik_bn_fit
+        likelihood_estimation = bnlearnPac.logLik_bn_fit
         names = list(self.generation.columns)
         to_test = list(set(names) - {'COSTE'})
 
@@ -133,7 +124,6 @@ class EDAgbn:
         del self.generation['trun']
 
     def sampling_multivariate(self, fit):
-
         """
         Calculate the parameters mu and sigma to sample from a multivariate normal distribution.
         :param fit: bnfit object from R of the generation (structure and data)
@@ -141,7 +131,7 @@ class EDAgbn:
         normal distribution
         """
 
-        hierarchical_order = bnlearn_package.node_ordering(self.structure)
+        hierarchical_order = bnlearnPac.node_ordering(self.structure)
         mu_calc, sigma_calc = dbnRPac.calc_mu, dbnRPac.calc_sigma
 
         # mus array -> alphabetic order
@@ -224,16 +214,14 @@ class EDAgbn:
         return nodes2sample_hierarchical_order, mu_cond, mat_cov_inv_data_inv  # , densities
 
     def new_generation(self):
-
         """
         Build a new generation from the parameters calculated.
         :return: update the generation to the new group of individuals
         """
-
         valid_individuals = 0
-        hierarchical_order = bnlearn_package.node_ordering(self.structure)
+        hierarchical_order = bnlearnPac.node_ordering(self.structure)
 
-        bn_fit = bnlearn_package.bn_fit
+        bn_fit = bnlearnPac.bn_fit
         fit = bn_fit(self.structure, self.generation)
 
         nodes, mu, sigma = self.sampling_multivariate(fit)
@@ -286,13 +274,9 @@ class EDAgbn:
                     break
 
         self.generation = gen.copy()
-
-        from scipy.stats import norm
-        mu, sigma = norm.fit(media)
-        return mu, sigma
+        return sum(media)/len(media)
 
     def soft_restrictions(self, NOISE):
-
         """
         Add Gaussian noise to the evidence variables
         :param NOISE: std of the normal distribution from where noise is sampled
@@ -307,7 +291,6 @@ class EDAgbn:
             self.generation[i[0]] = s
 
     def __choose_best__(self):
-
         """
         Select the best individual of the generation
         :return: cost of the individual, and the individual
@@ -318,7 +301,6 @@ class EDAgbn:
         return minimum, best_ind_local
 
     def run(self, output=True):
-
         """
         Running method
         :param output: if desired to print the output of each individual. True to print output
@@ -330,7 +312,6 @@ class EDAgbn:
 
         for ITER in range(self.MAX_ITER):
             self.truncate()
-
             # soft the values of the evidences variables
             if ITER > 0:
                 self.soft_restrictions(0.01)
@@ -340,60 +321,31 @@ class EDAgbn:
                 self.structure = learn_structure(self.generation, 'hc', self.black_list)
 
             # print_structure(self.structure, self.variables2optimize, [row[0] for row in self.evidences])
-            mu, sigma = self.new_generation()
-            self.__dispersion.append([mu, sigma])  # info about dispersion among individuals in each iteration
+            self.new_generation()
             self.structure = learn_structure(self.generation, 'hc', self.black_list)
 
             # if there have not been found all individuals
             if len(self.generation) < len(self.data) / 2:
-                return self
+                return self.best_cost_global, self.best_ind_global, self.history
 
             # set local and update global best
             best_cost_local, best_ind_local = self.__choose_best__()
-            self.__history.append(best_ind_local, ignore_index=True)
-            self.__history_cost.append(best_cost_local)
+            self.history.append(best_ind_local, ignore_index=True)
+            self.history_cost.append(best_cost_local)
 
             # update the global cost, structure and best individual, if needed
-            if best_cost_local < self.__best_cost_global:
-                self.__best_cost_global = best_cost_local
-                self.__best_ind_global = best_ind_local
-                self.__best_structure = self.structure
+            if best_cost_local < self.best_cost_global:
+                self.best_cost_global = best_cost_local
+                self.best_ind_global = best_ind_local
+                self.best_structure = self.structure
                 dead_iter = 0
             else:
                 dead_iter = dead_iter + 1
                 if dead_iter == self.DEAD_ITER:
-                    return self
+                    return self.best_cost_global, self.best_ind_global, self.history
 
             if output:
                 print('ITER: ', ITER, 'dead: ', dead_iter,
                       'bestLocal: ', best_cost_local, 'bestGlobal: ', self.best_cost_global)
 
         return self
-
-    """
-    Getters of interesting attributes
-    """
-
-    @property
-    def best_cost_global(self):
-        return self.__best_cost_global
-
-    @property
-    def best_ind_global(self):
-        return self.__best_ind_global
-
-    @property
-    def best_structure(self):
-        return self.__best_structure
-
-    @property
-    def history(self):
-        return self.__history
-
-    @property
-    def history_cost(self):
-        return self.__history_cost
-
-    @property
-    def dispersion(self):
-        return self.__dispersion
