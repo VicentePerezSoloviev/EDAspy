@@ -11,3 +11,5 @@ if sys.version_info[0] < 3:
 import warnings
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
+
+from sklearn.cluster import KMeans
