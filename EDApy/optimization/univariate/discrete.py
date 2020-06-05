@@ -3,6 +3,31 @@ import pandas as pd
 
 
 class UMDAd:
+
+    """Univariate marginal Estimation of Distribution algorithm.
+    New individuals are sampled from a vector of univariate probabilities. It is a binary optimizer, than can be
+    used for example for feature selection.
+
+    :param SIZE_GEN: total size of the generations in the execution of the algorithm
+    :type SIZE_GEN: int
+    :param MAX_IT: total number of iterations in case that optimum is not yet found. If reached, the optimum found is returned
+    :type MAX_IT: int
+    :param DEAD_ITER: total number of iteration with no better solution found. If reached, the optimum found is returned
+    :type DEAD_ITER: int
+    :param ALPHA: percentage of the generation tu take, in order to sample from them. The best individuals selection
+    :type ALPHA: float [0-1]
+    :param vector: vector of normal distributions to sample from
+    :type vector: pandas dataframe with columns ['mu', 'std'] and optional ['max', 'min']
+    :param aim: 'minimize' or 'maximize'. Represents the optimization aim.
+    :type aim: string ['minimize' or 'maximize']
+    :param cost_function: cost function to minimize
+    :type cost_function: callable function which receives a dictionary as input and returns a numeric value
+
+    :raises Exception: cost function is not callable
+
+
+    """
+
     MAX_IT = -1
     DEAD_ITER = -1
     SIZE_GEN = -1
@@ -20,6 +45,9 @@ class UMDAd:
 
     # init function
     def __init__(self, MAX_IT, DEAD_ITER, SIZE_GEN, ALPHA, vector, cost_function, aim):
+        """Constructor of the optimizer class
+        """
+
         self.ALPHA = ALPHA
         self.SIZE_GEN = SIZE_GEN
         self.MAX_IT = MAX_IT
@@ -51,6 +79,12 @@ class UMDAd:
 
     # new individual
     def __new_individual__(self):
+        """Sample a new individual from the vector of probabilities.
+
+        :return: a dictionary with the new individual; with names of the parameters as keys and the values.
+        :rtype: dict
+        """
+
         num_vars = len(self.variables)
         sample = list(np.random.uniform(low=0, high=1, size=num_vars))
         individual = {}
@@ -65,6 +99,8 @@ class UMDAd:
 
     # new generation
     def new_generation(self):
+        """Build a new generation sampled from the vector of probabilities and updates the generation pandas dataframe
+        """
         gen = pd.DataFrame(columns=self.variables)
 
         while len(gen) < self.SIZE_GEN:
@@ -75,17 +111,30 @@ class UMDAd:
 
     # check the cost of each individual of the generation
     def __check_individual__(self, individual):
+        """Check the cost of the individual in the cost function
+        :param individual: dictionary with the parameters to optimize as keys and the value as values of the keys
+        :type individual: dict
+        :return: a cost evaluated in the cost function to optimize
+        """
+
         cost = self.cost_function(individual)
         return cost
 
     # check the cost of each individual of the generation
     def check_generation(self):
+        """Check the cost of each individual in the cost function implemented by the user
+        """
+
         for ind in range(len(self.generation)):
             cost = self.__check_individual__(self.generation.loc[ind])
             self.generation.loc[ind, 'cost'] = cost
 
     # selection of the best individuals to mutate the next gen
     def individuals_selection(self):
+        """Selection of the best individuals of the actual generation and updates the generation by selecting the best
+        individuals
+        """
+
         length = int(len(self.generation)*self.ALPHA)
         if self.aim == 'min':
             self.generation = self.generation.nsmallest(length, 'cost')
@@ -97,6 +146,10 @@ class UMDAd:
 
     # based on the best individuals of the selection, rebuild the prob vector
     def update_vector(self):
+        """From the best individuals update the vector of probabilities in order to the next generation can sample from
+         it and update the vector of probabilities
+        """
+
         for ind in self.variables:
             total = self.generation[ind].sum()
             prob = total / len(self.generation)
@@ -104,10 +157,11 @@ class UMDAd:
 
     # intern function to compare local cost with global one
     def __compare_costs__(self, local):
-        """
-        Check if the local best cost is better than the global one
+        """Check if the local best cost is better than the global one
         :param local: local best cost
+        :type local: float
         :return: True if is better, False if not
+        :rtype: bool
         """
 
         if self.aim == 'min':
@@ -117,6 +171,14 @@ class UMDAd:
 
     # run method
     def run(self, output=True):
+        """Run method to execute the EDA algorithm
+
+        :param output: True if wanted to print each iteration
+        :type output: bool
+        :return: best cost, best individual, history of costs along execution
+        :rtype: float, pandas dataframe, list
+        """
+
         dead_iter = 0
         for i in range(self.MAX_IT):
             self.new_generation()
