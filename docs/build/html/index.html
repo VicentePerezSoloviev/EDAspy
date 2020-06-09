@@ -63,8 +63,8 @@
 </div>
 <div class="section" id="documentation-for-the-code">
 <h2>Documentation for the code<a class="headerlink" href="#documentation-for-the-code" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="eda-multivariate">
-<h3>EDA multivariate<a class="headerlink" href="#eda-multivariate" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="eda-multivariate-with-evidences">
+<h3>EDA multivariate with evidences<a class="headerlink" href="#eda-multivariate-with-evidences" title="Permalink to this headline">¶</a></h3>
 <dl class="py attribute">
 <dt id="EDApy.optimization.multivariate.EDA_multivariate">
 <code class="sig-prename descclassname">EDApy.optimization.multivariate.</code><code class="sig-name descname">EDA_multivariate</code><a class="headerlink" href="#EDApy.optimization.multivariate.EDA_multivariate" title="Permalink to this definition">¶</a></dt>
@@ -233,6 +233,99 @@ of the best indiviudals.</p>
 <code class="sig-name descname">truncate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDApy/optimization/multivariate/EDA_multivariate.html#EDAgbn.truncate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#EDApy.optimization.multivariate.EDA_multivariate.EDAgbn.truncate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Select the best individuals of the generation. In this case, not only the cost is considered. Also the
 likelihood of the individual in the initial generation. This influence is controlled by beta parameter</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="eda-multivariate-with-no-evidences">
+<h3>EDA multivariate with no evidences<a class="headerlink" href="#eda-multivariate-with-no-evidences" title="Permalink to this headline">¶</a></h3>
+<dl class="py class">
+<dt id="EDApy.optimization.multivariate.EDA_multivariate_gaussian">
+<em class="property">class </em><code class="sig-prename descclassname">EDApy.optimization.multivariate.</code><code class="sig-name descname">EDA_multivariate_gaussian</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">SIZE_GEN</span></em>, <em class="sig-param"><span class="n">MAX_ITER</span></em>, <em class="sig-param"><span class="n">DEAD_ITER</span></em>, <em class="sig-param"><span class="n">ALPHA</span></em>, <em class="sig-param"><span class="n">aim</span></em>, <em class="sig-param"><span class="n">cost_function</span></em>, <em class="sig-param"><span class="n">mus</span></em>, <em class="sig-param"><span class="n">sigma</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDApy/optimization/multivariate/EDA_multivariate_gaussian.html#EDA_multivariate_gaussian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#EDApy.optimization.multivariate.EDA_multivariate_gaussian" title="Permalink to this definition">¶</a></dt>
+<dd><p>Multivariate Estimation of Distribution algorithm continuous.
+New individuals are sampled from a multivariate normal distribution. Evidences are not allowed</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>SIZE_GEN</strong> (<em>int</em>) – total size of the generations in the execution of the algorithm</p></li>
+<li><p><strong>MAX_ITER</strong> (<em>int</em>) – total number of iterations in case that optimum is not yet found. If reached, the optimum found is returned</p></li>
+<li><p><strong>DEAD_ITER</strong> (<em>int</em>) – total number of iteration with no better solution found. If reached, the optimum found is returned</p></li>
+<li><p><strong>ALPHA</strong> (<em>float</em><em> [</em><em>0-1</em><em>]</em>) – percentage of the generation tu take, in order to sample from them. The best individuals selection</p></li>
+<li><p><strong>aim</strong> (<em>'minimize'</em><em> or </em><em>'maximize'.</em>) – Represents the optimization aim.</p></li>
+<li><p><strong>cost_function</strong> (<em>callable function which receives a dictionary as input and returns a numeric</em>) – a callable function implemented by the user, to optimize.</p></li>
+<li><p><strong>mus</strong> (<em>pandas dataframe</em><em> (</em><em>one row</em><em>)</em>) – pandas dataframe with initial mus of the multivariate gaussian</p></li>
+<li><p><strong>sigma</strong> (<em>pandas dataframe</em><em> (</em><em>one row</em><em>)</em>) – pandas dataframe with the sigmas of the variable (diagonal of covariance matrix)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Exception</strong> – cost function is not callable</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="EDApy.optimization.multivariate.EDA_multivariate_gaussian.EDA_multivariate_gaussian">
+<em class="property">class </em><code class="sig-prename descclassname">EDApy.optimization.multivariate.EDA_multivariate_gaussian.</code><code class="sig-name descname">EDA_multivariate_gaussian</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">SIZE_GEN</span></em>, <em class="sig-param"><span class="n">MAX_ITER</span></em>, <em class="sig-param"><span class="n">DEAD_ITER</span></em>, <em class="sig-param"><span class="n">ALPHA</span></em>, <em class="sig-param"><span class="n">aim</span></em>, <em class="sig-param"><span class="n">cost_function</span></em>, <em class="sig-param"><span class="n">mus</span></em>, <em class="sig-param"><span class="n">sigma</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDApy/optimization/multivariate/EDA_multivariate_gaussian.html#EDA_multivariate_gaussian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#EDApy.optimization.multivariate.EDA_multivariate_gaussian.EDA_multivariate_gaussian" title="Permalink to this definition">¶</a></dt>
+<dd><p>Multivariate Estimation of Distribution algorithm continuous.
+New individuals are sampled from a multivariate normal distribution. Evidences are not allowed</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>SIZE_GEN</strong> (<em>int</em>) – total size of the generations in the execution of the algorithm</p></li>
+<li><p><strong>MAX_ITER</strong> (<em>int</em>) – total number of iterations in case that optimum is not yet found. If reached, the optimum found is returned</p></li>
+<li><p><strong>DEAD_ITER</strong> (<em>int</em>) – total number of iteration with no better solution found. If reached, the optimum found is returned</p></li>
+<li><p><strong>ALPHA</strong> (<em>float</em><em> [</em><em>0-1</em><em>]</em>) – percentage of the generation tu take, in order to sample from them. The best individuals selection</p></li>
+<li><p><strong>aim</strong> (<em>'minimize'</em><em> or </em><em>'maximize'.</em>) – Represents the optimization aim.</p></li>
+<li><p><strong>cost_function</strong> (<em>callable function which receives a dictionary as input and returns a numeric</em>) – a callable function implemented by the user, to optimize.</p></li>
+<li><p><strong>mus</strong> (<em>pandas dataframe</em><em> (</em><em>one row</em><em>)</em>) – pandas dataframe with initial mus of the multivariate gaussian</p></li>
+<li><p><strong>sigma</strong> (<em>pandas dataframe</em><em> (</em><em>one row</em><em>)</em>) – pandas dataframe with the sigmas of the variable (diagonal of covariance matrix)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Exception</strong> – cost function is not callable</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="EDApy.optimization.multivariate.EDA_multivariate_gaussian.EDA_multivariate_gaussian.check_generation">
+<code class="sig-name descname">check_generation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDApy/optimization/multivariate/EDA_multivariate_gaussian.html#EDA_multivariate_gaussian.check_generation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#EDApy.optimization.multivariate.EDA_multivariate_gaussian.EDA_multivariate_gaussian.check_generation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check the cost of each individual in the cost function implemented by the user</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="EDApy.optimization.multivariate.EDA_multivariate_gaussian.EDA_multivariate_gaussian.new_generation">
+<code class="sig-name descname">new_generation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDApy/optimization/multivariate/EDA_multivariate_gaussian.html#EDA_multivariate_gaussian.new_generation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#EDApy.optimization.multivariate.EDA_multivariate_gaussian.EDA_multivariate_gaussian.new_generation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a new generation sampled from the vector of probabilities. Updates the generation pandas dataframe</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="EDApy.optimization.multivariate.EDA_multivariate_gaussian.EDA_multivariate_gaussian.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">output</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDApy/optimization/multivariate/EDA_multivariate_gaussian.html#EDA_multivariate_gaussian.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#EDApy.optimization.multivariate.EDA_multivariate_gaussian.EDA_multivariate_gaussian.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run method to execute the EDA algorithm</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>output</strong> (<em>bool</em>) – True if wanted to print each iteration</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>best cost, best individual, history of costs along execution</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float, pandas dataframe, list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="EDApy.optimization.multivariate.EDA_multivariate_gaussian.EDA_multivariate_gaussian.truncation">
+<code class="sig-name descname">truncation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDApy/optimization/multivariate/EDA_multivariate_gaussian.html#EDA_multivariate_gaussian.truncation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#EDApy.optimization.multivariate.EDA_multivariate_gaussian.EDA_multivariate_gaussian.truncation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Selection of the best individuals of the actual generation. Updates the generation by selecting the best individuals</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="EDApy.optimization.multivariate.EDA_multivariate_gaussian.EDA_multivariate_gaussian.update_vector">
+<code class="sig-name descname">update_vector</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDApy/optimization/multivariate/EDA_multivariate_gaussian.html#EDA_multivariate_gaussian.update_vector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#EDApy.optimization.multivariate.EDA_multivariate_gaussian.EDA_multivariate_gaussian.update_vector" title="Permalink to this definition">¶</a></dt>
+<dd><p>From the best individuals update the vector of normal distributions in order to the next
+generation can sample from it. Update the vector of normal distributions</p>
 </dd></dl>
 
 </dd></dl>

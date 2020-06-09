@@ -42,10 +42,16 @@ To use both univariate EDAs there is no need to install R.
 Documentation for the code
 ##########################
 
-EDA multivariate
-****************
+EDA multivariate with evidences
+********************************
 .. autoclass:: EDApy.optimization.multivariate.EDA_multivariate
 .. autoclass:: EDApy.optimization.multivariate.EDA_multivariate.EDAgbn
+   :members:
+
+EDA multivariate with no evidences
+***********************************
+.. autoclass:: EDApy.optimization.multivariate.EDA_multivariate_gaussian
+.. autoclass:: EDApy.optimization.multivariate.EDA_multivariate_gaussian.EDA_multivariate_gaussian
    :members:
 
 EDA discrete
