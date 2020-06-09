@@ -113,6 +113,41 @@ print_structure(structure=structure, var2optimize=['param2', 'param3', 'param4']
 
 ![Structure praph plot](/structure.PNG "Structure of the optimum generation found by the EDA")
 
+#### Another Continuous multivariate EDA approach
+
+In this EDA approach, new individuals are sampled from a multivariate normal distribution. Evidences are not allowed in the optimizer. If desired, the previous approach should be used.
+The EDA is initialized, as in the univariate continuous EDA, with univariate mus and sigma for the variables. In the execution, a multivariate gaussian is built to sample from it. As it is multivariate, correlation among variables is considered.
+
+```python
+import pandas as pd
+from EDApy.optimization.multivariate import EDA_multivariate_gaussian as EDAmg
+
+
+def cost_function(dictionary):
+    suma = dictionary['param1'] + dictionary['param2']
+    if suma < 0:
+        return 999999999
+    return suma
+
+mus = pd.DataFrame(columns=['param1', 'param2'])
+mus.loc[0] = [10, 8]
+
+sigma = pd.DataFrame(columns=['param1', 'param2'])
+sigma.loc[0] = 5
+
+EDAmulti = EDAmg(SIZE_GEN=40, MAX_ITER=1000, DEAD_ITER=50, ALPHA=0.6, aim='minimize',
+                                     cost_function=cost_function, mus=mus, sigma=sigma)
+
+bestcost, params, history = EDAmulti.run(output=True)
+print(bestcost)
+print(params)
+print(history)
+```
+
+The cost function to optimize is the minimization of two parameter sum. Both parameters are continuous, and to be initialized two pandas dataframes are needed: one with mus and another with sigmas (diagonal of the covariance matrix)
+
+The EDA returns the best cost, the combination and the history of costs if wanted to be plotted.
+
 ## Getting started
 
 #### Prerequisites
