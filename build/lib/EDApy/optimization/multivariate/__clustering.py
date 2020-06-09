@@ -3,7 +3,6 @@
 
 import numpy as np
 import pandas as pd
-from sklearn.cluster import KMeans
 
 
 def clustering(n_clusters, dataset, evidences, cluster_vars):
@@ -15,6 +14,7 @@ def clustering(n_clusters, dataset, evidences, cluster_vars):
 
     values = list(dataset.index)
 
+    from sklearn.cluster import KMeans
     k_means = KMeans(n_clusters=n_clusters, random_state=0).fit(np.array(data).T)
     labels = list(k_means.labels_)
 

@@ -22,7 +22,7 @@ Description: # EDApy
         #### Binary univariate EDA
         It can be used as a simple example of EDA, or to use it for feature selection. The cost function to optimize is the metric of the model. An example is shown.
         ```python
-        from EDApy import EDA_discrete as EDAd
+        from EDApy.optimization.univariate import EDA_discrete as EDAd
         import pandas as pd
         
         def check_solution_in_model(dictionary):
@@ -36,7 +36,8 @@ Description: # EDApy
                     cost_function=check_solution_in_model, aim='minimize')
         
         bestcost, solution, history = EDA.run(output=True)
-        print(bestcost, solution)
+        print(bestcost)
+        print(solution)
         print(history)
         ```
         
@@ -50,7 +51,7 @@ Description: # EDApy
         
         This EDA is used when some continuous parameters must be optimized. 
         ```python
-        from EDApy import EDA_continuous as EDAc
+        from EDApy.optimization.univariate import EDA_continuous as EDAc
         import pandas as pd
         import numpy as np
         
@@ -72,8 +73,9 @@ Description: # EDApy
         
         EDA = EDAc(SIZE_GEN=40, MAX_ITER=200, DEAD_ITER=20, ALPHA=0.7, vector=vector, 
                     aim='minimize', cost_function=cost_function)
-        bestcost, params, history = EDAc.run()
-        print(bestcost, params)
+        bestcost, params, history = EDA.run()
+        print(bestcost)
+        print(params)
         print(history)
         ```
         
@@ -87,7 +89,7 @@ Description: # EDApy
         The optimizer will find the optimum values of the non-evidence-variables based on the value of the evidences. This is widely used in problems where dependencies among variables must be considered.
         
         ```python
-        from EDApy import EDA_multivariate as EDAm
+        from EDApy.optimization.multivariate import EDA_multivariate as EDAm
         import pandas as pd
         
         blacklist = pd.DataFrame(columns=['from', 'to'])
@@ -113,7 +115,7 @@ Description: # EDApy
         
         In this case, the output is the self class that can be saved as a pickle in order to explore the attributes. One of the attributes is the optimum structure of the optimum generation, from which the structure can be plotted and observe the dependencies among the variables. The function to plot the structure is the following:
         ```python
-        from EDApy import print_structure
+        from EDApy.optimization.multivariate import print_structure
         print_structure(structure=structure, var2optimize=['param2', 'param3', 'param4'], evidences=['param1', 'param5'])
         ```
         

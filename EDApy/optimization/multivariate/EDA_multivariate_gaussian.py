@@ -1,17 +1,11 @@
 import pandas as pd
 import numpy as np
 
-'''
-In this version of UMDA, instead of a vector of probabilities, a vector of univariate normal distributions is found
-When sampling, it is sampled from gaussian
-vector is a table with, columns as variables, and rows with mu, std, and optional max and min
-'''
 
+class EDA_multivariate_gaussian:
 
-class UMDAc:
-
-    """Univariate marginal Estimation of Distribution algorithm continuous.
-    New individuals are sampled from a vector of univariate normal distributions.
+    """Multivariate Estimation of Distribution algorithm continuous.
+    New individuals are sampled from a multivariate normal distribution. Evidences are not allowed
 
     :param SIZE_GEN: total size of the generations in the execution of the algorithm
     :type SIZE_GEN: int
@@ -21,12 +15,14 @@ class UMDAc:
     :type DEAD_ITER: int
     :param ALPHA: percentage of the generation tu take, in order to sample from them. The best individuals selection
     :type ALPHA: float [0-1]
-    :param vector: vector of normal distributions to sample from
-    :type vector: pandas dataframe with columns ['mu', 'std'] and optional ['min', 'max']
     :param aim: Represents the optimization aim.
     :type aim: 'minimize' or 'maximize'.
     :param cost_function: a callable function implemented by the user, to optimize.
     :type cost_function: callable function which receives a dictionary as input and returns a numeric
+    :param mus: pandas dataframe with initial mus of the multivariate gaussian
+    :type mus: pandas dataframe (one row)
+    :param sigma: pandas dataframe with the sigmas of the variable (diagonal of covariance matrix)
+    :type sigma: pandas dataframe (one row)
 
     :raises Exception: cost function is not callable
 
@@ -46,16 +42,15 @@ class UMDAc:
     cost_function = -1
     history = []
 
-    def __init__(self, SIZE_GEN, MAX_ITER, DEAD_ITER, ALPHA, vector, aim, cost_function):
+    def __init__(self, SIZE_GEN, MAX_ITER, DEAD_ITER, ALPHA, aim, cost_function, mus, sigma):
         """Constructor of the optimizer class
         """
 
         self.SIZE_GEN = SIZE_GEN
         self.MAX_ITER = MAX_ITER
         self.alpha = ALPHA
-        self.vector = vector
 
-        self.variables = list(vector.columns)
+        self.variables = list(sigma.columns)
 
         if aim == 'minimize':
             self.aim = 'min'
@@ -78,33 +73,33 @@ class UMDAc:
         else:
             self.DEAD_ITER = DEAD_ITER
 
+        # multivariate
+        self.mus = mus
+
+        sigma_data = pd.DataFrame(columns=mus.columns)
+        sigma_data['vars'] = list(sigma_data.columns)
+        sigma_data = sigma_data.set_index('vars')
+        for var in list(sigma_data.columns):
+            sigma_data.loc[var, var] = float(sigma[var])
+        sigma_data = sigma_data.fillna(0)
+
+        self.sigma = sigma_data
+
     # new individual
     def __new_individual__(self):
         """Sample a new individual from the vector of probabilities.
         :return: a dictionary with the new individual; with names of the parameters as keys and the values.
         :rtype: dict
         """
+        mus = self.mus.loc[0].values.tolist()
+        sigma = self.sigma.values.tolist()
 
+        rand = list(np.random.multivariate_normal(mus, sigma, 1)[0])
         dic = {}
-        for var in self.variables:
-            mu = int(self.vector.loc['mu', var])
-            std = int(self.vector.loc['std', var])
+        for i in range(len(rand)):
+            key = list(self.sigma.columns)[i]
+            dic[key] = rand[i]
 
-            # if exists min o max restriction
-            if 'max' in list(self.vector.index):
-                maximum = int(self.vector.loc['max', var])
-            else:
-                maximum = 999999999999
-            if 'min' in list(self.vector.index):
-                minimum = int(self.vector.loc['min', var])
-            else:
-                minimum = -999999999999
-
-            sample = np.random.normal(mu, std, 1)
-            while sample < minimum or sample > maximum:
-                sample = np.random.normal(mu, std, 1)
-
-            dic[var] = sample[0]
         return dic
 
     # build a generation of size SIZE_GEN from prob vector
@@ -165,20 +160,19 @@ class UMDAc:
         generation can sample from it. Update the vector of normal distributions
         """
 
+        # build covariance matrix from selection
+        self.variables = list(self.sigma.columns)
+        self.generation = self.generation.astype(float)
+        covariance_matrix = self.generation[self.variables].cov()  # covariance matrix
+        self.sigma = covariance_matrix.copy()
+
         for var in self.variables:
-            array = self.generation[var].values
+            # change mean
+            self.mus.loc[0, var] = float(self.generation[var].mean())
 
-            # calculate mu and std from data
-            from scipy.stats import norm
-            mu, std = norm.fit(array)
-
-            # std should never be 0
-            if std < 1:
-                std = 1
-
-            # update the vector probabilities
-            self.vector.loc['mu', var] = mu
-            self.vector.loc['std', var] = std
+            # check if sigma has decreased in off
+            if self.sigma.loc[var, var] <= 1:
+                self.sigma.loc[var, var] = 1
 
     # intern function to compare local cost with global one
     def __compare_costs__(self, local):
