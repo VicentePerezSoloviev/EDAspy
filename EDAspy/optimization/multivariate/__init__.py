@@ -22,6 +22,7 @@ def check_package(installed_pack, package):
     else:
         return False
 
+
 if sys.version_info[0] < 3:
     raise Exception("Python version should be greater than 3")
 
