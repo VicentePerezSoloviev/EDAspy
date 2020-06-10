@@ -1,0 +1,538 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>EDAspy.optimization.multivariate.EDA_multivariate &#8212; EDAspy 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for EDAspy.optimization.multivariate.EDA_multivariate</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># coding: utf-8</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">rpy2.robjects.packages</span> <span class="k">as</span> <span class="nn">rp</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">.__BayesianNetwork</span> <span class="kn">import</span> <span class="n">learn_structure</span><span class="p">,</span> <span class="n">calculate_fit</span>
+<span class="kn">from</span> <span class="nn">.__clustering</span> <span class="kn">import</span> <span class="n">clustering</span>
+<span class="kn">from</span> <span class="nn">.__matrix</span> <span class="kn">import</span> <span class="n">nearestPD</span><span class="p">,</span> <span class="n">normalizacion</span><span class="p">,</span> <span class="n">is_invertible</span>
+
+<span class="n">utils</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">importr</span><span class="p">(</span><span class="s1">&#39;utils&#39;</span><span class="p">)</span>
+<span class="n">utils</span><span class="o">.</span><span class="n">chooseCRANmirror</span><span class="p">(</span><span class="n">ind</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">bnlearn_package</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">importr</span><span class="p">(</span><span class="s2">&quot;bnlearn&quot;</span><span class="p">)</span>
+<span class="n">dbnRPac</span> <span class="o">=</span> <span class="n">rp</span><span class="o">.</span><span class="n">importr</span><span class="p">(</span><span class="s2">&quot;dbnR&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="EDAgbn"><a class="viewcode-back" href="../../../../index.html#EDAspy.optimization.multivariate.EDAgbn">[docs]</a><span class="k">class</span> <span class="nc">EDAgbn</span><span class="p">:</span>
+
+    <span class="sd">&quot;&quot;&quot;Multivariate Estimation of Distribution algorithm. Best individuals of each generation are selected and modelled</span>
+<span class="sd">    by a Gaussian Bayesian network, from where new individuals are sampled. Some of the variables might be evidences</span>
+<span class="sd">    (fixed values). The optimizer will find the optimum values of the non-evidences variables for those evidences.</span>
+<span class="sd">    Also it is possible to control de influence of the historic (from which EDA is initialized) in the selection</span>
+<span class="sd">    of the best indiviudals.</span>
+
+<span class="sd">    :param MAX_ITER: Maximum number of iterations of the algorithm</span>
+<span class="sd">    :type MAX_ITER: int</span>
+<span class="sd">    :param DEAD_ITER: Number of iterations with no best cost improvement, before stopping</span>
+<span class="sd">    :type DEAD_ITER: int</span>
+<span class="sd">    :param data: data of the historic</span>
+<span class="sd">    :type data: pandas dataframe</span>
+<span class="sd">    :param ALPHA: percentage of population to select in the truncation</span>
+<span class="sd">    :type ALPHA: float [0,1]</span>
+<span class="sd">    :param BETA: percentage of influence of the individual likelihood in the historic</span>
+<span class="sd">    :type BETA: float [0,1]</span>
+<span class="sd">    :param cost_function: cost function to minimize</span>
+<span class="sd">    :type cost_function: callable function which receives a dictionary as input and returns a numeric value</span>
+<span class="sd">    :param evidences: name of evidences variables, and fixed values.</span>
+<span class="sd">    :type evidences: two fold list. A list that contains list of size 2 with name of variable and value [name, value]</span>
+<span class="sd">    :param black_list: forbidden arcs in the structures</span>
+<span class="sd">    :type black_list: pandas dataframe with two columns (from, to)</span>
+<span class="sd">    :param n_clusters: number of clusters in which, the data can be grouped. The cluster is appended in each iteration</span>
+<span class="sd">    :type n_clusters: int</span>
+<span class="sd">    :param cluster_vars: list of names of variables to consider in the clustering</span>
+<span class="sd">    :type cluster_vars: list of strings</span>
+
+<span class="sd">    :raises Exception: cost function is not callable</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># initializations</span>
+    <span class="c1"># structure = -1</span>
+
+    <span class="c1"># best_ind_global = -1</span>
+    <span class="c1"># best_cost_global = 999999999999</span>
+    <span class="c1"># best_structure = -1</span>
+    <span class="c1"># history = -1</span>
+    <span class="c1"># history_cost = []</span>
+    <span class="c1"># dispersion = []</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">MAX_ITER</span><span class="p">,</span> <span class="n">DEAD_ITER</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">ALPHA</span><span class="p">,</span> <span class="n">BETA</span><span class="p">,</span> <span class="n">cost_function</span><span class="p">,</span>
+                 <span class="n">evidences</span><span class="p">,</span> <span class="n">black_list</span><span class="p">,</span> <span class="n">n_clusters</span><span class="p">,</span> <span class="n">cluster_vars</span><span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot;Constructor method</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">MAX_ITER</span> <span class="o">=</span> <span class="n">MAX_ITER</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">DEAD_ITER</span> <span class="o">=</span> <span class="n">DEAD_ITER</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">*</span> <span class="n">ALPHA</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">beta</span> <span class="o">=</span> <span class="n">BETA</span>
+
+        <span class="k">if</span> <span class="n">callable</span><span class="p">(</span><span class="n">cost_function</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cost_function</span> <span class="o">=</span> <span class="n">cost_function</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;ERROR setting cost function. Cost function must be callable&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">evidences</span> <span class="o">=</span> <span class="n">evidences</span>
+
+        <span class="c1"># calculate historic fit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">historic_fit</span> <span class="o">=</span> <span class="n">calculate_fit</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s1">&#39;hc&#39;</span><span class="p">,</span> <span class="n">black_list</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">black_list</span> <span class="o">=</span> <span class="n">black_list</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generation</span> <span class="o">=</span> <span class="n">data</span>
+
+        <span class="c1"># definition of the variables to optimize</span>
+        <span class="n">ev</span> <span class="o">=</span> <span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">evidences</span><span class="p">]</span>
+        <span class="n">columns</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">variables2optimize</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">columns</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">ev</span><span class="p">))</span>
+
+        <span class="c1"># clustering to soft restrictions</span>
+        <span class="n">cluster</span> <span class="o">=</span> <span class="n">clustering</span><span class="p">(</span><span class="n">n_clusters</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">evidences</span><span class="p">,</span> <span class="n">cluster_vars</span><span class="p">)</span>
+        <span class="c1"># add cost to clustering selection</span>
+        <span class="n">indexes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">cluster</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+        <span class="n">dic</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">indexes</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">variables2optimize</span><span class="p">:</span>
+                <span class="n">dic</span><span class="p">[</span><span class="n">var</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">cluster</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">index</span><span class="p">,</span> <span class="n">var</span><span class="p">])</span>
+
+            <span class="n">cost</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cost_function</span><span class="p">(</span><span class="n">dic</span><span class="p">)</span>
+            <span class="n">cluster</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">index</span><span class="p">,</span> <span class="s1">&#39;COSTE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cost</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt_aux</span> <span class="o">=</span> <span class="n">cluster</span><span class="o">.</span><span class="n">nsmallest</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">,</span> <span class="s1">&#39;COSTE&#39;</span><span class="p">)</span>  <span class="c1"># assign cost to clustering selection</span>
+
+        <span class="c1"># initializations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__best_cost_global</span> <span class="o">=</span> <span class="mi">99999999999</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__best_structure</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__history</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__history_cost</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__dispersion</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__best_ind_global</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">structure</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">__initialize_data__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot;Initialize the dataset. Assign a column cost to each individual</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">indexes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+        <span class="n">dic</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">indexes</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">variables2optimize</span><span class="p">:</span>
+                <span class="n">dic</span><span class="p">[</span><span class="n">var</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">index</span><span class="p">,</span> <span class="n">var</span><span class="p">])</span>
+
+            <span class="n">cost</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cost_function</span><span class="p">(</span><span class="n">dic</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">index</span><span class="p">,</span> <span class="s1">&#39;COSTE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cost</span>
+
+<div class="viewcode-block" id="EDAgbn.truncate"><a class="viewcode-back" href="../../../../index.html#EDAspy.optimization.multivariate.EDAgbn.truncate">[docs]</a>    <span class="k">def</span> <span class="nf">truncate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot;Select the best individuals of the generation. In this case, not only the cost is considered. Also the</span>
+<span class="sd">        likelihood of the individual in the initial generation. This influence is controlled by beta parameter</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">likelihood_estimation</span> <span class="o">=</span> <span class="n">bnlearn_package</span><span class="o">.</span><span class="n">logLik_bn_fit</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+        <span class="n">to_test</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">names</span><span class="p">)</span> <span class="o">-</span> <span class="p">{</span><span class="s1">&#39;COSTE&#39;</span><span class="p">})</span>
+
+        <span class="n">logs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="p">[</span><span class="n">to_test</span><span class="p">]</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+            <span class="n">log</span> <span class="o">=</span> <span class="n">likelihood_estimation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">historic_fit</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">row</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">logs</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">index</span><span class="p">,</span> <span class="n">log</span><span class="p">])</span>
+
+        <span class="n">maximo</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span><span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">logs</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">logs</span><span class="p">:</span>
+            <span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">maximo</span> <span class="o">-</span> <span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;COSTE&#39;</span><span class="p">])</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta</span> <span class="o">*</span> <span class="nb">abs</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;trun&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">generation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="o">.</span><span class="n">nsmallest</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">,</span> <span class="s1">&#39;trun&#39;</span><span class="p">)</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="p">[</span><span class="s1">&#39;trun&#39;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="EDAgbn.sampling_multivariate"><a class="viewcode-back" href="../../../../index.html#EDAspy.optimization.multivariate.EDAgbn.sampling_multivariate">[docs]</a>    <span class="k">def</span> <span class="nf">sampling_multivariate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fit</span><span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot;Calculate the parameters mu and sigma to sample from a multivariate normal distribution.</span>
+
+<span class="sd">        :param fit: bnfit object from R of the generation (structure and data)</span>
+<span class="sd">        :type fit: bnfit object from R</span>
+<span class="sd">        :return: name in order of the parameters returned. mu and sigma parameters of the multivariate normal distribution</span>
+<span class="sd">        :rtype: list, float, float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">hierarchical_order</span> <span class="o">=</span> <span class="n">bnlearn_package</span><span class="o">.</span><span class="n">node_ordering</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">structure</span><span class="p">)</span>
+        <span class="n">mu_calc</span><span class="p">,</span> <span class="n">sigma_calc</span> <span class="o">=</span> <span class="n">dbnRPac</span><span class="o">.</span><span class="n">calc_mu</span><span class="p">,</span> <span class="n">dbnRPac</span><span class="o">.</span><span class="n">calc_sigma</span>
+
+        <span class="c1"># mus array -&gt; alphabetic order</span>
+        <span class="n">mat_mus</span> <span class="o">=</span> <span class="n">mu_calc</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
+
+        <span class="c1"># covariance matrix hierarchical order</span>
+        <span class="n">cov</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">sigma_calc</span><span class="p">(</span><span class="n">fit</span><span class="p">))</span>
+        <span class="n">split</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">mat_mus</span><span class="p">)</span>
+        <span class="n">mat_cov</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cov</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">split</span><span class="p">,</span> <span class="n">split</span><span class="p">)</span>
+
+        <span class="c1"># change order of the columns and rows. Up-left must be variables and down right evidences</span>
+        <span class="n">sampled_nodes</span> <span class="o">=</span> <span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">evidences</span><span class="p">]</span>
+        <span class="n">sampled_value</span> <span class="o">=</span> <span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">evidences</span><span class="p">]</span>
+        <span class="n">nodes2sample</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">hierarchical_order</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">sampled_nodes</span><span class="p">))</span>
+
+        <span class="c1"># order evidences and variables to sample in order jerarquico</span>
+        <span class="n">nodes2sample_hierarchical_order</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">nodes_sampled_hierarchical_order</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">hierarchical_order</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">nodes2sample</span><span class="p">:</span>
+                <span class="n">nodes2sample_hierarchical_order</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">nodes_sampled_hierarchical_order</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+        <span class="n">mat_cov_order</span> <span class="o">=</span> <span class="n">nodes2sample_hierarchical_order</span> <span class="o">+</span> <span class="n">nodes_sampled_hierarchical_order</span>  <span class="c1"># desired order</span>
+        <span class="n">order</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">mat_cov_order</span><span class="p">:</span>
+            <span class="n">order</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hierarchical_order</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>  <span class="c1"># place of each order[] in hierarchical order</span>
+
+        <span class="c1"># covariance matrix</span>
+        <span class="n">mat_cov</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">hierarchical_order</span><span class="p">))),</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">mat_cov</span><span class="p">[</span><span class="n">order</span><span class="p">,</span> <span class="p">:]</span>  <span class="c1"># rows swap</span>
+        <span class="n">mat_cov</span><span class="p">[:,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">hierarchical_order</span><span class="p">)))]</span> <span class="o">=</span> <span class="n">mat_cov</span><span class="p">[:,</span> <span class="n">order</span><span class="p">]</span>  <span class="c1"># columns swap</span>
+        <span class="n">mat_cov_evid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">row</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">nodes2sample</span><span class="p">):]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">mat_cov</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">nodes2sample</span><span class="p">):]])</span>
+
+        <span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="kn">import</span> <span class="n">inv</span><span class="p">,</span> <span class="n">pinv</span>
+        <span class="k">if</span> <span class="n">is_invertible</span><span class="p">(</span><span class="n">mat_cov</span><span class="p">):</span>
+            <span class="n">mat_cov_inv</span> <span class="o">=</span> <span class="n">inv</span><span class="p">(</span><span class="n">mat_cov</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">mat_cov_inv</span> <span class="o">=</span> <span class="n">pinv</span><span class="p">(</span><span class="n">mat_cov</span><span class="p">,</span> <span class="n">hermitian</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">mat_cov_inv_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">row</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">nodes2sample</span><span class="p">)]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">mat_cov_inv</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">nodes2sample</span><span class="p">)]])</span>
+        <span class="n">sum_12</span> <span class="o">=</span> <span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">nodes2sample</span><span class="p">):]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">mat_cov</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">nodes2sample</span><span class="p">)]]</span>
+
+        <span class="n">orden_mat_mus</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">hierarchical_order</span><span class="p">)</span>  <span class="c1"># order hierarchical en order alphabetic</span>
+
+        <span class="n">mus</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># mus en order hierarchical</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">hierarchical_order</span><span class="p">:</span>  <span class="c1"># append in mus, mu calc of the position where is i</span>
+            <span class="n">mus</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mat_mus</span><span class="p">[</span><span class="n">orden_mat_mus</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">i</span><span class="p">)])</span>
+
+        <span class="n">values</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># sampled values in hierarchical order</span>
+        <span class="n">order_values</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">hierarchical_order</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">nodes2sample</span><span class="p">:</span>
+                <span class="n">order_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="n">values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sampled_value</span><span class="p">[</span><span class="n">sampled_nodes</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">i</span><span class="p">)])</span>
+
+        <span class="c1"># mus en order hierarchical</span>
+        <span class="n">mat_mus_data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">mat_mus_evid</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">hierarchical_order</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">nodes2sample</span><span class="p">:</span>
+                <span class="n">mat_mus_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mus</span><span class="p">[</span><span class="n">hierarchical_order</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">i</span><span class="p">)])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">mat_mus_evid</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mus</span><span class="p">[</span><span class="n">hierarchical_order</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">i</span><span class="p">)])</span>
+
+        <span class="c1"># FORMULAS MURPHY</span>
+        <span class="n">aux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">values</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mat_mus_evid</span><span class="p">))</span>
+        <span class="n">aux1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">sum_12</span><span class="p">,</span> <span class="n">pinv</span><span class="p">(</span><span class="n">mat_cov_evid</span><span class="p">))</span>
+        <span class="n">aux2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">aux1</span><span class="p">,</span> <span class="n">aux</span><span class="p">)</span>
+
+        <span class="n">mu_cond</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">mat_mus_data</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">aux2</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">is_invertible</span><span class="p">(</span><span class="n">mat_cov</span><span class="p">):</span>
+            <span class="n">mat_cov_inv_data_inv</span> <span class="o">=</span> <span class="n">inv</span><span class="p">(</span><span class="n">mat_cov_inv_data</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">mat_cov_inv_data_inv</span> <span class="o">=</span> <span class="n">pinv</span><span class="p">(</span><span class="n">mat_cov_inv_data</span><span class="p">,</span> <span class="n">hermitian</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">nodes2sample_hierarchical_order</span><span class="p">,</span> <span class="n">mu_cond</span><span class="p">,</span> <span class="n">mat_cov_inv_data_inv</span>  <span class="c1"># , densities</span></div>
+
+<div class="viewcode-block" id="EDAgbn.new_generation"><a class="viewcode-back" href="../../../../index.html#EDAspy.optimization.multivariate.EDAgbn.new_generation">[docs]</a>    <span class="k">def</span> <span class="nf">new_generation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot;Build a new generation from the parameters calculated and update the generation to the new group of individuals</span>
+
+<span class="sd">        :return: mean and sigma of the individuals costs of the generation</span>
+<span class="sd">        :rtype: float, float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">valid_individuals</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">hierarchical_order</span> <span class="o">=</span> <span class="n">bnlearn_package</span><span class="o">.</span><span class="n">node_ordering</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">structure</span><span class="p">)</span>
+
+        <span class="n">bn_fit</span> <span class="o">=</span> <span class="n">bnlearn_package</span><span class="o">.</span><span class="n">bn_fit</span>
+        <span class="n">fit</span> <span class="o">=</span> <span class="n">bn_fit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">structure</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="p">)</span>
+
+        <span class="n">nodes</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sampling_multivariate</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
+
+        <span class="c1"># precision errors solved</span>
+        <span class="n">sigma</span> <span class="o">=</span> <span class="n">nearestPD</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sigma</span><span class="p">))</span>
+        <span class="n">gen</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">hierarchical_order</span><span class="p">)</span>
+        <span class="n">media</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">while</span> <span class="n">valid_individuals</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">):</span>
+            <span class="n">sample</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="c1"># normalization</span>
+            <span class="n">cost_position</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;COSTE&#39;</span><span class="p">)</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">sample</span> <span class="k">if</span> <span class="nb">list</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="o">!=</span> <span class="n">cost_position</span><span class="p">]</span>
+            <span class="n">ind_</span> <span class="o">=</span> <span class="n">normalizacion</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+            <span class="n">ind</span> <span class="o">=</span> <span class="n">ind_</span><span class="p">[:</span><span class="n">cost_position</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">sample</span><span class="p">[</span><span class="n">cost_position</span><span class="p">]]</span> <span class="o">+</span> <span class="n">ind_</span><span class="p">[</span><span class="n">cost_position</span><span class="p">:]</span>
+
+            <span class="c1"># append the evidences</span>
+            <span class="n">individual</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evidences</span><span class="p">[:]</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ind</span><span class="p">)):</span>
+                <span class="n">individual</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">nodes</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">ind</span><span class="p">[</span><span class="n">j</span><span class="p">]])</span>
+
+            <span class="c1"># avoid solutions with the parameters under zero</span>
+            <span class="n">flag</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">individual</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">variables2optimize</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">j</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                            <span class="n">flag</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="c1"># if restrictions are correct</span>
+            <span class="k">if</span> <span class="n">flag</span><span class="p">:</span>
+                <span class="n">dic</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">individual</span><span class="p">:</span>
+                    <span class="n">aux</span> <span class="o">=</span> <span class="p">{</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]}</span>
+                    <span class="n">dic</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">aux</span><span class="p">)</span>
+
+                <span class="n">cost</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cost_function</span><span class="p">(</span><span class="n">dic</span><span class="p">)</span>
+                <span class="n">dic</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;COSTE&#39;</span><span class="p">:</span> <span class="n">cost</span><span class="p">})</span>
+                <span class="n">gen</span> <span class="o">=</span> <span class="n">gen</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+                <span class="n">valid_individuals</span> <span class="o">=</span> <span class="n">valid_individuals</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">media</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cost</span><span class="p">)</span>
+                <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">counter</span> <span class="o">=</span> <span class="n">counter</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">counter</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span> <span class="o">*</span> <span class="mi">10</span><span class="p">:</span>
+                    <span class="k">break</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">generation</span> <span class="o">=</span> <span class="n">gen</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">norm</span>
+        <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span> <span class="o">=</span> <span class="n">norm</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">media</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span></div>
+
+<div class="viewcode-block" id="EDAgbn.soft_restrictions"><a class="viewcode-back" href="../../../../index.html#EDAspy.optimization.multivariate.EDAgbn.soft_restrictions">[docs]</a>    <span class="k">def</span> <span class="nf">soft_restrictions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">NOISE</span><span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot;Add Gaussian noise to the evidence variables</span>
+
+<span class="sd">        :param NOISE: std of the normal distribution from where noise is sampled</span>
+<span class="sd">        :type NOISE: float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">number_samples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="p">)</span>
+
+        <span class="c1"># generate noise from a normal distribution</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">evidences</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">NOISE</span><span class="p">,</span> <span class="n">number_samples</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">s</span></div>
+
+    <span class="k">def</span> <span class="nf">__choose_best__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot;Select the best individual of the generation</span>
+<span class="sd">        :return: cost of the individual, and the individual</span>
+<span class="sd">        :rtype: float, pandas dataframe</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">minimum</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="p">[</span><span class="s1">&#39;COSTE&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+        <span class="n">best_ind_local</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="p">[</span><span class="s1">&#39;COSTE&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">minimum</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">minimum</span><span class="p">,</span> <span class="n">best_ind_local</span>
+
+<div class="viewcode-block" id="EDAgbn.run"><a class="viewcode-back" href="../../../../index.html#EDAspy.optimization.multivariate.EDAgbn.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Running method</span>
+<span class="sd">        :param output: if desired to print the output of each individual. True to print output</span>
+<span class="sd">        :type output: boolean</span>
+<span class="sd">        :return:the class is returned, in order to explore all the parameters</span>
+<span class="sd">        :rtype: self python class</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__initialize_data__</span><span class="p">()</span>
+        <span class="n">dead_iter</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">ITER</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">MAX_ITER</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">truncate</span><span class="p">()</span>
+
+            <span class="c1"># soft the values of the evidences variables</span>
+            <span class="k">if</span> <span class="n">ITER</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">soft_restrictions</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">generation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dt_aux</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># first iteration</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">structure</span> <span class="o">=</span> <span class="n">learn_structure</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="p">,</span> <span class="s1">&#39;hc&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">black_list</span><span class="p">)</span>
+
+            <span class="c1"># print_structure(self.structure, self.variables2optimize, [row[0] for row in self.evidences])</span>
+            <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_generation</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__dispersion</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">])</span>  <span class="c1"># info about dispersion among individuals in each iteration</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">structure</span> <span class="o">=</span> <span class="n">learn_structure</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="p">,</span> <span class="s1">&#39;hc&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">black_list</span><span class="p">)</span>
+
+            <span class="c1"># if there have not been found all individuals</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span>
+
+            <span class="c1"># set local and update global best</span>
+            <span class="n">best_cost_local</span><span class="p">,</span> <span class="n">best_ind_local</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__choose_best__</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">best_ind_local</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__history_cost</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">best_cost_local</span><span class="p">)</span>
+
+            <span class="c1"># update the global cost, structure and best individual, if needed</span>
+            <span class="k">if</span> <span class="n">best_cost_local</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">__best_cost_global</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__best_cost_global</span> <span class="o">=</span> <span class="n">best_cost_local</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__best_ind_global</span> <span class="o">=</span> <span class="n">best_ind_local</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__best_structure</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">structure</span>
+                <span class="n">dead_iter</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">dead_iter</span> <span class="o">=</span> <span class="n">dead_iter</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">dead_iter</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEAD_ITER</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="bp">self</span>
+
+            <span class="k">if</span> <span class="n">output</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ITER: &#39;</span><span class="p">,</span> <span class="n">ITER</span><span class="p">,</span> <span class="s1">&#39;dead: &#39;</span><span class="p">,</span> <span class="n">dead_iter</span><span class="p">,</span>
+                      <span class="s1">&#39;bestLocal: &#39;</span><span class="p">,</span> <span class="n">best_cost_local</span><span class="p">,</span> <span class="s1">&#39;bestGlobal: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_cost_global</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Getters of interesting attributes</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">best_cost_global</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: best cost found ever at the end of the execution</span>
+<span class="sd">        :rtype: float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__best_cost_global</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">best_ind_global</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: best individual found ever at the end of the execution</span>
+<span class="sd">        :rtype: pandas dataframe slice</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__best_ind_global</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">best_structure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: best generation structure found ever at the end of the execution</span>
+<span class="sd">        :rtype: bnlearn structure</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__best_structure</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">history</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: best individuals from all generations</span>
+<span class="sd">        :rtype: pandas dataframe</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__history</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">history_cost</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: list of best costs found along the execution</span>
+<span class="sd">        :rtype: list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__history_cost</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">dispersion</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: list of double tuples with mean and variance of each generation</span>
+<span class="sd">        :rtype: list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dispersion</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../index.html">EDAspy</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Vicente P. Soloviev.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

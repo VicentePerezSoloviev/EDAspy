@@ -151,10 +151,10 @@ The EDA returns the best cost, the combination and the history of costs if wante
 ## Getting started
 
 #### Prerequisites
-R must be installed to use the multivariate EDA, with installed libraries c("bnlearn", "dbnR", "data.table")
+R must be installed to use the multivariate EDA with Bayesian networks, with the following installed libraries: c("bnlearn", "dbnR", "data.table")
 To manage R from python, rpy2 package must also be installed.
 
 #### Installing
 ```
-pip install git+https://github.com/vicenteperezsoloviev/EDAspy.git#egg=EDApy
+pip install git+https://github.com/vicenteperezsoloviev/EDAspy.git#egg=EDAspy
 ```

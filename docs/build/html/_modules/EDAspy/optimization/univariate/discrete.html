@@ -1,0 +1,313 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>EDAspy.optimization.univariate.discrete &#8212; EDAspy 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for EDAspy.optimization.univariate.discrete</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+
+<div class="viewcode-block" id="UMDAd"><a class="viewcode-back" href="../../../../index.html#EDAspy.optimization.univariate.UMDAd">[docs]</a><span class="k">class</span> <span class="nc">UMDAd</span><span class="p">:</span>
+
+    <span class="sd">&quot;&quot;&quot;Univariate marginal Estimation of Distribution algorithm.</span>
+<span class="sd">    New individuals are sampled from a vector of univariate probabilities. It is a binary optimizer, than can be</span>
+<span class="sd">    used for example for feature selection.</span>
+
+<span class="sd">    :param SIZE_GEN: total size of the generations in the execution of the algorithm</span>
+<span class="sd">    :type SIZE_GEN: int</span>
+<span class="sd">    :param MAX_IT: total number of iterations in case that optimum is not yet found. If reached, the optimum found is returned</span>
+<span class="sd">    :type MAX_IT: int</span>
+<span class="sd">    :param DEAD_ITER: total number of iteration with no better solution found. If reached, the optimum found is returned</span>
+<span class="sd">    :type DEAD_ITER: int</span>
+<span class="sd">    :param ALPHA: percentage of the generation tu take, in order to sample from them. The best individuals selection</span>
+<span class="sd">    :type ALPHA: float [0-1]</span>
+<span class="sd">    :param vector: vector of normal distributions to sample from</span>
+<span class="sd">    :type vector: pandas dataframe with columns [&#39;mu&#39;, &#39;std&#39;] and optional [&#39;max&#39;, &#39;min&#39;]</span>
+<span class="sd">    :param aim: &#39;minimize&#39; or &#39;maximize&#39;. Represents the optimization aim.</span>
+<span class="sd">    :type aim: string [&#39;minimize&#39; or &#39;maximize&#39;]</span>
+<span class="sd">    :param cost_function: cost function to minimize</span>
+<span class="sd">    :type cost_function: callable function which receives a dictionary as input and returns a numeric value</span>
+
+<span class="sd">    :raises Exception: cost function is not callable</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">MAX_IT</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="n">DEAD_ITER</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="n">SIZE_GEN</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="n">ALPHA</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="n">vector</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">variables</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">cost_function</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="n">esc</span> <span class="o">=</span> <span class="mi">15</span>
+
+    <span class="n">history</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">generation</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="n">best_MAE_global</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="n">best_ind_global</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+    <span class="c1"># init function</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">MAX_IT</span><span class="p">,</span> <span class="n">DEAD_ITER</span><span class="p">,</span> <span class="n">SIZE_GEN</span><span class="p">,</span> <span class="n">ALPHA</span><span class="p">,</span> <span class="n">vector</span><span class="p">,</span> <span class="n">cost_function</span><span class="p">,</span> <span class="n">aim</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Constructor of the optimizer class</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ALPHA</span> <span class="o">=</span> <span class="n">ALPHA</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SIZE_GEN</span> <span class="o">=</span> <span class="n">SIZE_GEN</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">MAX_IT</span> <span class="o">=</span> <span class="n">MAX_IT</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">vector</span> <span class="o">=</span> <span class="n">vector</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">variables</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">vector</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+
+        <span class="c1"># check if cost_function is real</span>
+        <span class="k">if</span> <span class="n">callable</span><span class="p">(</span><span class="n">cost_function</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cost_function</span> <span class="o">=</span> <span class="n">cost_function</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;ERROR setting cost function. The cost function must be a callable function&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">aim</span> <span class="o">==</span> <span class="s1">&#39;minimize&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">aim</span> <span class="o">=</span> <span class="s1">&#39;min&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">best_MAE_global</span> <span class="o">=</span> <span class="mi">9999999999</span>
+        <span class="k">elif</span> <span class="n">aim</span> <span class="o">==</span> <span class="s1">&#39;maximize&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">aim</span> <span class="o">=</span> <span class="s1">&#39;max&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">best_MAE_global</span> <span class="o">=</span> <span class="o">-</span><span class="mi">9999999999</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;ERROR when setting aim of optimizer. Only &quot;minimize&quot; or &quot;maximize&quot; is possible&#39;</span><span class="p">)</span>
+
+        <span class="c1"># self.DEAD_ITER must be fewer than MAX_ITER</span>
+        <span class="k">if</span> <span class="n">DEAD_ITER</span> <span class="o">&gt;=</span> <span class="n">MAX_IT</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                <span class="s1">&#39;ERROR setting DEAD_ITER. The dead iterations must be fewer than the maximum iterations&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">DEAD_ITER</span> <span class="o">=</span> <span class="n">DEAD_ITER</span>
+
+    <span class="c1"># new individual</span>
+    <span class="k">def</span> <span class="nf">__new_individual__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sample a new individual from the vector of probabilities.</span>
+
+<span class="sd">        :return: a dictionary with the new individual; with names of the parameters as keys and the values.</span>
+<span class="sd">        :rtype: dict</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">num_vars</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">)</span>
+        <span class="n">sample</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">num_vars</span><span class="p">))</span>
+        <span class="n">individual</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vector</span><span class="p">[</span><span class="n">ind</span><span class="p">])</span> <span class="o">&gt;=</span> <span class="n">sample</span><span class="p">[</span><span class="n">index</span><span class="p">]:</span>
+                <span class="n">individual</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">individual</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">individual</span>
+
+    <span class="c1"># new generation</span>
+<div class="viewcode-block" id="UMDAd.new_generation"><a class="viewcode-back" href="../../../../index.html#EDAspy.optimization.univariate.UMDAd.new_generation">[docs]</a>    <span class="k">def</span> <span class="nf">new_generation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Build a new generation sampled from the vector of probabilities and updates the generation pandas dataframe</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">gen</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">)</span>
+
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">gen</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">SIZE_GEN</span><span class="p">:</span>
+            <span class="n">individual</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__new_individual__</span><span class="p">()</span>
+            <span class="n">gen</span> <span class="o">=</span> <span class="n">gen</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">individual</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">generation</span> <span class="o">=</span> <span class="n">gen</span></div>
+
+    <span class="c1"># check the cost of each individual of the generation</span>
+    <span class="k">def</span> <span class="nf">__check_individual__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">individual</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Check the cost of the individual in the cost function</span>
+<span class="sd">        :param individual: dictionary with the parameters to optimize as keys and the value as values of the keys</span>
+<span class="sd">        :type individual: dict</span>
+<span class="sd">        :return: a cost evaluated in the cost function to optimize</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">cost</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cost_function</span><span class="p">(</span><span class="n">individual</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cost</span>
+
+    <span class="c1"># check the cost of each individual of the generation</span>
+<div class="viewcode-block" id="UMDAd.check_generation"><a class="viewcode-back" href="../../../../index.html#EDAspy.optimization.univariate.UMDAd.check_generation">[docs]</a>    <span class="k">def</span> <span class="nf">check_generation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Check the cost of each individual in the cost function implemented by the user</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="p">)):</span>
+            <span class="n">cost</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__check_individual__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">ind</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">ind</span><span class="p">,</span> <span class="s1">&#39;cost&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cost</span></div>
+
+    <span class="c1"># selection of the best individuals to mutate the next gen</span>
+<div class="viewcode-block" id="UMDAd.individuals_selection"><a class="viewcode-back" href="../../../../index.html#EDAspy.optimization.univariate.UMDAd.individuals_selection">[docs]</a>    <span class="k">def</span> <span class="nf">individuals_selection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Selection of the best individuals of the actual generation and updates the generation by selecting the best</span>
+<span class="sd">        individuals</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">length</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">ALPHA</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">aim</span> <span class="o">==</span> <span class="s1">&#39;min&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">generation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="o">.</span><span class="n">nsmallest</span><span class="p">(</span><span class="n">length</span><span class="p">,</span> <span class="s1">&#39;cost&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">generation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="o">.</span><span class="n">nlargest</span><span class="p">(</span><span class="n">length</span><span class="p">,</span> <span class="s1">&#39;cost&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">generation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="p">[</span><span class="s1">&#39;index&#39;</span><span class="p">]</span></div>
+
+    <span class="c1"># based on the best individuals of the selection, rebuild the prob vector</span>
+<div class="viewcode-block" id="UMDAd.update_vector"><a class="viewcode-back" href="../../../../index.html#EDAspy.optimization.univariate.UMDAd.update_vector">[docs]</a>    <span class="k">def</span> <span class="nf">update_vector</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;From the best individuals update the vector of probabilities in order to the next generation can sample from</span>
+<span class="sd">         it and update the vector of probabilities</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">:</span>
+            <span class="n">total</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            <span class="n">prob</span> <span class="o">=</span> <span class="n">total</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vector</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span> <span class="o">=</span> <span class="n">prob</span></div>
+
+    <span class="c1"># intern function to compare local cost with global one</span>
+    <span class="k">def</span> <span class="nf">__compare_costs__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">local</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Check if the local best cost is better than the global one</span>
+<span class="sd">        :param local: local best cost</span>
+<span class="sd">        :type local: float</span>
+<span class="sd">        :return: True if is better, False if not</span>
+<span class="sd">        :rtype: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">aim</span> <span class="o">==</span> <span class="s1">&#39;min&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">local</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_MAE_global</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">local</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_MAE_global</span>
+
+    <span class="c1"># run method</span>
+<div class="viewcode-block" id="UMDAd.run"><a class="viewcode-back" href="../../../../index.html#EDAspy.optimization.univariate.UMDAd.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Run method to execute the EDA algorithm</span>
+
+<span class="sd">        :param output: True if wanted to print each iteration</span>
+<span class="sd">        :type output: bool</span>
+<span class="sd">        :return: best cost, best individual, history of costs along execution</span>
+<span class="sd">        :rtype: float, pandas dataframe, list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">dead_iter</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">MAX_IT</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">new_generation</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">check_generation</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">individuals_selection</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_vector</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">aim</span> <span class="o">==</span> <span class="s1">&#39;min&#39;</span><span class="p">:</span>
+                <span class="n">best_mae_local</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="p">[</span><span class="s1">&#39;cost&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">best_mae_local</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="p">[</span><span class="s1">&#39;cost&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">best_mae_local</span><span class="p">)</span>
+            <span class="n">best_ind_local</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">best</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="p">[</span><span class="s1">&#39;cost&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">best_mae_local</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">best</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">best_ind_local</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+
+            <span class="c1"># update best of model</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__compare_costs__</span><span class="p">(</span><span class="n">best_mae_local</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">best_MAE_global</span> <span class="o">=</span> <span class="n">best_mae_local</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">best_ind_global</span> <span class="o">=</span> <span class="n">best_ind_local</span>
+                <span class="n">dead_iter</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">dead_iter</span> <span class="o">=</span> <span class="n">dead_iter</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">dead_iter</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEAD_ITER</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_MAE_global</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_ind_global</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span>
+
+            <span class="k">if</span> <span class="n">output</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;IT &#39;</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="s1">&#39;best cost &#39;</span><span class="p">,</span> <span class="n">best_mae_local</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">best_ind_local</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_MAE_global</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_ind_global</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span></div></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../index.html">EDAspy</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Vicente P. Soloviev.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
