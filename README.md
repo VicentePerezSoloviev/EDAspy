@@ -1,3 +1,5 @@
+[![PyPI version fury.io](https://badge.fury.io/py/EDAspy.svg)](https://pypi.python.org/pypi/EDAspy/)
+[![PyPI license](https://img.shields.io/pypi/l/EDAspy.svg)](https://pypi.python.org/pypi/EDAspy/)
 # EDAspy
 
 ## Description
