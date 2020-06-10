@@ -44,24 +44,24 @@ Documentation for the code
 
 EDA multivariate with evidences
 ********************************
-.. autoclass:: EDApy.optimization.multivariate.EDA_multivariate
-.. autoclass:: EDApy.optimization.multivariate.EDA_multivariate.EDAgbn
+.. autoclass:: EDAspy.optimization.multivariate.EDA_multivariate
+.. autoclass:: EDAspy.optimization.multivariate.EDA_multivariate.EDAgbn
    :members:
 
 EDA multivariate with no evidences
 ***********************************
-.. autoclass:: EDApy.optimization.multivariate.EDA_multivariate_gaussian
-.. autoclass:: EDApy.optimization.multivariate.EDA_multivariate_gaussian.EDA_multivariate_gaussian
+.. autoclass:: EDAspy.optimization.multivariate.EDA_multivariate_gaussian
+.. autoclass:: EDAspy.optimization.multivariate.EDA_multivariate_gaussian.EDA_multivariate_gaussian
    :members:
 
 EDA discrete
 ************
-.. autoclass:: EDApy.optimization.univariate.EDA_discrete
-.. autoclass:: EDApy.optimization.univariate.discrete.UMDAd
+.. autoclass:: EDAspy.optimization.univariate.EDA_discrete
+.. autoclass:: EDAspy.optimization.univariate.discrete.UMDAd
    :members:
 
 EDA continuous
 **************
-.. autoclass:: EDApy.optimization.univariate.EDA_continuous
-.. autoclass:: EDApy.optimization.univariate.continuous.UMDAc
+.. autoclass:: EDAspy.optimization.univariate.EDA_continuous
+.. autoclass:: EDAspy.optimization.univariate.continuous.UMDAc
    :members:

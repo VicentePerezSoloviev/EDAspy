@@ -4,15 +4,15 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="EDApy",
+    name="EDAspy",
     version="0.1.0",
     author="Vicente P. Soloviev",
     author_email="vicente.perez.soloviev@gmail.com",
     description="This is a package where some estimation of distribution algorithms are implemented.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    download_url="https://github.com/VicentePerezSoloviev/EDApy/archive/0.1.0.tar.gz",
-    url="https://github.com/VicentePerezSoloviev/EDApy",
+    download_url="https://github.com/VicentePerezSoloviev/EDAspy/archive/0.1.0.tar.gz",
+    url="https://github.com/VicentePerezSoloviev/EDAspy",
     packages=setuptools.find_packages(),
     classifiers=[
         'Development Status :: 5 - Production/Stable',

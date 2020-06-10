@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.abspath('../..'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'EDApy'
+project = 'EDAspy'
 copyright = '2020, Vicente P. Soloviev'
 author = 'Vicente P. Soloviev'
 
