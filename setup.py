@@ -22,5 +22,5 @@ setuptools.setup(
     ],
     keywords=['EDA', 'estimation', 'bayesian', 'evolutionary', 'algorithm', 'optimization'],
     python_requires='>=3.6',
-    license="LGPL-2.1",
+    license="LGPLv2+",
 )
