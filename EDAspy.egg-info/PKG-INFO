@@ -1,12 +1,12 @@
 Metadata-Version: 2.1
 Name: EDAspy
-Version: 0.2.0
+Version: 0.1.1
 Summary: Estimation of Distribution Algorithms
 Home-page: https://github.com/VicentePerezSoloviev/EDAspy
 Author: Vicente P. Soloviev
 Author-email: vicente.perez.soloviev@gmail.com
 License: LGPLv2+
-Download-URL: https://github.com/VicentePerezSoloviev/EDAspy/archive/0.2.0.tar.gz
+Download-URL: https://github.com/VicentePerezSoloviev/EDAspy/archive/0.1.1.tar.gz
 Description: # EDAspy
         
         ## Description
