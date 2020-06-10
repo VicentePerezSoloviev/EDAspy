@@ -5,22 +5,22 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="EDAspy",
-    version="0.1.0",
+    version="0.1.1",
     author="Vicente P. Soloviev",
     author_email="vicente.perez.soloviev@gmail.com",
-    description="This is a package where some estimation of distribution algorithms are implemented.",
+    description="Estimation of Distribution Algorithms",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    download_url="https://github.com/VicentePerezSoloviev/EDAspy/archive/0.1.0.tar.gz",
+    download_url="https://github.com/VicentePerezSoloviev/EDAspy/archive/0.1.1.tar.gz",
     url="https://github.com/VicentePerezSoloviev/EDAspy",
     packages=setuptools.find_packages(),
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: LGPL-2.1",
+        "License :: OSI Approved :: GNU Lesser General Public License v2 or later (LGPLv2+)",
         "Operating System :: OS Independent",
     ],
     keywords=['EDA', 'estimation', 'bayesian', 'evolutionary', 'algorithm', 'optimization'],
     python_requires='>=3.6',
-    license="LGPL-2.1",
+    license="LGPLv2+",
 )

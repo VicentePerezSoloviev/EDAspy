@@ -156,5 +156,5 @@ To manage R from python, rpy2 package must also be installed.
 
 #### Installing
 ```
-pip install git+https://github.com/vicenteperezsoloviev/EDAspy.git#egg=EDAspy
+pip install EDAspy
 ```
