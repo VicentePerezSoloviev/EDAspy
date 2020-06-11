@@ -166,7 +166,7 @@ class UMDAc:
         """
 
         for var in self.variables:
-            array = self.generation[var].values
+            array = list(self.generation[var].values)
 
             # calculate mu and std from data
             from scipy.stats import norm

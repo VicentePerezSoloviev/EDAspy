@@ -24,8 +24,6 @@ class UMDAd:
     :type cost_function: callable function which receives a dictionary as input and returns a numeric value
 
     :raises Exception: cost function is not callable
-
-
     """
 
     MAX_IT = -1
