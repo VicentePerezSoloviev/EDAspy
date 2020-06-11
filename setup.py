@@ -5,13 +5,13 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="EDAspy",
-    version="0.1.1",
+    version="0.1.2",
     author="Vicente P. Soloviev",
     author_email="vicente.perez.soloviev@gmail.com",
     description="Estimation of Distribution Algorithms",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    download_url="https://github.com/VicentePerezSoloviev/EDAspy/archive/0.1.1.tar.gz",
+    download_url="https://github.com/VicentePerezSoloviev/EDAspy/archive/0.1.2.tar.gz",
     url="https://github.com/VicentePerezSoloviev/EDAspy",
     packages=setuptools.find_packages(),
     classifiers=[

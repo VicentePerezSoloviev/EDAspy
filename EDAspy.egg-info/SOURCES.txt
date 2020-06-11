@@ -15,4 +15,8 @@ EDAspy/optimization/multivariate/__matrix.py
 EDAspy/optimization/univariate/__init__.py
 EDAspy/optimization/univariate/continuous.py
 EDAspy/optimization/univariate/discrete.py
-tests/__init__.py
+EDAspy/tests/__init__.py
+EDAspy/tests/test_EDA_multivariate_gaussian.py
+EDAspy/tests/test___matrix.py
+EDAspy/tests/test_continuous.py
+EDAspy/tests/test_discrete.py
