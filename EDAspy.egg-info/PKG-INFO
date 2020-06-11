@@ -1,13 +1,17 @@
 Metadata-Version: 2.1
 Name: EDAspy
-Version: 0.1.1
+Version: 0.1.2
 Summary: Estimation of Distribution Algorithms
 Home-page: https://github.com/VicentePerezSoloviev/EDAspy
 Author: Vicente P. Soloviev
 Author-email: vicente.perez.soloviev@gmail.com
 License: LGPLv2+
-Download-URL: https://github.com/VicentePerezSoloviev/EDAspy/archive/0.1.1.tar.gz
-Description: # EDAspy
+Download-URL: https://github.com/VicentePerezSoloviev/EDAspy/archive/0.1.2.tar.gz
+Description: [![PyPI version fury.io](https://badge.fury.io/py/EDAspy.svg)](https://pypi.python.org/pypi/EDAspy/)
+        [![PyPI license](https://img.shields.io/pypi/l/EDAspy.svg)](https://pypi.python.org/pypi/EDAspy/)
+        [![PyPI license](https://img.shields.io/pypi/dm/EDAspy)](https://pypi.python.org/pypi/EDAspy/)
+        
+        # EDAspy
         
         ## Description
         
@@ -171,7 +175,7 @@ Description: # EDAspy
 Keywords: EDA,estimation,bayesian,evolutionary,algorithm,optimization
 Platform: UNKNOWN
 Classifier: Development Status :: 5 - Production/Stable
-Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
 Classifier: License :: OSI Approved :: GNU Lesser General Public License v2 or later (LGPLv2+)
 Classifier: Operating System :: OS Independent
 Requires-Python: >=3.6
