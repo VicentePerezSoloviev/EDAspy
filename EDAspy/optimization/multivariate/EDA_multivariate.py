@@ -174,7 +174,7 @@ class EDAgbn:
         sampled_value = [row[1] for row in self.evidences]
         nodes2sample = list(set(hierarchical_order) - set(sampled_nodes))
 
-        # order evidences and variables to sample in order jerarquico
+        # order evidences and variables to sample in hierarchical order
         nodes2sample_hierarchical_order = []
         nodes_sampled_hierarchical_order = []
 
