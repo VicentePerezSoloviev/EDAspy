@@ -152,6 +152,12 @@ The cost function to optimize is the minimization of two parameter sum. Both par
 
 The EDA returns the best cost, the combination and the history of costs if wanted to be plotted.
 
+#### Time series transformations selection
+
+When working with large datasets in time series Machine Learning projects, it is common to use different time series transformations in order to improve the forecasting model. In this approach an EDA is used to find the optimum transformations of the time series.
+
+In the Notebooks directory there is a example.
+
 ## Getting started
 
 #### Prerequisites
