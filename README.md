@@ -10,13 +10,20 @@ In this package some Estimation of Distribution Algorithms (EDAs) are implemente
 
 Three EDAs have been implemented:
 * Binary univariate EDA. It can be used as a simple example of EDA, or to use it for feature selection.
-* Continuous univariate EDA. 
-* Continuous multivariate EDA. 
+* Continuous univariate EDA. It can be used for hyper-parameter optimization.
+* Continuous multivariate EDA. Using Gaussian Bayesian Networks to model an abstract representation of the search space.
+* Continuous multivariate EDA. Another approach not using GBNs that can be used for hyper-parameter optimization, or other problems.
+* Binary multivariate EDA. This approach selects the best time series transformation to improve the model forecasting performance.
+
+The following codes are some easy examples of how the functions should be used. In order to see some real examples, I recommend to see the Notebooks examples where some Jupyter notebooks are presented.
 
 ## Examples
 
 #### Binary univariate EDA
 It can be used as a simple example of EDA, or to use it for feature selection. The cost function to optimize is the metric of the model. An example is shown.
+
+In the Notebooks directory there is a example.
+
 ```python
 from EDAspy.optimization.univariate import EDA_discrete as EDAd
 import pandas as pd
@@ -46,6 +53,9 @@ Vector probabilities are usually initialized to 0.5 to start from an equilibrium
 #### Continuous univariate EDA
 
 This EDA is used when some continuous parameters must be optimized. 
+
+In the Notebooks directory there is a example.
+
 ```python
 from EDAspy.optimization.univariate import EDA_continuous as EDAc
 import pandas as pd
@@ -84,6 +94,8 @@ As in the binary EDA, the best cost found, the solution and the cost evolution i
 In this case, dependencies among the variables are considered and managed with a Gaussian Bayesian Network. This EDA must be initialized with historical records in order to try to find the optimum result. A parameter (beta) is included to control the influence of the historical records in the final solution. Some of the variables can be evidences (fixed values for which we want to find the optimum of the other variables). 
 The optimizer will find the optimum values of the non-evidence-variables based on the value of the evidences. This is widely used in problems where dependencies among variables must be considered.
 
+In the Notebooks directory there is a example.
+
 ```python
 from EDAspy.optimization.multivariate import EDA_multivariate as EDAm
 import pandas as pd
@@ -121,6 +133,8 @@ print_structure(structure=structure, var2optimize=['param2', 'param3', 'param4']
 
 In this EDA approach, new individuals are sampled from a multivariate normal distribution. Evidences are not allowed in the optimizer. If desired, the previous approach should be used.
 The EDA is initialized, as in the univariate continuous EDA, with univariate mus and sigma for the variables. In the execution, a multivariate gaussian is built to sample from it. As it is multivariate, correlation among variables is considered.
+
+In the Notebooks directory there is a example.
 
 ```python
 import pandas as pd
@@ -161,7 +175,7 @@ In the Notebooks directory there is a example.
 ## Getting started
 
 #### Prerequisites
-R must be installed to use the multivariate EDA with Bayesian networks, with the following installed libraries: c("bnlearn", "dbnR", "data.table")
+R must be installed to use the "optimization.multivariate" subpackage, with the following installed libraries: c("bnlearn", "dbnR", "data.table")
 To manage R from python, rpy2 package must also be installed.
 
 #### Installing
