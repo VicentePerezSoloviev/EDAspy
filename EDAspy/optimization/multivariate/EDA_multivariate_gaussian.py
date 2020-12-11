@@ -4,27 +4,44 @@ import numpy as np
 
 class EDA_multivariate_gaussian:
 
-    """Multivariate Estimation of Distribution algorithm continuous.
+    """
+    Multivariate Estimation of Distribution algorithm continuous.
     New individuals are sampled from a multivariate normal distribution. Evidences are not allowed
 
-    :param SIZE_GEN: total size of the generations in the execution of the algorithm
-    :type SIZE_GEN: int
-    :param MAX_ITER: total number of iterations in case that optimum is not yet found. If reached, the optimum found is returned
-    :type MAX_ITER: int
-    :param DEAD_ITER: total number of iteration with no better solution found. If reached, the optimum found is returned
-    :type DEAD_ITER: int
-    :param ALPHA: percentage of the generation tu take, in order to sample from them. The best individuals selection
-    :type ALPHA: float [0-1]
-    :param aim: Represents the optimization aim.
-    :type aim: 'minimize' or 'maximize'.
-    :param cost_function: a callable function implemented by the user, to optimize.
-    :type cost_function: callable function which receives a dictionary as input and returns a numeric
-    :param mus: pandas dataframe with initial mus of the multivariate gaussian
-    :type mus: pandas dataframe (one row)
-    :param sigma: pandas dataframe with the sigmas of the variable (diagonal of covariance matrix)
-    :type sigma: pandas dataframe (one row)
+    ...
 
-    :raises Exception: cost function is not callable
+    Attributes:
+    --------------------
+
+    generation: pandas DataFrame
+        Last generation of the algorithm.
+
+    best_mae_global: float
+        Best cost found.
+
+    best_ind_global: pandas DataFrame
+        First row of the pandas DataFrame. Can be casted to dictionary.
+
+    history: list
+        List of the costs found during runtime.
+
+    SIZE_GEN: int
+        Parameter set by user. Number of the individuals in each generation.
+
+    MAX_ITER: int
+        Parameter set by user. Maximum number of iterations of the algorithm.
+
+    DEAD_ITER: int
+        Parameter set by user. Number of iterations after which, if no improvement reached, the algorithm finishes.
+
+    vector: pandas DataFrame
+        When initialized, parameters set by the user. When finished, statistics learned by the user.
+
+    alpha: float
+        Parameter set by user. Float over 1. Percentage of the generation to be selected to reproduce next generation.
+
+    cost_function:
+        Set by user. Cost function set to optimize.
 
     """
 
@@ -43,7 +60,27 @@ class EDA_multivariate_gaussian:
     history = []
 
     def __init__(self, SIZE_GEN, MAX_ITER, DEAD_ITER, ALPHA, aim, cost_function, mus, sigma):
-        """Constructor of the optimizer class
+        """
+        Constructor of the optimizer class
+
+        :param SIZE_GEN: total size of the generations in the execution of the algorithm
+        :type SIZE_GEN: int
+        :param MAX_ITER: total number of iterations in case that optimum is not yet found. If reached, the optimum found is returned
+        :type MAX_ITER: int
+        :param DEAD_ITER: total number of iteration with no better solution found. If reached, the optimum found is returned
+        :type DEAD_ITER: int
+        :param ALPHA: percentage of the generation tu take, in order to sample from them. The best individuals selection
+        :type ALPHA: float [0-1]
+        :param aim: Represents the optimization aim.
+        :type aim: 'minimize' or 'maximize'.
+        :param cost_function: a callable function implemented by the user, to optimize.
+        :type cost_function: callable function which receives a dictionary as input and returns a numeric
+        :param mus: pandas dataframe with initial mus of the multivariate gaussian
+        :type mus: pandas dataframe (one row)
+        :param sigma: pandas dataframe with the sigmas of the variable (diagonal of covariance matrix)
+        :type sigma: pandas dataframe (one row)
+
+        :raises Exception: cost function is not callable
         """
 
         self.SIZE_GEN = SIZE_GEN
@@ -88,6 +125,7 @@ class EDA_multivariate_gaussian:
     # new individual
     def __new_individual__(self):
         """Sample a new individual from the vector of probabilities.
+
         :return: a dictionary with the new individual; with names of the parameters as keys and the values.
         :rtype: dict
         """
@@ -104,7 +142,8 @@ class EDA_multivariate_gaussian:
 
     # build a generation of size SIZE_GEN from prob vector
     def new_generation(self):
-        """Build a new generation sampled from the vector of probabilities. Updates the generation pandas dataframe
+        """
+        Build a new generation sampled from the vector of probabilities. Updates the generation pandas dataframe
         """
         gen = pd.DataFrame(columns=self.variables)
         while len(gen) < self.SIZE_GEN:
@@ -120,7 +159,8 @@ class EDA_multivariate_gaussian:
 
     # truncate the generation at alpha percent
     def truncation(self):
-        """ Selection of the best individuals of the actual generation. Updates the generation by selecting the best individuals
+        """
+        Selection of the best individuals of the actual generation. Updates the generation by selecting the best individuals
         """
 
         length = int(self.SIZE_GEN * self.alpha)
@@ -146,7 +186,8 @@ class EDA_multivariate_gaussian:
 
     # check each individual of the generation
     def check_generation(self):
-        """Check the cost of each individual in the cost function implemented by the user
+        """
+        Check the cost of each individual in the cost function implemented by the user
         """
 
         for ind in range(len(self.generation)):
@@ -156,7 +197,8 @@ class EDA_multivariate_gaussian:
 
     # update the probability vector
     def update_vector(self):
-        """From the best individuals update the vector of normal distributions in order to the next
+        """
+        From the best individuals update the vector of normal distributions in order to the next
         generation can sample from it. Update the vector of normal distributions
         """
 
@@ -195,7 +237,7 @@ class EDA_multivariate_gaussian:
         :param output: True if wanted to print each iteration
         :type output: bool
         :return: best cost, best individual, history of costs along execution
-        :rtype: float, pandas dataframe, list
+        :rtype: float, pandas DataFrame, list
         """
 
         not_better = 0

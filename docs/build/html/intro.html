@@ -1,0 +1,162 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Introduction &#8212; EDAspy 0.2.0 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="EDAspy package" href="EDAspy.html" />
+    <link rel="prev" title="Welcome to EDAspy’s documentation!" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<p>Estimation of Distribution Algorithms (EDA) are a type of evolutionary algorithms that incorporate a probabilistic model to reproduce the next generations of the algorithm.
+Depending on the type of EDA, the relations among variables is different, and different probabilistic models are used.</p>
+<p>EDAspy is a Python package with different EDA implementations. This is the first and unique package created and full dedicated to this type of algorithms.</p>
+<div class="section" id="motivation">
+<h2>Motivation<a class="headerlink" href="#motivation" title="Permalink to this headline">¶</a></h2>
+<p>The aim of this package is to continue adding different implementations of this algorithm. Also, different implementations specifically designed to use
+in some Machine Learning projects (time series for example) are implemented.</p>
+<p>Feel free to contribute in this package with more implementations of the algorithm.</p>
+</div>
+<div class="section" id="actual-implementations">
+<h2>Actual implementations<a class="headerlink" href="#actual-implementations" title="Permalink to this headline">¶</a></h2>
+<p>The following EDAs have been implemented:</p>
+<p>General EDAs:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Binary univariate EDA. It can be used as a simple example of EDA, or to use it for feature selection.</p></li>
+<li><p>Continuous univariate EDA. It can be used for hyper-parameter optimization or continuous function optimization.</p></li>
+<li><p>Continuous multivariate EDA. Using Gaussian Bayesian Networks to model an abstract representation of the search space. Can be used to continuous multivariate optimization problems.</p></li>
+<li><p>Continuous multivariate EDA. Another approach not using GBNs that can be used for hyper-parameter optimization, or other optimization problems.</p></li>
+</ol>
+</div></blockquote>
+<p>Specific EDAs:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Binary multivariate EDA. This approach selects the best time series transformation to improve the model forecasting performance.</p></li>
+</ol>
+</div></blockquote>
+</div>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>EDAspy can be downloaded from PyPi using pip command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install EDAspy
+</pre></div>
+</div>
+<p>Depending on the algorithms you want to run, different requisites are needed to be installed.
+To use the optimization.multivariate approach using Bayesian Networks, an interface to connect with R is needed. EDaspy
+uses rpy2 package to do it. EDAspy uses bnlearn package implemented in R to manage different functions with Bayesian Networks.</p>
+<p>To install rpy2:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install rpy2
+</pre></div>
+</div>
+<p>To install R packages:</p>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="nf">install.packages</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;bnlearn&quot;</span><span class="p">,</span> <span class="s">&quot;data.table&quot;</span><span class="p">,</span> <span class="s">&quot;dbnR&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">EDAspy</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#motivation">Motivation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#actual-implementations">Actual implementations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="EDAspy.html">EDAspy package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Welcome to EDAspy’s documentation!</a></li>
+      <li>Next: <a href="EDAspy.html" title="next chapter">EDAspy package</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Vicente P. Soloviev.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/intro.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

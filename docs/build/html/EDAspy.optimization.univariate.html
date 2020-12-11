@@ -1,0 +1,295 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EDAspy.optimization.univariate package &#8212; EDAspy 0.2.0 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="EDAspy.timeseries package" href="EDAspy.timeseries.html" />
+    <link rel="prev" title="EDAspy.optimization.multivariate package" href="EDAspy.optimization.multivariate.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="edaspy-optimization-univariate-package">
+<h1>EDAspy.optimization.univariate package<a class="headerlink" href="#edaspy-optimization-univariate-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-EDAspy.optimization.univariate.continuous">
+<span id="edaspy-optimization-univariate-continuous-module"></span><h2>EDAspy.optimization.univariate.continuous module<a class="headerlink" href="#module-EDAspy.optimization.univariate.continuous" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="EDAspy.optimization.univariate.continuous.UMDAc">
+<em class="property">class </em><code class="sig-prename descclassname">EDAspy.optimization.univariate.continuous.</code><code class="sig-name descname">UMDAc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">SIZE_GEN</span></em>, <em class="sig-param"><span class="n">MAX_ITER</span></em>, <em class="sig-param"><span class="n">DEAD_ITER</span></em>, <em class="sig-param"><span class="n">ALPHA</span></em>, <em class="sig-param"><span class="n">vector</span></em>, <em class="sig-param"><span class="n">aim</span></em>, <em class="sig-param"><span class="n">cost_function</span></em><span class="sig-paren">)</span><a class="headerlink" href="#EDAspy.optimization.univariate.continuous.UMDAc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Univariate marginal Estimation of Distribution algorithm continuous.
+New individuals are sampled from a vector of univariate normal distributions. It can be used for hyper-parameter
+optimization or to optimize a function.</p>
+<p>…</p>
+<dl class="simple">
+<dt>generation: pandas DataFrame</dt><dd><p>Last generation of the algorithm.</p>
+</dd>
+<dt>best_mae_global: float</dt><dd><p>Best cost found.</p>
+</dd>
+<dt>best_ind_global: pandas DataFrame</dt><dd><p>First row of the pandas DataFrame. Can be casted to dictionary.</p>
+</dd>
+<dt>history: list</dt><dd><p>List of the costs found during runtime.</p>
+</dd>
+<dt>SIZE_GEN: int</dt><dd><p>Parameter set by user. Number of the individuals in each generation.</p>
+</dd>
+<dt>MAX_ITER: int</dt><dd><p>Parameter set by user. Maximum number of iterations of the algorithm.</p>
+</dd>
+<dt>DEAD_ITER: int</dt><dd><p>Parameter set by user. Number of iterations after which, if no improvement reached, the algorithm finishes.</p>
+</dd>
+<dt>vector: pandas DataFrame</dt><dd><p>When initialized, parameters set by the user. When finished, statistics learned by the user.</p>
+</dd>
+<dt>cost_function:</dt><dd><p>Set by user. Cost function set to optimize.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="EDAspy.optimization.univariate.continuous.UMDAc.check_generation">
+<code class="sig-name descname">check_generation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#EDAspy.optimization.univariate.continuous.UMDAc.check_generation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check the cost of each individual in the cost function implemented by the user, and updates the
+generation DataFrame</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="EDAspy.optimization.univariate.continuous.UMDAc.new_generation">
+<code class="sig-name descname">new_generation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#EDAspy.optimization.univariate.continuous.UMDAc.new_generation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a new generation sampled from the vector of probabilities. Updates the generation pandas dataframe</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="EDAspy.optimization.univariate.continuous.UMDAc.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">output</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#EDAspy.optimization.univariate.continuous.UMDAc.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run method to execute the EDA algorithm</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>output</strong> (<em>bool</em>) – True if wanted to print each iteration</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>best cost, best individual, history of costs along execution</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float, pandas dataframe, list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="EDAspy.optimization.univariate.continuous.UMDAc.truncation">
+<code class="sig-name descname">truncation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#EDAspy.optimization.univariate.continuous.UMDAc.truncation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Selection of the best individuals of the actual generation. Updates the generation by selecting the best
+individuals</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="EDAspy.optimization.univariate.continuous.UMDAc.update_vector">
+<code class="sig-name descname">update_vector</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#EDAspy.optimization.univariate.continuous.UMDAc.update_vector" title="Permalink to this definition">¶</a></dt>
+<dd><p>From the best individuals update the vector of normal distributions in order to the next
+generation can sample from it. Update the vector of normal distributions.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-EDAspy.optimization.univariate.discrete">
+<span id="edaspy-optimization-univariate-discrete-module"></span><h2>EDAspy.optimization.univariate.discrete module<a class="headerlink" href="#module-EDAspy.optimization.univariate.discrete" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="EDAspy.optimization.univariate.discrete.UMDAd">
+<em class="property">class </em><code class="sig-prename descclassname">EDAspy.optimization.univariate.discrete.</code><code class="sig-name descname">UMDAd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">MAX_IT</span></em>, <em class="sig-param"><span class="n">DEAD_ITER</span></em>, <em class="sig-param"><span class="n">SIZE_GEN</span></em>, <em class="sig-param"><span class="n">ALPHA</span></em>, <em class="sig-param"><span class="n">vector</span></em>, <em class="sig-param"><span class="n">cost_function</span></em>, <em class="sig-param"><span class="n">aim</span></em><span class="sig-paren">)</span><a class="headerlink" href="#EDAspy.optimization.univariate.discrete.UMDAd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Univariate discrete Estimation of Distribution algorithm.
+New individuals are sampled from a vector of univariate probabilities. It is a binary optimizer, than can be
+used for example for feature selection.</p>
+<p>…</p>
+<dl class="simple">
+<dt>generation: pandas DataFrame</dt><dd><p>Last generation of the algorithm.</p>
+</dd>
+<dt>best_MAE_global: float</dt><dd><p>Best cost found.</p>
+</dd>
+<dt>best_ind_global: pandas DataFrame</dt><dd><p>First row of the pandas DataFrame. Can be casted to dictionary.</p>
+</dd>
+<dt>history: list</dt><dd><p>List of the costs found during runtime.</p>
+</dd>
+<dt>SIZE_GEN: int</dt><dd><p>Parameter set by user. Number of the individuals in each generation.</p>
+</dd>
+<dt>MAX_IT: int</dt><dd><p>Parameter set by user. Maximum number of iterations of the algorithm.</p>
+</dd>
+<dt>DEAD_ITER: int</dt><dd><p>Parameter set by user. Number of iterations after which, if no improvement reached, the algorithm finishes.</p>
+</dd>
+<dt>vector: pandas DataFrame</dt><dd><p>When initialized, parameters set by the user. When finished, statistics learned by the user.</p>
+</dd>
+<dt>cost_function:</dt><dd><p>Set by user. Cost function set to optimize.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="EDAspy.optimization.univariate.discrete.UMDAd.check_generation">
+<code class="sig-name descname">check_generation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#EDAspy.optimization.univariate.discrete.UMDAd.check_generation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check the cost of each individual in the cost function implemented by the user</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="EDAspy.optimization.univariate.discrete.UMDAd.individuals_selection">
+<code class="sig-name descname">individuals_selection</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#EDAspy.optimization.univariate.discrete.UMDAd.individuals_selection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Selection of the best individuals of the actual generation and updates the generation by selecting the best
+individuals</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="EDAspy.optimization.univariate.discrete.UMDAd.new_generation">
+<code class="sig-name descname">new_generation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#EDAspy.optimization.univariate.discrete.UMDAd.new_generation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a new generation sampled from the vector of probabilities and updates the generation pandas dataframe</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="EDAspy.optimization.univariate.discrete.UMDAd.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">output</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#EDAspy.optimization.univariate.discrete.UMDAd.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run method to execute the EDA algorithm</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>output</strong> (<em>bool</em>) – True if wanted to print each iteration</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>best cost, best individual, history of costs along execution</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float, pandas dataframe, list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="EDAspy.optimization.univariate.discrete.UMDAd.update_vector">
+<code class="sig-name descname">update_vector</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#EDAspy.optimization.univariate.discrete.UMDAd.update_vector" title="Permalink to this definition">¶</a></dt>
+<dd><p>From the best individuals update the vector of probabilities in order to the next generation can sample from
+it and update the vector of probabilities</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-EDAspy.optimization.univariate">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-EDAspy.optimization.univariate" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="EDAspy.optimization.univariate.check_package">
+<code class="sig-prename descclassname">EDAspy.optimization.univariate.</code><code class="sig-name descname">check_package</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">installed_pack</span></em>, <em class="sig-param"><span class="n">package</span></em><span class="sig-paren">)</span><a class="headerlink" href="#EDAspy.optimization.univariate.check_package" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="EDAspy.optimization.univariate.install">
+<code class="sig-prename descclassname">EDAspy.optimization.univariate.</code><code class="sig-name descname">install</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">package</span></em><span class="sig-paren">)</span><a class="headerlink" href="#EDAspy.optimization.univariate.install" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">EDAspy</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="EDAspy.html">EDAspy package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="EDAspy.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="EDAspy.optimization.html">EDAspy.optimization package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="EDAspy.optimization.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="EDAspy.optimization.html#module-EDAspy.optimization">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="EDAspy.timeseries.html">EDAspy.timeseries package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="EDAspy.html">EDAspy package</a><ul>
+  <li><a href="EDAspy.optimization.html">EDAspy.optimization package</a><ul>
+      <li>Previous: <a href="EDAspy.optimization.multivariate.html" title="previous chapter">EDAspy.optimization.multivariate package</a></li>
+      <li>Next: <a href="EDAspy.timeseries.html" title="next chapter">EDAspy.timeseries package</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Vicente P. Soloviev.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/EDAspy.optimization.univariate.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

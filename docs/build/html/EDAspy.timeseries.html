@@ -1,0 +1,351 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EDAspy.timeseries package &#8212; EDAspy 0.2.0 documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Examples" href="examples.html" />
+    <link rel="prev" title="EDAspy.optimization.univariate package" href="EDAspy.optimization.univariate.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="edaspy-timeseries-package">
+<h1>EDAspy.timeseries package<a class="headerlink" href="#edaspy-timeseries-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-EDAspy.timeseries.TS_transformations">
+<span id="edaspy-timeseries-ts-transformations-module"></span><h2>EDAspy.timeseries.TS_transformations module<a class="headerlink" href="#module-EDAspy.timeseries.TS_transformations" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="EDAspy.timeseries.TS_transformations.TSTransformations">
+<em class="property">class </em><code class="sig-prename descclassname">EDAspy.timeseries.TS_transformations.</code><code class="sig-name descname">TSTransformations</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em><span class="sig-paren">)</span><a class="headerlink" href="#EDAspy.timeseries.TS_transformations.TSTransformations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Tool to calculate time series transformations. Some time series transformations are given.
+This is just a very simple tool. It is not mandatory to use this tool to use the time series transformations
+selector. It is only disposed to be handy.</p>
+<dl class="py method">
+<dt id="EDAspy.timeseries.TS_transformations.TSTransformations.box_cox">
+<code class="sig-name descname">box_cox</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">variable</span></em>, <em class="sig-param"><span class="n">lmbda</span></em>, <em class="sig-param"><span class="n">plot</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#EDAspy.timeseries.TS_transformations.TSTransformations.box_cox" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate Box Cox time series transformation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>variable</strong> (<em>string</em>) – name of variable</p></li>
+<li><p><strong>lmbda</strong> (<em>float</em>) – lambda parameter of Box Cox transformation</p></li>
+<li><p><strong>plot</strong> (<em>bool</em>) – if True, plot is given.ç</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>time series transformation</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="EDAspy.timeseries.TS_transformations.TSTransformations.de_trending">
+<code class="sig-name descname">de_trending</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">variable</span></em>, <em class="sig-param"><span class="n">plot</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#EDAspy.timeseries.TS_transformations.TSTransformations.de_trending" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes the trend of the time series.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>variable</strong> (<em>string</em>) – string available in data DataFrame</p></li>
+<li><p><strong>plot</strong> (<em>bool</em>) – if True plot is give, if False, not</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>time series detrended</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="EDAspy.timeseries.TS_transformations.TSTransformations.exponential">
+<code class="sig-name descname">exponential</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">variable</span></em>, <em class="sig-param"><span class="n">numerator</span></em>, <em class="sig-param"><span class="n">plot</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#EDAspy.timeseries.TS_transformations.TSTransformations.exponential" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate exponential time series transformation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>variable</strong> (<em>string</em>) – name of variable</p></li>
+<li><p><strong>numerator</strong> (<em>int</em>) – numerator of the transformation</p></li>
+<li><p><strong>plot</strong> (<em>bool</em>) – if True, plot is given</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>time series transformation</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="EDAspy.timeseries.TS_transformations.TSTransformations.log">
+<code class="sig-name descname">log</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">variable</span></em>, <em class="sig-param"><span class="n">plot</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#EDAspy.timeseries.TS_transformations.TSTransformations.log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the logarithm of the time series.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>variable</strong> (<em>string</em>) – name of variables</p></li>
+<li><p><strong>plot</strong> (<em>bool</em>) – if True a plot is given.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>time series transformation</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="EDAspy.timeseries.TS_transformations.TSTransformations.power">
+<code class="sig-name descname">power</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">variable</span></em>, <em class="sig-param"><span class="n">power</span></em>, <em class="sig-param"><span class="n">plot</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#EDAspy.timeseries.TS_transformations.TSTransformations.power" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate power time series transformation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>variable</strong> (<em>string</em>) – name of variable</p></li>
+<li><p><strong>power</strong> (<em>int</em>) – exponent to calculate</p></li>
+<li><p><strong>plot</strong> (<em>bool</em>) – if True, plot is given</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>time series transformation</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="EDAspy.timeseries.TS_transformations.TSTransformations.smoothing">
+<code class="sig-name descname">smoothing</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">variable</span></em>, <em class="sig-param"><span class="n">window</span></em>, <em class="sig-param"><span class="n">plot</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#EDAspy.timeseries.TS_transformations.TSTransformations.smoothing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate time series smoothing transformation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>variable</strong> (<em>string</em>) – name of variable</p></li>
+<li><p><strong>window</strong> (<em>int</em>) – number of previous instances taken to smooth.</p></li>
+<li><p><strong>plot</strong> (<em>bool</em>) – if True, plot is given</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>time series transformation</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-EDAspy.timeseries.TransformationsFeatureSelection">
+<span id="edaspy-timeseries-transformationsfeatureselection-module"></span><h2>EDAspy.timeseries.TransformationsFeatureSelection module<a class="headerlink" href="#module-EDAspy.timeseries.TransformationsFeatureSelection" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="EDAspy.timeseries.TransformationsFeatureSelection.TransformationsFSEDA">
+<em class="property">class </em><code class="sig-prename descclassname">EDAspy.timeseries.TransformationsFeatureSelection.</code><code class="sig-name descname">TransformationsFSEDA</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">max_it</span></em>, <em class="sig-param"><span class="n">dead_it</span></em>, <em class="sig-param"><span class="n">size_gen</span></em>, <em class="sig-param"><span class="n">alpha</span></em>, <em class="sig-param"><span class="n">vector</span></em>, <em class="sig-param"><span class="n">array_transformations</span></em>, <em class="sig-param"><span class="n">cost_function</span></em><span class="sig-paren">)</span><a class="headerlink" href="#EDAspy.timeseries.TransformationsFeatureSelection.TransformationsFSEDA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Estimation of Distribution Algorithm that uses a Dirichlet distribution to select among the different time series
+transformations that best improve the cost function to optimize.</p>
+<p>…</p>
+<dl class="simple">
+<dt>generation: pandas DataFrame</dt><dd><p>Last generation of the algorithm.</p>
+</dd>
+<dt>best_MAE: float</dt><dd><p>Best cost found.</p>
+</dd>
+<dt>best_ind: pandas DataFrame</dt><dd><p>First row of the pandas DataFrame. Can be casted to dictionary.</p>
+</dd>
+<dt>history_best: list</dt><dd><p>List of the costs found during runtime.</p>
+</dd>
+<dt>size_gen: int</dt><dd><p>Parameter set by user. Number of the individuals in each generation.</p>
+</dd>
+<dt>max_it: int</dt><dd><p>Parameter set by user. Maximum number of iterations of the algorithm.</p>
+</dd>
+<dt>dead_it: int</dt><dd><p>Parameter set by user. Number of iterations after which, if no improvement reached, the algorithm finishes.</p>
+</dd>
+<dt>vector: pandas DataFrame</dt><dd><p>When initialized, parameters set by the user. When finished, statistics learned by the user.</p>
+</dd>
+<dt>cost_function:</dt><dd><p>Set by user. Cost function set to optimize.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="EDAspy.timeseries.TransformationsFeatureSelection.TransformationsFSEDA.check_generation">
+<code class="sig-name descname">check_generation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#EDAspy.timeseries.TransformationsFeatureSelection.TransformationsFSEDA.check_generation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check the cost of each individual of the generation in the cost function</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="EDAspy.timeseries.TransformationsFeatureSelection.TransformationsFSEDA.individuals_selection">
+<code class="sig-name descname">individuals_selection</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#EDAspy.timeseries.TransformationsFeatureSelection.TransformationsFSEDA.individuals_selection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Selection of the best individuals to mutate the next generation</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="EDAspy.timeseries.TransformationsFeatureSelection.TransformationsFSEDA.new_generation">
+<code class="sig-name descname">new_generation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#EDAspy.timeseries.TransformationsFeatureSelection.TransformationsFSEDA.new_generation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a new generation of individuals. Updates the generation DataFrame</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="EDAspy.timeseries.TransformationsFeatureSelection.TransformationsFSEDA.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">output</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#EDAspy.timeseries.TransformationsFeatureSelection.TransformationsFSEDA.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Algorithm run execution</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>output</strong> (<em>bool</em>) – If True then an output is printed in each iteration. Otherwise, not</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>best_individual, best MAE found</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list, float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="EDAspy.timeseries.TransformationsFeatureSelection.TransformationsFSEDA.update_vector_probabilities">
+<code class="sig-name descname">update_vector_probabilities</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#EDAspy.timeseries.TransformationsFeatureSelection.TransformationsFSEDA.update_vector_probabilities" title="Permalink to this definition">¶</a></dt>
+<dd><p>Re-build the vector of statistics based on the selection of the best individuals of the generation.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-EDAspy.timeseries">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-EDAspy.timeseries" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="EDAspy.timeseries.check_package">
+<code class="sig-prename descclassname">EDAspy.timeseries.</code><code class="sig-name descname">check_package</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">installed_pack</span></em>, <em class="sig-param"><span class="n">package</span></em><span class="sig-paren">)</span><a class="headerlink" href="#EDAspy.timeseries.check_package" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="EDAspy.timeseries.install">
+<code class="sig-prename descclassname">EDAspy.timeseries.</code><code class="sig-name descname">install</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">package</span></em><span class="sig-paren">)</span><a class="headerlink" href="#EDAspy.timeseries.install" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">EDAspy</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="EDAspy.html">EDAspy package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="EDAspy.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="EDAspy.optimization.html">EDAspy.optimization package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">EDAspy.timeseries package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-EDAspy.timeseries.TS_transformations">EDAspy.timeseries.TS_transformations module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-EDAspy.timeseries.TransformationsFeatureSelection">EDAspy.timeseries.TransformationsFeatureSelection module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-EDAspy.timeseries">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="EDAspy.html">EDAspy package</a><ul>
+      <li>Previous: <a href="EDAspy.optimization.univariate.html" title="previous chapter">EDAspy.optimization.univariate package</a></li>
+      <li>Next: <a href="examples.html" title="next chapter">Examples</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Vicente P. Soloviev.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/EDAspy.timeseries.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

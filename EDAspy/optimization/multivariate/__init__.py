@@ -43,6 +43,7 @@ for package in requirements:
             print('dependencies insatisfied')
 
 
+from .EDA_multivariate_gaussian import EDA_multivariate_gaussian as EDA_multivariate_gaussian
 from .EDA_multivariate import EDAgbn as EDA_multivariate
 from .__BayesianNetwork import print_structure as print_structure
-from .EDA_multivariate_gaussian import EDA_multivariate_gaussian as EDA_multivariate_gaussian
+

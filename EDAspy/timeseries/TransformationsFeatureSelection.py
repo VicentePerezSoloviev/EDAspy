@@ -18,6 +18,44 @@ def __normalize__(array):
 
 class TransformationsFSEDA:
 
+    """
+    Estimation of Distribution Algorithm that uses a Dirichlet distribution to select among the different time series
+    transformations that best improve the cost function to optimize.
+
+    ...
+
+    Attributes:
+    --------------------
+
+    generation: pandas DataFrame
+        Last generation of the algorithm.
+
+    best_MAE: float
+        Best cost found.
+
+    best_ind: pandas DataFrame
+        First row of the pandas DataFrame. Can be casted to dictionary.
+
+    history_best: list
+        List of the costs found during runtime.
+
+    size_gen: int
+        Parameter set by user. Number of the individuals in each generation.
+
+    max_it: int
+        Parameter set by user. Maximum number of iterations of the algorithm.
+
+    dead_it: int
+        Parameter set by user. Number of iterations after which, if no improvement reached, the algorithm finishes.
+
+    vector: pandas DataFrame
+        When initialized, parameters set by the user. When finished, statistics learned by the user.
+
+    cost_function:
+        Set by user. Cost function set to optimize.
+
+    """
+
     generation = pd.DataFrame()
     output_plot = ''
 
@@ -26,6 +64,29 @@ class TransformationsFSEDA:
     best_ind = ''
 
     def __init__(self, max_it, dead_it, size_gen, alpha, vector, array_transformations, cost_function):
+        """
+        Constructor of the class.
+
+        :param max_it: Maximum number of iterations of the EDA.
+        :type max_it: int
+        :param dead_it: Number of iterations without improvement after which the algorithm finishes.
+        :type dead_it: int
+        :param size_gen: Number of individuals per generation.
+        :type size_gen: int
+        :param alpha: percentage (over 1) of the generation to be selected to reproduce the next generation.
+        :type alpha: float
+        :param vector: initial statistics.
+        :type vector: pandas DataFrame
+        :param array_transformations: name of the transformations to selected.
+        :type array_transformations: list
+        :param cost_function: cost function to calculate the cost of the individual. Receives a list of names, and
+        returns a float
+        :type cost_function: callable function
+
+        :raises Exception: cost function is not callable
+
+        """
+
         self.max_it = max_it
         self.size_gen = size_gen
         self.alpha = alpha
@@ -96,8 +157,7 @@ class TransformationsFSEDA:
 
     def new_generation(self):
         """
-        Creates a new generation of individuals.
-        :return: updates the generation DataFrame
+        Creates a new generation of individuals. Updates the generation DataFrame
         """
 
         gen = pd.DataFrame(columns=self.variables)
@@ -116,8 +176,10 @@ class TransformationsFSEDA:
     def __getKeysByValue__(self, value_2_find):
         """
         Get a list of keys from dictionary which has the given value
+
         :param value_2_find: value to find in the dictionary
         :return: list of keys which match with value_2_find in the dictionary {transformation: key}
+        :rtype: list
         """
 
         list_keys = list()
@@ -130,8 +192,11 @@ class TransformationsFSEDA:
     def __check_individual__(self, individual):
         """
         Check the cost of the individual in the cost function.
-        :param individual: dictionary of the respective individual.
-        :return: cost of the individual ¿MAE?
+
+        :param individual: dictionary of the respective individual
+        :type individual: dict
+        :return: cost of the individual calculated by cost function
+        :rtype: float
         """
 
         variables = []  # list of variables included
@@ -153,8 +218,7 @@ class TransformationsFSEDA:
     # check the cost of each individual of the generation
     def check_generation(self):
         """
-        Check the cost of each individual of the generation in the cost function.
-        :return:
+        Check the cost of each individual of the generation in the cost function
         """
 
         for ind in range(len(self.generation)):
@@ -170,15 +234,13 @@ class TransformationsFSEDA:
     def individuals_selection(self):
         """
         Selection of the best individuals to mutate the next generation
-        :return:
         """
 
         self.generation = self.generation.nsmallest(self.trunc_size, 'MAE')
 
     def update_vector_probabilities(self):
         """
-        Re-build the vector of statistics based on the selection of the best individuals of the generation
-        :return: update the vector of statistics
+        Re-build the vector of statistics based on the selection of the best individuals of the generation.
         """
 
         for ind in self.variables:
@@ -214,7 +276,6 @@ class TransformationsFSEDA:
         """
         Save a figure in the filename location with the EDA progress.
         output_plot must be overwritten previously.
-        :return: save a fig in output_plot
         """
 
         if self.output_plot != '':
@@ -228,9 +289,12 @@ class TransformationsFSEDA:
 
     def run(self, output=True):
         """
-        Algorithm run execution.
-        :param output: Boolean. If True then an output is printed in each iteration. Otherwise, not.
-        :return: best_individual array, best MAE found double
+        Algorithm run execution
+
+        :param output: If True then an output is printed in each iteration. Otherwise, not
+        :type output: bool
+        :return: best_individual, best MAE found
+        :rtype: list, float
         """
 
         convergence = 0
@@ -281,4 +345,5 @@ class TransformationsFSEDA:
                 print('[iteration:', i, ']', best_mae_local)
 
         self.__plot__()  # save the fig of the progression
+
         return self.best_ind, self.best_MAE

@@ -1,0 +1,7 @@
+sklearn
+pandas
+numpy
+rpy2
+networkx
+matplotlib
+statsmodels

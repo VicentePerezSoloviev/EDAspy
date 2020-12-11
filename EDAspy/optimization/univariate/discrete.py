@@ -4,26 +4,44 @@ import pandas as pd
 
 class UMDAd:
 
-    """Univariate marginal Estimation of Distribution algorithm.
+    """
+    Univariate discrete Estimation of Distribution algorithm.
     New individuals are sampled from a vector of univariate probabilities. It is a binary optimizer, than can be
     used for example for feature selection.
 
-    :param SIZE_GEN: total size of the generations in the execution of the algorithm
-    :type SIZE_GEN: int
-    :param MAX_IT: total number of iterations in case that optimum is not yet found. If reached, the optimum found is returned
-    :type MAX_IT: int
-    :param DEAD_ITER: total number of iteration with no better solution found. If reached, the optimum found is returned
-    :type DEAD_ITER: int
-    :param ALPHA: percentage of the generation tu take, in order to sample from them. The best individuals selection
-    :type ALPHA: float [0-1]
-    :param vector: vector of normal distributions to sample from
-    :type vector: pandas dataframe with columns ['mu', 'std'] and optional ['max', 'min']
-    :param aim: 'minimize' or 'maximize'. Represents the optimization aim.
-    :type aim: string ['minimize' or 'maximize']
-    :param cost_function: cost function to minimize
-    :type cost_function: callable function which receives a dictionary as input and returns a numeric value
+    ...
 
-    :raises Exception: cost function is not callable
+    Attributes:
+    --------------------
+
+    generation: pandas DataFrame
+        Last generation of the algorithm.
+
+    best_MAE_global: float
+        Best cost found.
+
+    best_ind_global: pandas DataFrame
+        First row of the pandas DataFrame. Can be casted to dictionary.
+
+    history: list
+        List of the costs found during runtime.
+
+    SIZE_GEN: int
+        Parameter set by user. Number of the individuals in each generation.
+
+    MAX_IT: int
+        Parameter set by user. Maximum number of iterations of the algorithm.
+
+    DEAD_ITER: int
+        Parameter set by user. Number of iterations after which, if no improvement reached, the algorithm finishes.
+
+    vector: pandas DataFrame
+        When initialized, parameters set by the user. When finished, statistics learned by the user.
+
+    cost_function:
+        Set by user. Cost function set to optimize.
+
+
     """
 
     MAX_IT = -1
@@ -33,7 +51,6 @@ class UMDAd:
     vector = []
     variables = []
     cost_function = -1
-    esc = 15
 
     history = []
 
@@ -43,7 +60,25 @@ class UMDAd:
 
     # init function
     def __init__(self, MAX_IT, DEAD_ITER, SIZE_GEN, ALPHA, vector, cost_function, aim):
-        """Constructor of the optimizer class
+        """
+        Constructor of the optimizer class.
+
+        :param SIZE_GEN: total size of the generations in the execution of the algorithm
+        :type SIZE_GEN: int
+        :param MAX_IT: total number of iterations in case that optimum is not yet found. If reached, the optimum found is returned
+        :type MAX_IT: int
+        :param DEAD_ITER: total number of iteration with no better solution found. If reached, the optimum found is returned
+        :type DEAD_ITER: int
+        :param ALPHA: percentage of the generation tu take, in order to sample from them. The best individuals selection
+        :type ALPHA: float [0-1]
+        :param vector: vector of normal distributions to sample from
+        :type vector: pandas dataframe with columns ['mu', 'std'] and optional ['max', 'min']
+        :param aim: 'minimize' or 'maximize'. Represents the optimization aim.
+        :type aim: string ['minimize' or 'maximize']
+        :param cost_function: cost function to minimize
+        :type cost_function: callable function which receives a dictionary as input and returns a numeric value
+
+        :raises Exception: cost function is not callable
         """
 
         self.ALPHA = ALPHA
@@ -112,7 +147,8 @@ class UMDAd:
         """Check the cost of the individual in the cost function
         :param individual: dictionary with the parameters to optimize as keys and the value as values of the keys
         :type individual: dict
-        :return: a cost evaluated in the cost function to optimize
+        :return: a cost evaluated in the cost function to optimize.
+        :rtype: float
         """
 
         cost = self.cost_function(individual)
