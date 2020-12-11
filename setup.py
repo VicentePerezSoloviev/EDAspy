@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="EDAspy",
-    version="0.2.1",
+    version="0.2.0",
     author="Vicente P. Soloviev",
     author_email="vicente.perez.soloviev@gmail.com",
     description="Estimation of Distribution Algorithms",

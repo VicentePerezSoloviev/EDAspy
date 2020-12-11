@@ -23,7 +23,7 @@ author = 'Vicente P. Soloviev'
 html_theme = 'sphinx_rtd_theme'
 
 # The full version, including alpha/beta/rc tags
-release = '0.2.1'
+release = '0.2.0'
 
 
 # -- General configuration ---------------------------------------------------
