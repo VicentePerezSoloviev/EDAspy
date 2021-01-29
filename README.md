@@ -1,4 +1,4 @@
-![PyPI](https://img.shields.io/pypi/v/edaspy)
+[![PyPI](https://img.shields.io/pypi/v/edaspy)](https://pypi.python.org/pypi/EDAspy/)
 [![PyPI license](https://img.shields.io/pypi/l/EDAspy.svg)](https://pypi.python.org/pypi/EDAspy/)
 [![Downloads](https://pepy.tech/badge/edaspy)](https://pepy.tech/project/edaspy)
 [![Documentation Status](https://readthedocs.org/projects/edaspy/badge/?version=latest)](https://edaspy.readthedocs.io/en/latest/?badge=latest)
