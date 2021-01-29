@@ -1,6 +1,6 @@
-[![PyPI version fury.io](https://badge.fury.io/py/EDAspy.svg)](https://pypi.python.org/pypi/EDAspy/)
+![PyPI](https://img.shields.io/pypi/v/edaspy)
 [![PyPI license](https://img.shields.io/pypi/l/EDAspy.svg)](https://pypi.python.org/pypi/EDAspy/)
-[![](https://pepy.tech/badge/EDAspy)](https://pepy.tech/project/EDAspy)
+[![Downloads](https://pepy.tech/badge/edaspy)](https://pepy.tech/project/edaspy)
 [![Documentation Status](https://readthedocs.org/projects/edaspy/badge/?version=latest)](https://edaspy.readthedocs.io/en/latest/?badge=latest)
 
 # EDAspy
