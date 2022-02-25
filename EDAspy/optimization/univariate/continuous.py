@@ -125,8 +125,8 @@ class UMDAc:
 
         dic = {}
         for var in self.variables:
-            mu = int(self.vector.loc['mu', var])
-            std = int(self.vector.loc['std', var])
+            mu = float(self.vector.loc['mu', var])
+            std = float(self.vector.loc['std', var])
 
             # if exists min o max restriction
             if 'max' in list(self.vector.index):
