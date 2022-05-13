@@ -3,4 +3,6 @@
 
 # __init__.py
 
-# empty
+from .univariate import UMDAc
+from .univariate import UMDA
+from .univariate.discrete import UMDAd
