@@ -5,7 +5,7 @@
 
 # __all__ = ['EDA_multivariate', '__BayesianNetwork']
 
-import subprocess
+'''import subprocess
 import sys
 
 import warnings
@@ -45,5 +45,6 @@ for package in requirements:
 
 from .EDA_multivariate_gaussian import EDA_multivariate_gaussian as EDA_multivariate_gaussian
 from .EDA_multivariate import EDAgbn as EDA_multivariate
-from .__BayesianNetwork import print_structure as print_structure
+from .__BayesianNetwork import print_structure as print_structure'''
 
+from .EGNA import EGNA

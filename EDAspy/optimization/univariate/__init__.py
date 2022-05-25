@@ -41,4 +41,5 @@ from .continuous import UMDAc as EDA_continuous
 
 from .UMDAc import UMDAc
 from .UMDAd import UMDAd
-
+from .PBILd import PBILd
+from .PBILc import PBILc

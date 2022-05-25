@@ -4,3 +4,4 @@
 # __init__.py
 
 from .binary import *
+from .continuous import ContinuousBenchmarkingCEC14
