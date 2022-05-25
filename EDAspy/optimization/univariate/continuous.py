@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from warnings import warn
 
 """
 In this version of UMDA, instead of a vector of probabilities, a vector of univariate normal distributions is found.
@@ -69,6 +70,10 @@ class UMDAc:
         :type cost_function: callable function which receives a dictionary as input and returns a numeric
         :raises Exception: cost function is not callable
         """
+
+        warn('This version of UMDAc is deprecated and will be removed in future version. Please consider '
+             'using from EDAspy.optimization import UMDAc instead as a newer and optimized version of the algorithm',
+             DeprecationWarning, stacklevel=2)
 
         self.SIZE_GEN = SIZE_GEN
         self.MAX_ITER = MAX_ITER
@@ -232,6 +237,10 @@ class UMDAc:
         :return: best cost, best individual, history of costs along execution
         :rtype: float, pandas dataframe, list
         """
+
+        warn('This version of UMDAc is deprecated and will be removed in future version. Please consider '
+             'using from EDAspy.optimization import UMDAc instead as a newer and optimized version of the algorithm',
+             DeprecationWarning, stacklevel=2)
 
         not_better = 0
         for i in range(self.MAX_ITER):

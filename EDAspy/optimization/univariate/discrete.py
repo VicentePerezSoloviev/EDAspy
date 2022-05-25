@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from warnings import warn
 
 
 class UMDAd:
@@ -65,6 +66,10 @@ class UMDAd:
         :type cost_function: callable function which receives a dictionary as input and returns a numeric value
         :raises Exception: cost function is not callable
         """
+
+        warn('This version of UMDAd is deprecated and will be removed in future version. Please consider '
+             'using from EDAspy.optimization import UMDAd instead as a newer and optimized version of the algorithm',
+             DeprecationWarning, stacklevel=2)
 
         self.ALPHA = ALPHA
         self.SIZE_GEN = SIZE_GEN
@@ -195,6 +200,10 @@ class UMDAd:
         :return: best cost, best individual, history of costs along execution
         :rtype: float, pandas dataframe, list
         """
+
+        warn('This version of UMDAd is deprecated and will be removed in future version. Please consider '
+             'using EDAspy.optimization.UMDAd instead as a newer and optimized version of the algorithm',
+             DeprecationWarning, stacklevel=2)
 
         dead_iter = 0
         for i in range(self.MAX_IT):
