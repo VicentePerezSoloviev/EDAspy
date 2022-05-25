@@ -37,7 +37,8 @@ for package in requirements:
 
 
 from .discrete import UMDAd as EDA_discrete
-from .discrete import UMDAd as UMDA
 from .continuous import UMDAc as EDA_continuous
-from .continuous import UMDAc as UMDAc
+
+from .UMDAc import UMDAc
+from .UMDAd import UMDAd
 
