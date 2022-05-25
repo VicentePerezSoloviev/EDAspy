@@ -2,7 +2,6 @@
 # coding: utf-8
 
 import numpy as np
-from scipy.stats import norm
 from .UMDA import UMDA
 
 
@@ -119,6 +118,7 @@ class UMDAc(UMDA):
         generation can sample from it. Update the vector of normal distributions.
         """
         for i in range(self.n_variables):
-            self.vector[0, i], self.vector[1, i] = norm.fit(self.generation[:, i])
+            self.vector[0, i] = np.mean(self.generation[:, i])
+            self.vector[1, i] = np.std(self.generation[:, i])
             if self.vector[1, i] < self.std_bound:
                 self.vector[1, i] = self.std_bound
