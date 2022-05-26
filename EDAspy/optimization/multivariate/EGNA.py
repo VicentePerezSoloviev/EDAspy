@@ -4,9 +4,10 @@
 import numpy as np
 from pybnesian import GaussianNetwork
 import pandas as pd
+from .multivariate_eda import MultivariateEda
 
 
-class EGNA:
+class EGNA(MultivariateEda):
     """
     Estimation of Gaussian Networks Algorithm. This type of Estimation-of-Distribution Algorithm uses
     a Gaussian Bayesian Network from where new solutions are sampled. This multivariate probabilistic
@@ -70,34 +71,11 @@ class EGNA:
             elite_factor: Percentage of previous population selected to add to new generation (elite approach).
             disp: Set to True to print convergence messages.
         """
-
-        self.max_it = max_iter
-        self.size_gen = size_gen
-
-        assert dead_iter <= max_iter, "dead_it must be lower than max_it"
-        self.dead_iter = dead_iter
-
-        self.trunc_size = int(size_gen*alpha)
-        self.n_variables = n_variables
-        self.elite_factor = elite_factor
-        self.disp = disp
-        self.landscape_bounds = landscape_bounds
-        self.vars = [str(num) for num in range(n_variables)]
+        super().__init__(size_gen=size_gen, max_iter=max_iter, dead_iter=dead_iter,
+                         n_variables=n_variables, landscape_bounds=landscape_bounds,
+                         alpha=alpha, elite_factor=elite_factor, disp=disp)
 
         self.pm = GaussianNetwork(self.vars)
-        self._initialization()
-
-    def _initialization(self):
-        self.generation = np.random.randint(self.landscape_bounds[0], self.landscape_bounds[1],
-                                            (self.size_gen, self.n_variables)).astype(float)
-
-    def _evaluation(self, objective_function):
-        self.evaluations = np.apply_along_axis(objective_function, 1, self.generation)
-
-    def _truncation(self):
-        best_indices = self.evaluations.argsort()[: self.trunc_size]
-        self.generation = self.generation[best_indices, :]
-        self.evaluations = np.take(self.evaluations, best_indices)
 
     def _update_pm(self):
         self.pm = GaussianNetwork(self.vars)
@@ -106,39 +84,3 @@ class EGNA:
     def _new_generation(self):
         self.generation = self.pm.sample(self.size_gen).to_pandas()
         self.generation = self.generation[self.vars].to_numpy()
-
-    def minimize(self, cost_function: callable, output_runtime: bool = True):
-        r"""
-        Args:
-            cost_function: Cost function to be optimized and accepts an array as argument.
-            output_runtime: True if information during runtime is desired.
-        """
-        no_improvement = 0
-
-        for _ in range(self.max_it):
-            if no_improvement == self.dead_iter:
-                break
-
-            self._evaluation(cost_function)
-            self._truncation()
-            self._update_pm()
-
-            best_local_cost = self.evaluations[0]
-            if best_local_cost < self.best_global_cost:
-                self.best_global_cost = best_local_cost
-                self.best_global_ind = self.generation[0]
-                no_improvement = 0
-            else:
-                no_improvement += 1
-
-            if output_runtime:
-                print('IT: ', _, '\tBest cost: ', self.best_global_cost)
-
-            self._new_generation()
-            self.history.append(best_local_cost)
-
-        if self.disp:
-            print("\tNFVALS = " + str(len(self.history) * self.size_gen) + " F = " + str(self.best_global_cost))
-            print("\tX = " + str(self.best_global_ind))
-
-        return self.best_global_ind, self.best_global_cost, len(self.history) * self.size_gen

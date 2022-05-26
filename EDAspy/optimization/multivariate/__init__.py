@@ -48,3 +48,4 @@ from .EDA_multivariate import EDAgbn as EDA_multivariate
 from .__BayesianNetwork import print_structure as print_structure'''
 
 from .EGNA import EGNA
+from .EMNA import EMNA

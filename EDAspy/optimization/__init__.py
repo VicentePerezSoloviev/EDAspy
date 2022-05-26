@@ -4,4 +4,4 @@
 # __init__.py
 
 from .univariate import UMDAd, UMDAc, PBILd, PBILc
-from.multivariate import EGNA
+from.multivariate import EGNA, EMNA
