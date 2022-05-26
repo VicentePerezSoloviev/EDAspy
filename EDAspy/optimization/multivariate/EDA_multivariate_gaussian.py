@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from warnings import warn
 
 
 class EDA_multivariate_gaussian:
@@ -82,6 +83,10 @@ class EDA_multivariate_gaussian:
 
         :raises Exception: cost function is not callable
         """
+
+        warn('This version of EMNA is deprecated and will be removed in future version. Please consider '
+             'using from EDAspy.optimization import EMNA instead as a newer and optimized version of the algorithm',
+             DeprecationWarning, stacklevel=2)
 
         self.SIZE_GEN = SIZE_GEN
         self.MAX_ITER = MAX_ITER
@@ -239,6 +244,10 @@ class EDA_multivariate_gaussian:
         :return: best cost, best individual, history of costs along execution
         :rtype: float, pandas DataFrame, list
         """
+
+        warn('This version of EMNA is deprecated and will be removed in future version. Please consider '
+             'using from EDAspy.optimization import EMNA instead as a newer and optimized version of the algorithm',
+             DeprecationWarning, stacklevel=2)
 
         not_better = 0
         for i in range(self.MAX_ITER):
