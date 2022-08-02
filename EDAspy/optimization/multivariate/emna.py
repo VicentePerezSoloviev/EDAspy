@@ -13,7 +13,7 @@ class EMNA(MultivariateEda):
     generation.
 
     In this implementation, as in EGNA, the algorithm is initialized from a uniform sampling in the
-    landscape bound you input in the constructor of the algorithm. If a different initialization is
+    landscape bound you input in the constructor of the algorithm. If a different initialization_models is
     desired, then you can override the class and this specific method.
 
     This algorithm is widely used in the literature and compared for different optimization tasks with
@@ -50,8 +50,8 @@ class EMNA(MultivariateEda):
                  landscape_bounds: tuple,
                  alpha: float = 0.5,
                  elite_factor: float = 0.4,
-                 std_bound: float = 0.5,
-                 disp: bool = True):
+                 disp: bool = True,
+                 std_bound: float = 0.5):
         r"""
         Args:
             size_gen: Population size. Number of individuals in each generation.
@@ -68,20 +68,26 @@ class EMNA(MultivariateEda):
                          n_variables=n_variables, landscape_bounds=landscape_bounds,
                          alpha=alpha, elite_factor=elite_factor, disp=disp)
 
-        self.std_bound = std_bound
-        self.vector = np.zeros((2, n_variables))
-
         self._initialization()
 
-    def _update_pm(self):
+        self.std_bound = std_bound
+
+        self.cov = np.zeros((self.n_variables, self.n_variables))
+        self.cov.fill(100)
         for i in range(self.n_variables):
-            self.vector[0, i] = np.mean(self.generation[:, i])
-            self.vector[1, i] = np.std(self.generation[:, i])
-            if self.vector[1, i] < self.std_bound:
-                self.vector[1, i] = self.std_bound
+            self.cov[i, i] = np.std(self.generation[:, i])
+
+    def _update_pm(self):
+        self.vector = np.empty(self.n_variables)
+        for i in range(self.n_variables):
+            self.vector[i] = np.mean(self.generation[:, i])
+
+        self.cov = np.cov(self.generation.T)
+        self.cov[self.cov < self.std_bound] = self.std_bound
+        np.fill_diagonal(self.cov, self.generation.std(0))
 
     def _new_generation(self):
-        gen = np.random.multivariate_normal(self.vector[0, :], self.vector[1, :], [self.size_gen, self.n_variables])
+        gen = np.random.multivariate_normal(self.vector, self.cov, self.size_gen)
 
         self.generation = self.generation[: int(self.elite_factor * len(self.generation))]
         self.generation = np.vstack((self.generation, gen))

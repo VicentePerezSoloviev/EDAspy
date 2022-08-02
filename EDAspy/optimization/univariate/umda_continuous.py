@@ -2,10 +2,10 @@
 # coding: utf-8
 
 import numpy as np
-from .UMDA import UMDA
+from ..eda import EDA
 
 
-class UMDAc(UMDA):
+class UMDAc(EDA):
     """
     Univariate marginal Estimation of Distribution algorithm continuous. New individuals are sampled
     from a univariate normal probabilistic model. It can be used for hyper-parameter optimization
@@ -48,12 +48,6 @@ class UMDAc(UMDA):
         Evolutionary Computation Conference (GECCO). DOI: https://doi.org/10.1145/3520304.3533963
     """
 
-    best_mae_global = 999999999999
-    best_ind_global = -1
-
-    history = []
-    evaluations = np.array(0)
-
     def __init__(self,
                  size_gen: int,
                  max_iter: int,
@@ -86,7 +80,7 @@ class UMDAc(UMDA):
         else:
             self.vector = self._initialize_vector()
 
-        # initialization of generation
+        # initialization_models of generation
         self.generation = np.random.normal(
             self.vector[0, :], self.vector[1, :], [self.size_gen, self.n_variables]
         )
@@ -102,7 +96,7 @@ class UMDAc(UMDA):
     # build a generation of size SIZE_GEN from prob vector
     def _new_generation(self):
         """
-        Build a new generation sampled from the vector of probabilities. Updates the generation pandas dataframe
+        Build a new generation sampled from the vector of probabilities. Updates the generation
         """
         gen = np.random.normal(
             self.vector[0, :], self.vector[1, :], [self.size_gen, self.n_variables]
@@ -112,7 +106,7 @@ class UMDAc(UMDA):
         self.generation = np.vstack((self.generation, gen))
 
     # update the probability vector
-    def _update_vector(self):
+    def _update_pm(self):
         """
         From the best individuals update the vector of normal distributions in order to the next
         generation can sample from it. Update the vector of normal distributions.

@@ -6,11 +6,6 @@ from abc import ABC, abstractmethod
 
 
 class UMDA(ABC):
-    best_mae_global = 999999999999
-    best_ind_global = -1
-
-    history = []
-    evaluations = np.array(0)
 
     def __init__(self,
                  size_gen: int,
@@ -31,6 +26,10 @@ class UMDA(ABC):
 
         assert dead_iter <= self.max_iter, 'dead_iter must be lower than max_iter'
         self.dead_iter = dead_iter
+
+        self.best_mae_global = 999999999999
+        self.best_ind_global = -1
+        self.evaluations = np.array(0)
 
         self.generation = np.zeros((self.size_gen, self.n_variables))
 
@@ -73,7 +72,7 @@ class UMDA(ABC):
             output_runtime: True if information during runtime is desired.
         """
 
-        self.history = []
+        history = []
         not_better = 0
 
         for _ in range(self.max_iter):
@@ -83,7 +82,7 @@ class UMDA(ABC):
 
             best_mae_local = min(self.evaluations)
 
-            self.history.append(best_mae_local)
+            history.append(best_mae_local)
             best_ind_local = np.where(self.evaluations == best_mae_local)[0][0]
             best_ind_local = self.generation[best_ind_local]
 
@@ -104,7 +103,7 @@ class UMDA(ABC):
                 print('IT: ', _, '\tBest cost: ', self.best_mae_global)
 
         if self.disp:
-            print("\tNFVALS = " + str(len(self.history) * self.size_gen) + " F = " + str(self.best_mae_global))
+            print("\tNFVALS = " + str(len(history) * self.size_gen) + " F = " + str(self.best_mae_global))
             print("\tX = " + str(self.best_ind_global))
 
-        return self.best_ind_global, self.best_mae_global, len(self.history) * self.size_gen
+        return self.best_ind_global, self.best_mae_global, len(history) * self.size_gen

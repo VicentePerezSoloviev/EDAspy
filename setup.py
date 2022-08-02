@@ -25,3 +25,5 @@ setuptools.setup(
     python_requires='>=3.6',
     license="LGPLv2+",
 )
+
+#TODO: requirements

@@ -3,5 +3,7 @@
 
 # __init__.py
 
-from .univariate import UMDAd, UMDAc, PBILd, PBILc
-from.multivariate import EGNA, EMNA
+from .univariate import UMDAd, UMDAc
+from .multivariate import EGNA, EMNA
+
+from .eda import EDA

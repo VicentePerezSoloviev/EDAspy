@@ -2,10 +2,10 @@
 # coding: utf-8
 
 import numpy as np
-from .UMDA import UMDA
+from ..eda import EDA
 
 
-class UMDAd(UMDA):
+class UMDAd(EDA):
     """
     Univariate marginal Estimation of Distribution algorithm binary. New individuals are sampled
     from a univariate binary probabilistic model. It can be used for hyper-parameter optimization
@@ -44,12 +44,6 @@ class UMDAd(UMDA):
         problem solving from nature (pp. 178-187). Springer, Berlin, Heidelberg.
     """
 
-    best_mae_global = 999999999999
-    best_ind_global = -1
-
-    history = []
-    evaluations = np.array(0)
-
     def __init__(self,
                  size_gen: int,
                  max_iter: int,
@@ -86,7 +80,7 @@ class UMDAd(UMDA):
         else:
             self.vector = self._initialize_vector()
 
-        # initialization of generation
+        # initialization_models of generation
         self.generation = np.random.random((self.size_gen, self.n_variables))
         self.generation = self.generation < self.vector
         self.generation = np.array(self.generation, dtype=int)
@@ -107,7 +101,7 @@ class UMDAd(UMDA):
         self.generation = np.vstack((self.generation, gen))
 
     # update the probability vector
-    def _update_vector(self):
+    def _update_pm(self):
         """
         From the best individuals update the vector of univariate distributions in order to the next
         generation can sample from it. Update the vector of univariate binary distributions.

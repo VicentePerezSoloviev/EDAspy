@@ -47,5 +47,5 @@ from .EDA_multivariate_gaussian import EDA_multivariate_gaussian as EDA_multivar
 from .EDA_multivariate import EDAgbn as EDA_multivariate
 from .__BayesianNetwork import print_structure as print_structure'''
 
-from .EGNA import EGNA
-from .EMNA import EMNA
+from .egna import EGNA
+from .emna import EMNA

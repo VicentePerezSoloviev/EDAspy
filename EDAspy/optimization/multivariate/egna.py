@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-import numpy as np
 from pybnesian import GaussianNetwork
 import pandas as pd
 from .multivariate_eda import MultivariateEda
@@ -44,12 +43,6 @@ class EGNA(MultivariateEda):
         algorithms using Gaussian Bayesian networks to solve industrial optimization problems constrained
         by environment variables. Journal of Combinatorial Optimization.
     """
-
-    best_global_cost = 9999999999
-    best_global_ind = np.array(0)
-
-    history = []
-    evaluations = []
 
     def __init__(self,
                  size_gen: int,

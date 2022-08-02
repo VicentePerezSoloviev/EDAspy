@@ -8,6 +8,7 @@ import numpy as np
 from .__BayesianNetwork import learn_structure, calculate_fit
 from .__clustering import clustering
 from .__matrix import nearestPD, normalizacion, is_invertible
+from warnings import warn
 
 utils = rp.importr('utils')
 utils.chooseCRANmirror(ind=1)
@@ -66,6 +67,10 @@ class EDAgbn:
         :raises Exception: cost function is not callable
 
         """
+
+        warn('This version of EMNA is deprecated and will be removed in future version. Please consider '
+             'using from EDAspy.optimization import EMNA instead as a newer and optimized version of the algorithm',
+             DeprecationWarning, stacklevel=2)
 
         self.MAX_ITER = MAX_ITER
         self.DEAD_ITER = DEAD_ITER

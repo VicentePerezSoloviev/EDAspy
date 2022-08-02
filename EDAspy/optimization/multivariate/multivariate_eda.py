@@ -7,10 +7,7 @@ import numpy as np
 
 class MultivariateEda(ABC):
 
-    best_global_ind = np.array(0)
-
-    history = []
-    evaluations = []
+    # TODO: implement getters and setters and set private attributes
 
     def __init__(self,
                  size_gen: int,
@@ -35,6 +32,7 @@ class MultivariateEda(ABC):
 
         self.max_it = max_iter
         self.size_gen = size_gen
+        self.best_global_cost = 999999999
 
         assert dead_iter <= max_iter, "dead_it must be lower than max_it"
         self.dead_iter = dead_iter
@@ -45,6 +43,9 @@ class MultivariateEda(ABC):
         self.disp = disp
         self.landscape_bounds = landscape_bounds
         self.vars = [str(num) for num in range(n_variables)]
+
+        self.best_global_ind = np.array(0)
+        self.evaluations = []
 
         self._initialization()
 
@@ -75,6 +76,7 @@ class MultivariateEda(ABC):
             output_runtime: True if information during runtime is desired.
         """
         no_improvement = 0
+        history = []
 
         for _ in range(self.max_it):
             if no_improvement == self.dead_iter:
@@ -96,10 +98,10 @@ class MultivariateEda(ABC):
                 print('IT: ', _, '\tBest cost: ', self.best_global_cost)
 
             self._new_generation()
-            self.history.append(best_local_cost)
+            history.append(best_local_cost)
 
         if self.disp:
-            print("\tNFVALS = " + str(len(self.history) * self.size_gen) + " F = " + str(self.best_global_cost))
+            print("\tNFVALS = " + str(len(history) * self.size_gen) + " F = " + str(self.best_global_cost))
             print("\tX = " + str(self.best_global_ind))
 
-        return self.best_global_ind, self.best_global_cost, len(self.history) * self.size_gen
+        return self.best_global_ind, self.best_global_cost, len(history) * self.size_gen
