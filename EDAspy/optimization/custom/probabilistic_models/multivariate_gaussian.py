@@ -7,10 +7,11 @@ from .probabilistic_model import ProbabilisticModel
 
 class MultiGauss(ProbabilisticModel):
 
-    def __init__(self, variables, std_bound):
+    def __init__(self, variables, lower_bound: float, upper_bound: float):
         super().__init__(variables)
 
-        self.std_bound = std_bound
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
 
         self.pm_means = np.empty(self.len_variables)
         self.pm_cov = np.zeros((self.len_variables, self.len_variables))
@@ -26,8 +27,12 @@ class MultiGauss(ProbabilisticModel):
             self._pm_means[i] = np.mean(dataset[:, i])
 
         self.pm_cov = np.cov(dataset.T)
-        self.pm_cov[self.pm_cov < self.std_bound] = self.std_bound
+        self.pm_cov[self.pm_cov < self.lower_bound] = self.lower_bound
+        self.pm_cov[self.pm_cov > self.upper_bound] = self.upper_bound
         np.fill_diagonal(self.pm_cov, dataset.std(0))
+
+    def export_settings(self):
+        return self.id, self.lower_bound, self.upper_bound
 
     @property
     def pm_means(self) -> np.array:

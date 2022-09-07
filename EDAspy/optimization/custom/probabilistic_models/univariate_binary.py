@@ -28,6 +28,9 @@ class UniBin(ProbabilisticModel):
         self.pm[self.pm < self.lower_bound] = self.lower_bound
         self.pm[self.pm < self.upper_bound] = self.upper_bound
 
+    def export_settings(self):
+        return self.id, self.upper_bound, self.lower_bound
+
     @property
     def pm(self):
         return self._pm

@@ -2,8 +2,8 @@
 # coding: utf-8
 
 import numpy as np
-from probabilistic_models.probabilistic_model import ProbabilisticModel
-from initialization_models.generation_init import GenInit
+from probabilistic_models import UniBin, UniGauss, GBN, MultiGauss
+from initialization_models import UniformGenInit, MultiGaussGenInit, UniBinGenInit, UniGaussGenInit
 from ..eda import EDA
 
 
@@ -14,29 +14,53 @@ class EDACustom(EDA):
                  max_iter: int,
                  dead_iter: int,
                  n_variables: int,
-                 pm: ProbabilisticModel,
-                 initialization: GenInit,
-                 alpha: float = 0.5,
-                 elite_factor: float = 0.4,
-                 disp: bool = True
+                 alpha: float,
+                 elite_factor: float,
+                 disp: bool,
+                 pm: int,
+                 init: int,
+                 bounds: tuple
                  ):
 
         super().__init__(size_gen, max_iter, dead_iter, n_variables, alpha, elite_factor, disp)
 
-        self._pm = pm
-        self._init = initialization
+        names_var = list(range(self.n_variables))
 
-    def read_settings(self, settings):
-        super().__init__(settings["size_gen"],
-                         settings["max_iter"],
-                         settings["dead_iter"],
-                         settings["n_variables"],
-                         settings["alpha"],
-                         settings["elite_factor"],
-                         settings["disp"])
+        # Probabilistic model setting
+        if pm == 1:
+            self._pm = UniGauss(names_var, lower_bound=bounds[0], upper_bound=bounds[1])
+        elif pm == 2:
+            self._pm = UniBin(names_var, lower_bound=bounds[0], upper_bound=bounds[1])
+        elif pm == 3:
+            self._pm = MultiGauss(names_var, lower_bound=bounds[0], upper_bound=bounds[1])
+        elif pm == 4:
+            self._pm = GBN(names_var)
+        else:
+            raise ValueError("The probabilistic model is not properly defined.")
 
-        self._pm =
-        self._init = initialization
+        # Initialization model setting
+        if init == 1:
+            self._init = UniGaussGenInit(self.n_variables, lower_bound=bounds[0], upper_bound=bounds[1])
+        elif init == 2:
+            self._init = UniBinGenInit(self.n_variables)
+        elif init == 3:
+            self._init = MultiGaussGenInit(self.n_variables, lower_bound=bounds[0], upper_bound=bounds[1])
+        elif init == 4:
+            self._init = UniformGenInit(self.n_variables, lower_bound=bounds[0], upper_bound=bounds[1])
+        else:
+            raise ValueError("The probabilistic model is not properly defined.")
+
+        self.generation = self._initialize_generation()
+        self.bounds = bounds
+
+    def _new_generation(self):
+        self.generation = self._pm.sample(self.size_gen)
+
+    def _update_pm(self):
+        self._pm.learn(self.generation)
+
+    def _initialize_generation(self):
+        return self._init.sample(self.size_gen)
 
     def export_settings(self):
         dic = {
@@ -48,49 +72,23 @@ class EDACustom(EDA):
             "init": self._init.id,
             "alpha": self.alpha,
             "elite_factor": self.elite_factor,
-            "disp": self.disp
+            "disp": self.disp,
+            "bounds": self.bounds
         }
         return dic
 
-    def minimize(self, cost_function: callable, output_runtime: bool = True):
-        r"""
-        Args:
-            cost_function: Cost function to be optimized and accepts an array as argument.
-            output_runtime: True if information during runtime is desired.
-        """
 
-        history = []
-        not_better = 0
+def read_settings(settings) -> EDACustom:
 
-        for _ in range(self.max_iter):
-            self._check_generation(cost_function)
-            self._truncation()
-            self._update_pm()
-
-            best_mae_local = min(self.evaluations)
-
-            history.append(best_mae_local)
-            best_ind_local = np.where(self.evaluations == best_mae_local)[0][0]
-            best_ind_local = self.generation[best_ind_local]
-
-            # update the best values ever
-            if best_mae_local < self.best_mae_global:
-                self.best_mae_global = best_mae_local
-                self.best_ind_global = best_ind_local
-                not_better = 0
-
-            else:
-                not_better += 1
-                if not_better == self.dead_iter:
-                    break
-
-            self._new_generation()
-
-            if output_runtime:
-                print('IT: ', _, '\tBest cost: ', self.best_mae_global)
-
-        if self.disp:
-            print("\tNFVALS = " + str(len(history) * self.size_gen) + " F = " + str(self.best_mae_global))
-            print("\tX = " + str(self.best_ind_global))
-
-        return self.best_ind_global, self.best_mae_global, len(history) * self.size_gen
+    eda = EDACustom(size_gen=settings["size-gen"],
+                    max_iter=settings["max_iter"],
+                    dead_iter=settings["dead_iter"],
+                    n_variables=settings["n_variables"],
+                    alpha=settings["alpha"],
+                    elite_factor=settings["elite_factor"],
+                    disp=settings["disp"],
+                    pm=settings["pm"],
+                    init=settings["init"],
+                    bounds=settings["bounds"]
+                    )
+    return eda

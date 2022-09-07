@@ -3,6 +3,7 @@
 
 from abc import ABC, abstractmethod
 import numpy as np
+from . import UniBin, UniGauss, GBN, MultiGauss
 
 
 class ProbabilisticModel(ABC):
@@ -19,6 +20,10 @@ class ProbabilisticModel(ABC):
 
     @abstractmethod
     def learn(self, dataset: np.array):
+        raise Exception("Not implemented method")
+
+    @abstractmethod
+    def export_settings(self):
         raise Exception("Not implemented method")
 
     @property

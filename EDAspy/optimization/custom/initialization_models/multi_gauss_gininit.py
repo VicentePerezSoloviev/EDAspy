@@ -12,19 +12,20 @@ class MultiGaussGenInit(GenInit):
                  n_variables: int,
                  means_vector: np.array = np.empty(0),
                  cov_matrix: np.array = np.empty(0),
-                 bounds: tuple = (-100, 100)):
+                 lower_bound: float = -100,
+                 upper_bound: float = 100):
 
         super().__init__(n_variables)
         assert len(means_vector) == len(cov_matrix), "Lengths of means vector and covariance matrix must be the same."
 
         if len(means_vector) == 0:
-            self._means_vector = np.random.randint(low=bounds[0], high=bounds[1], size=n_variables)
-            self._cov_matrix = np.random.randint(low=bounds[0], high=bounds[1], size=(n_variables, n_variables))
+            self._means_vector = np.random.randint(low=lower_bound, high=upper_bound, size=n_variables)
+            self._cov_matrix = np.random.randint(low=lower_bound, high=upper_bound, size=(n_variables, n_variables))
         else:
             self._means_vector = means_vector
             self._cov_matrix = cov_matrix
 
-        self._pm = MultiGauss(list(range(n_variables)), 99999999)
+        self._pm = MultiGauss(list(range(n_variables)), lower_bound, upper_bound)
         self._pm.pm_means = self._means_vector
         self._pm.pm_cov = self._cov_matrix
 

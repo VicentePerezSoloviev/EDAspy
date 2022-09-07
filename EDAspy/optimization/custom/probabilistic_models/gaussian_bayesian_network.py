@@ -26,3 +26,6 @@ class GBN(ProbabilisticModel):
         dataset = self._pm.sample(size).to_pandas()
         dataset = dataset[self.variables].to_numpy()
         return dataset
+
+    def export_settings(self):
+        return self.id
