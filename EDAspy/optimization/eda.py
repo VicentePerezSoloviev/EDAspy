@@ -3,6 +3,7 @@
 
 import numpy as np
 from abc import ABC
+from .eda_result import EdaResult
 
 
 class EDA(ABC):
@@ -138,32 +139,3 @@ class EDA(ABC):
                                history, self.export_settings())
 
         return eda_result
-
-
-class EdaResult:
-
-    """
-    Object used to encapsulate the result and information of the EDA during the execution
-    """
-
-    def __init__(self,
-                 best_ind: np.array,
-                 best_cost: float,
-                 n_fev: int,
-                 history: list,
-                 settings: dict):
-
-        """
-
-        :param best_ind: Best result found in the execution.
-        :param best_cost: Cost of the best result found.
-        :param n_fev: Number of cost function evaluations.
-        :param history: Best result found in each iteration of the algorithm.
-        :param settings: Configuration of the parameters of the EDA.
-        """
-
-        self.best_ind = best_ind
-        self.best_cost = best_cost
-        self.n_fev = n_fev
-        self.history = history
-        self.settings = settings
