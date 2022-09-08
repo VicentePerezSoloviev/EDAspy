@@ -12,14 +12,14 @@ class UniBinGenInit(GenInit):
         super().__init__(n_variables)
 
         if len(means_vector) == 0:
-            self._means_vector = np.array([0.5] * self.n_variables)
+            self.means_vector = np.array([0.5] * self.n_variables)
         else:
-            self._means_vector = means_vector
+            self.means_vector = means_vector
 
-        self._pm = UniBin(list(range(self.n_variables)), lower_bound=0, upper_bound=0)  # dismiss bounds
-        self._pm.pm = means_vector
+        self.pm = UniBin(list(range(self.n_variables)), lower_bound=0, upper_bound=0)  # dismiss bounds
+        self.pm.pm = means_vector
 
         self.id = 2
 
-    def sample(self, size):
-        return self._pm.sample(size)
+    def sample(self, size) -> np.array:
+        return self.pm.sample(size)

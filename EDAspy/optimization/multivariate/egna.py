@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-from pybnesian import GaussianNetwork
-import pandas as pd
-from .multivariate_eda import MultivariateEda
+from ..eda import EDA
+from ..custom.probabilistic_models import GBN
+from ..custom.initialization_models import MultiGaussGenInit
 
 
-class EGNA(MultivariateEda):
+class EGNA(EDA):
     """
     Estimation of Gaussian Networks Algorithm. This type of Estimation-of-Distribution Algorithm uses
     a Gaussian Bayesian Network from where new solutions are sampled. This multivariate probabilistic
@@ -32,7 +32,7 @@ class EGNA(MultivariateEda):
             egna = EGNA(size_gen=300, max_iter=100, dead_iter=20, n_variables=10,
                         landscape_bounds=(-60, 60))
 
-            best_sol, best_cost, cost_evals = egna.minimize(benchmarking.cec14_4, True)
+            eda_result = egna.minimize(benchmarking.cec14_4, True)
 
     References:
 
@@ -64,16 +64,12 @@ class EGNA(MultivariateEda):
             elite_factor: Percentage of previous population selected to add to new generation (elite approach).
             disp: Set to True to print convergence messages.
         """
+
         super().__init__(size_gen=size_gen, max_iter=max_iter, dead_iter=dead_iter,
-                         n_variables=n_variables, landscape_bounds=landscape_bounds,
-                         alpha=alpha, elite_factor=elite_factor, disp=disp)
+                         n_variables=n_variables, alpha=alpha, elite_factor=elite_factor, disp=disp)
 
-        self.pm = GaussianNetwork(self.vars)
-
-    def _update_pm(self):
-        self.pm = GaussianNetwork(self.vars)
-        self.pm.fit(pd.DataFrame(self.generation))
-
-    def _new_generation(self):
-        self.generation = self.pm.sample(self.size_gen).to_pandas()
-        self.generation = self.generation[self.vars].to_numpy()
+        self.vars = [str(i) for i in range(n_variables)]
+        self.landscape_bounds = landscape_bounds
+        self.pm = GBN(self.vars)
+        self.init = MultiGaussGenInit(self.n_variables, lower_bound=self.landscape_bounds[0],
+                                      upper_bound=self.landscape_bounds[1])

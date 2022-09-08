@@ -11,8 +11,8 @@ class UniGauss(ProbabilisticModel):
         super().__init__(variables)
 
         self.pm = np.zeros((2, self.len_variables))
-        self._lower_bound = lower_bound
-        self._upper_bound = upper_bound
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
 
         self.id = 1
 
@@ -27,20 +27,8 @@ class UniGauss(ProbabilisticModel):
             self.pm[0, i] = np.mean(dataset[:, i])
             self.pm[1, i] = np.std(dataset[:, i])
 
-            if self.pm[1, i] < self._lower_bound:
-                self.pm[1, i] = self._lower_bound
+            if self.pm[1, i] < self.lower_bound:
+                self.pm[1, i] = self.lower_bound
 
-            if self.pm[1, i] > self._upper_bound:
-                self.pm[1, i] = self._upper_bound
-
-    def export_settings(self):
-        return self.id, self._lower_bound, self._upper_bound
-
-    @property
-    def pm(self):
-        return self._pm
-
-    @pm.setter
-    def pm(self, value: np.array):
-        assert value.shape == (2, len(self.variables)), "The argument must have a shape of 2 x number of variables."
-        self._pm = value
+            if self.pm[1, i] > self.upper_bound:
+                self.pm[1, i] = self.upper_bound

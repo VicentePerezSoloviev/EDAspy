@@ -2,6 +2,8 @@
 # coding: utf-8
 
 import numpy as np
+from ..custom.probabilistic_models import UniBin
+from ..custom.initialization_models import UniBinGenInit
 from ..eda import EDA
 
 
@@ -35,7 +37,7 @@ class UMDAd(EDA):
 
             umda = UMDAd(size_gen=100, max_iter=100, dead_iter=10, n_variables=10)
             # We leave bound by default
-            best_sol, best_cost, cost_evals = umda.minimize(one_max_min, True)
+            eda_result = umda.minimize(one_max_min, True)
 
     References:
 
@@ -74,38 +76,12 @@ class UMDAd(EDA):
         self.lower_bound = lower_bound
         self.upper_bound = upper_bound
 
-        if vector is not None:
-            assert vector.shape == (self.n_variables, )
-            self.vector = vector
+        self.vector = vector
+
+        self.names_vars = list(range(self.n_variables))
+        self.pm = UniBin(self.names_vars, self.upper_bound, self.lower_bound)
+
+        if self.vector is None:
+            self.init = UniBinGenInit(self.n_variables, means_vector=[0.5]*self.n_variables)
         else:
-            self.vector = self._initialize_vector()
-
-        # initialization_models of generation
-        self.generation = np.random.random((self.size_gen, self.n_variables))
-        self.generation = self.generation < self.vector
-        self.generation = np.array(self.generation, dtype=int)
-
-    def _initialize_vector(self):
-        return np.array([0.5]*self.n_variables)
-
-    # build a generation of size SIZE_GEN from prob vector
-    def _new_generation(self):
-        """
-        Build a new generation sampled from the vector of probabilities. Updates the generation pandas dataframe
-        """
-        gen = np.random.random((self.size_gen, self.n_variables))
-        gen = gen < self.vector
-        gen = np.array(gen, dtype=int)
-
-        self.generation = self.generation[: int(self.elite_factor * len(self.generation))]
-        self.generation = np.vstack((self.generation, gen))
-
-    # update the probability vector
-    def _update_pm(self):
-        """
-        From the best individuals update the vector of univariate distributions in order to the next
-        generation can sample from it. Update the vector of univariate binary distributions.
-        """
-        self.vector = sum(self.generation) / len(self.generation)
-        self.vector[self.vector < self.lower_bound] = self.lower_bound
-        self.vector[self.vector < self.upper_bound] = self.upper_bound
+            self.init = UniBinGenInit(self.n_variables, means_vector=self.vector)

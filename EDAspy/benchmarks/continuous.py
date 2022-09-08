@@ -1,20 +1,21 @@
 import numpy as np
+import os
 
 
-class Benchmarking:
-
-    #TODO: solve paths
+class ContinuousBenchmarkingCEC14:
 
     def __init__(self, dim):
         self.d = dim
+        self.package_directory = os.path.dirname(os.path.abspath(__file__))
 
     def load_shift(self, number):
-        text_file = open("CEC2014/cec14-c-code/input_data/shift_data_" + str(number) + ".txt", "r")
+
+        text_file = open(os.path.join(self.package_directory, 'input_data', "shift_data_" + str(number) + ".txt"), "r")
         shifts = text_file.read().split()
         return np.array(shifts[:self.d]).astype(float)
 
     def load_rot(self, number):
-        matrix_file = open("CEC2014/cec14-c-code/input_data/M_" + str(number) + "_D" + str(self.d) + ".txt", "r")
+        matrix_file = open(os.path.join(self.package_directory, 'input_data', "M_" + str(number) + "_D" + str(self.d) + ".txt"), "r")
         matrix_file = matrix_file.read().split()
         matrix_file = np.array(matrix_file).astype(float)
         matrix_file = np.reshape(matrix_file, (self.d, self.d))

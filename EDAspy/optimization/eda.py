@@ -2,7 +2,9 @@
 # coding: utf-8
 
 import numpy as np
-from abc import ABC, abstractmethod
+from abc import ABC
+from .custom.probabilistic_models import ProbabilisticModel
+from .custom.initialization_models import GenInit
 
 
 class EDA(ABC):
@@ -31,11 +33,16 @@ class EDA(ABC):
         self.best_ind_global = -1
         self.evaluations = np.array(0)
 
-        self.generation = np.zeros((self.size_gen, self.n_variables))
+        self.generation = self._initialize_generation()
 
-    @abstractmethod
+        self.pm = ProbabilisticModel(list())
+        self.init = GenInit(n_variables)
+
     def _new_generation(self):
-        raise Exception("Not implemented method")
+        self.generation = self.pm.sample(size=self.size_gen)
+
+    def _initialize_generation(self) -> np.array:
+        return self.init.sample(self.size_gen)
 
     def _truncation(self):
         """
@@ -53,9 +60,19 @@ class EDA(ABC):
         """
         self.evaluations = np.apply_along_axis(objective_function, 1, self.generation)
 
-    @abstractmethod
     def _update_pm(self):
-        raise Exception("Not implemented method")
+        self.pm.learn(dataset=self.generation)
+
+    def export_settings(self) -> dict:
+        return {
+            "size_gen": self.size_gen,
+            "max_iter": self.max_iter,
+            "dead_iter": self.dead_iter,
+            "n_variables": self.n_variables,
+            "alpha": self.alpha,
+            "elite_factor": self.elite_factor,
+            "disp": self.disp
+        }
 
     # run the class to find the optimum
     def minimize(self, cost_function: callable, output_runtime: bool = True):
@@ -99,4 +116,22 @@ class EDA(ABC):
             print("\tNFVALS = " + str(len(history) * self.size_gen) + " F = " + str(self.best_mae_global))
             print("\tX = " + str(self.best_ind_global))
 
-        return self.best_ind_global, self.best_mae_global, len(history) * self.size_gen
+        eda_result = EdaResult(self.best_ind_global, self.best_mae_global, len(history) * self.size_gen,
+                               history, self.export_settings())
+
+        return eda_result
+
+
+class EdaResult:
+    def __init__(self,
+                 best_ind: np.array,
+                 best_cost: float,
+                 n_fev: int,
+                 history: list,
+                 settings: dict):
+
+        self.best_ind = best_ind
+        self.best_cost = best_cost
+        self.n_fev = n_fev
+        self.history = history
+        self.settings = settings

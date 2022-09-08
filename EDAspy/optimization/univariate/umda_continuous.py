@@ -2,6 +2,8 @@
 # coding: utf-8
 
 import numpy as np
+from ..custom.probabilistic_models import UniGauss
+from ..custom.initialization_models import UniGaussGenInit
 from ..eda import EDA
 
 
@@ -28,15 +30,15 @@ class UMDAc(EDA):
 
         .. code-block:: python
 
-            from EDAspy.benchmarks import one_max
-            from EDAspy.optimization import UMDAc, UMDAd
+            from EDAspy.benchmarks import ContinuousBenchmarkingCEC14
+            from EDAspy.optimization import UMDAc
 
-            def one_max_min(array):
-                return -one_max(array)
+            n_vars = 10
+            benchmarking = ContinuousBenchmarkingCEC14(n_vars)
 
             umda = UMDAc(size_gen=100, max_iter=100, dead_iter=10, n_variables=10, alpha=0.5)
             # We leave bound by default
-            best_sol, best_cost, cost_evals = umda.minimize(one_max_min, True)
+            eda_result = umda.minimize(cost_function=one_max_min, True)
 
     References:
 
@@ -55,7 +57,8 @@ class UMDAc(EDA):
                  n_variables: int,
                  alpha: float = 0.5,
                  vector: np.array = None,
-                 std_bound: float = 0.3,
+                 lower_bound: float = 0.5,
+                 upper_bound: float = 100,
                  elite_factor: float = 0.4,
                  disp: bool = True):
         r"""
@@ -66,53 +69,24 @@ class UMDAc(EDA):
             n_variables: Number of variables to be optimized.
             alpha: Percentage of population selected to update the probabilistic model.
             vector: Array with shape (2, n_variables) where rows are mean and std of the parameters to be optimized.
-            std_bound: Lower bound imposed in std of the variables to not converge to std=0.
+            lower_bound: Lower bound imposed in std of the variables to not converge to std=0.
+            upper_bound: Upper bound imposed to the probabilities of the variables
             elite_factor: Percentage of previous population selected to add to new generation (elite approach).
             disp: Set to True to print convergence messages.
         """
 
+        self.vector = vector
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
+        self.names_vars = list(range(n_variables))
+
         super().__init__(size_gen, max_iter, dead_iter, n_variables, alpha, elite_factor, disp)
-        self.std_bound = std_bound
 
-        if vector is not None:
-            assert vector.shape == (2, self.n_variables)
-            self.vector = vector
-        else:
-            self.vector = self._initialize_vector()
+        self.pm = UniGauss(self.names_vars, lower_bound, upper_bound)
 
-        # initialization_models of generation
-        self.generation = np.random.normal(
-            self.vector[0, :], self.vector[1, :], [self.size_gen, self.n_variables]
-        )
+        if self.vector is None:
+            self.vector = np.zeros((2, self.n_variables))
+            self.vector[0, :] = [0] * self.n_variables
+            self.vector[1, :] = [self.upper_bound] * self.n_variables
 
-    def _initialize_vector(self):
-        vector = np.zeros((2, self.n_variables))
-
-        vector[0, :] = np.pi  # mu
-        vector[1, :] = 0.5  # std
-
-        return vector
-
-    # build a generation of size SIZE_GEN from prob vector
-    def _new_generation(self):
-        """
-        Build a new generation sampled from the vector of probabilities. Updates the generation
-        """
-        gen = np.random.normal(
-            self.vector[0, :], self.vector[1, :], [self.size_gen, self.n_variables]
-        )
-
-        self.generation = self.generation[: int(self.elite_factor * len(self.generation))]
-        self.generation = np.vstack((self.generation, gen))
-
-    # update the probability vector
-    def _update_pm(self):
-        """
-        From the best individuals update the vector of normal distributions in order to the next
-        generation can sample from it. Update the vector of normal distributions.
-        """
-        for i in range(self.n_variables):
-            self.vector[0, i] = np.mean(self.generation[:, i])
-            self.vector[1, i] = np.std(self.generation[:, i])
-            if self.vector[1, i] < self.std_bound:
-                self.vector[1, i] = self.std_bound
+        self.init = UniGaussGenInit(self.n_variables, means_vector=self.vector[0, :], stds_vector=self.vector[1, :])

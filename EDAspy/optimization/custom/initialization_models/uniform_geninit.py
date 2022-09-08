@@ -20,5 +20,5 @@ class UniformGenInit(GenInit):
 
         self.id = 4
 
-    def sample(self, size):
+    def sample(self, size) -> np.array:
         return np.random.randint(self.lower_bound, self.upper_bound, (self.n_variables, size)).astype(float)
