@@ -7,12 +7,11 @@ from .probabilistic_model import ProbabilisticModel
 
 class UniGauss(ProbabilisticModel):
 
-    def __init__(self, variables: list, lower_bound: float, upper_bound: float):
+    def __init__(self, variables: list, lower_bound: float):
         super().__init__(variables)
 
         self.pm = np.zeros((2, self.len_variables))
         self.lower_bound = lower_bound
-        self.upper_bound = upper_bound
 
         self.id = 1
 
@@ -29,6 +28,3 @@ class UniGauss(ProbabilisticModel):
 
             if self.pm[1, i] < self.lower_bound:
                 self.pm[1, i] = self.lower_bound
-
-            if self.pm[1, i] > self.upper_bound:
-                self.pm[1, i] = self.upper_bound

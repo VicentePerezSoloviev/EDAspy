@@ -58,7 +58,6 @@ class UMDAc(EDA):
                  alpha: float = 0.5,
                  vector: np.array = None,
                  lower_bound: float = 0.5,
-                 upper_bound: float = 100,
                  elite_factor: float = 0.4,
                  disp: bool = True):
         r"""
@@ -70,23 +69,23 @@ class UMDAc(EDA):
             alpha: Percentage of population selected to update the probabilistic model.
             vector: Array with shape (2, n_variables) where rows are mean and std of the parameters to be optimized.
             lower_bound: Lower bound imposed in std of the variables to not converge to std=0.
-            upper_bound: Upper bound imposed to the probabilities of the variables
             elite_factor: Percentage of previous population selected to add to new generation (elite approach).
             disp: Set to True to print convergence messages.
         """
 
         self.vector = vector
         self.lower_bound = lower_bound
-        self.upper_bound = upper_bound
         self.names_vars = list(range(n_variables))
 
         super().__init__(size_gen, max_iter, dead_iter, n_variables, alpha, elite_factor, disp)
 
-        self.pm = UniGauss(self.names_vars, lower_bound, upper_bound)
-
         if self.vector is None:
-            self.vector = np.zeros((2, self.n_variables))
-            self.vector[0, :] = [0] * self.n_variables
-            self.vector[1, :] = [self.upper_bound] * self.n_variables
+            self.vector = np.zeros((2, n_variables))
+            self.vector[0, :] = [0] * n_variables
+            self.vector[1, :] = [100] * n_variables  # high value to ensure variance
+        else:
+            assert self.vector.shape == (2, n_variables)
 
-        self.init = UniGaussGenInit(self.n_variables, means_vector=self.vector[0, :], stds_vector=self.vector[1, :])
+        self.init = UniGaussGenInit(n_variables, means_vector=self.vector[0, :], stds_vector=self.vector[1, :])
+
+        self.pm = UniGauss(self.names_vars, lower_bound)

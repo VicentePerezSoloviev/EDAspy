@@ -3,8 +3,6 @@
 
 import numpy as np
 from abc import ABC
-from .custom.probabilistic_models import ProbabilisticModel
-from .custom.initialization_models import GenInit
 
 
 class EDA(ABC):
@@ -31,6 +29,7 @@ class EDA(ABC):
         self.n_variables = n_variables
         self.truncation_length = int(size_gen * alpha)
         self.elite_factor = elite_factor
+        self.elite_length = int(size_gen * elite_factor)
 
         assert dead_iter <= self.max_iter, 'dead_iter must be lower than max_iter'
         self.dead_iter = dead_iter
@@ -39,24 +38,26 @@ class EDA(ABC):
         self.best_ind_global = -1
         self.evaluations = np.array(0)
 
-        self.generation = self._initialize_generation()
-
-        self.pm = ProbabilisticModel(list())
-        self.init = GenInit(n_variables)
+        self.pm = None
+        self.init = None
+        self.generation = None
 
     def _new_generation(self):
-        self.generation = self.pm.sample(size=self.size_gen)
+        self.generation = np.concatenate([self.pm.sample(size=self.size_gen), self.elite_temp])
 
     def _initialize_generation(self) -> np.array:
-        return self.init.sample(self.size_gen)
+        return self.init.sample(size=self.size_gen)
 
     def _truncation(self):
         """
         Selection of the best individuals of the actual generation.
         """
-        best_indices = self.evaluations.argsort()[: self.truncation_length]
-        self.generation = self.generation[best_indices, :]
-        self.evaluations = np.take(self.evaluations, best_indices)
+        ordering = self.evaluations.argsort()
+        best_indices_truc = ordering[: self.truncation_length]
+        best_indices_elit = ordering[: self.elite_length]
+        self.elite_temp = self.generation[best_indices_elit, :]
+        self.generation = self.generation[best_indices_truc, :]
+        self.evaluations = np.take(self.evaluations, best_indices_truc)
 
     # check each individual of the generation
     def _check_generation(self, objective_function):
@@ -99,6 +100,8 @@ class EDA(ABC):
 
         history = []
         not_better = 0
+
+        self.generation = self._initialize_generation()
 
         for _ in range(self.max_iter):
             self._check_generation(cost_function)

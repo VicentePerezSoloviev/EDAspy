@@ -9,7 +9,6 @@ class ContinuousBenchmarkingCEC14:
         self.package_directory = os.path.dirname(os.path.abspath(__file__))
 
     def load_shift(self, number):
-
         text_file = open(os.path.join(self.package_directory, 'input_data', "shift_data_" + str(number) + ".txt"), "r")
         shifts = text_file.read().split()
         return np.array(shifts[:self.d]).astype(float)

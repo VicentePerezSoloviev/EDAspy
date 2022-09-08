@@ -60,7 +60,7 @@ class EMNA(EDA):
             max_iter: Maximum number of iterations during runtime.
             dead_iter: Stopping criteria. Number of iterations with no improvement after which, the algorithm finish.
             n_variables: Number of variables to be optimized.
-            landscape_bounds: Landscape bounds. Limits in the search space.
+            landscape_bounds: Landscape bounds only for initialization. Limits in the search space.
             alpha: Percentage of population selected to update the probabilistic model.
             elite_factor: Percentage of previous population selected to add to new generation (elite approach).
             lower_bound: Lower bound imposed in std of the variables to not converge to std=0.
