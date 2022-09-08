@@ -6,4 +6,4 @@
 from .univariate import UMDAd, UMDAc
 from .multivariate import EGNA, EMNA
 
-from .eda import EDA
+from .eda import EDA, EdaResult

@@ -9,6 +9,12 @@ from .custom.initialization_models import GenInit
 
 class EDA(ABC):
 
+    """
+    Abstract class which defines the general performance of the algorithms. The baseline of the EDA
+    approach is defined in this object. The specific configurations is defined in the class of each
+    specific algorithm.
+    """
+
     def __init__(self,
                  size_gen: int,
                  max_iter: int,
@@ -61,9 +67,16 @@ class EDA(ABC):
         self.evaluations = np.apply_along_axis(objective_function, 1, self.generation)
 
     def _update_pm(self):
+        """
+        Learn the probabilistic model from the best individuals of previous generation.
+        """
         self.pm.learn(dataset=self.generation)
 
     def export_settings(self) -> dict:
+        """
+        Export the configuration of the algorithm to an object to be loaded in other execution.
+        :return: dict
+        """
         return {
             "size_gen": self.size_gen,
             "max_iter": self.max_iter,
@@ -80,6 +93,8 @@ class EDA(ABC):
         Args:
             cost_function: Cost function to be optimized and accepts an array as argument.
             output_runtime: True if information during runtime is desired.
+
+        :return: EdaResult object
         """
 
         history = []
@@ -123,12 +138,26 @@ class EDA(ABC):
 
 
 class EdaResult:
+
+    """
+    Object used to encapsulate the result and information of the EDA during the execution
+    """
+
     def __init__(self,
                  best_ind: np.array,
                  best_cost: float,
                  n_fev: int,
                  history: list,
                  settings: dict):
+
+        """
+
+        :param best_ind: Best result found in the execution.
+        :param best_cost: Cost of the best result found.
+        :param n_fev: Number of cost function evaluations.
+        :param history: Best result found in each iteration of the algorithm.
+        :param settings: Configuration of the parameters of the EDA.
+        """
 
         self.best_ind = best_ind
         self.best_cost = best_cost
