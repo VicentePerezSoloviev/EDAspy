@@ -7,8 +7,10 @@ Welcome to EDAspy's documentation!
 ==================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Contents:
+
+   EDAspy/eda.py
 
 
 
