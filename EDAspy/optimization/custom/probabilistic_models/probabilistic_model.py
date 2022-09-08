@@ -21,7 +21,6 @@ class ProbabilisticModel(ABC):
     def learn(self, dataset: np.array):
         raise Exception("Not implemented method")
 
-    @abstractmethod
     def export_settings(self):
         return self.id
 

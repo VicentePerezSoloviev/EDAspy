@@ -563,7 +563,7 @@
   };
 
   // Returns a function that will be executed at most one time, no matter how
-  // often you call it. Useful for lazy initialization.
+  // often you call it. Useful for lazy initialization_models.
   _.once = function(func) {
     var ran = false, memo;
     return function() {
