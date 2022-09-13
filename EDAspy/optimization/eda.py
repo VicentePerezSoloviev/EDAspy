@@ -4,6 +4,8 @@
 import numpy as np
 from abc import ABC
 from .eda_result import EdaResult
+from .custom.probabilistic_models import ProbabilisticModel
+from .custom.initialization_models import GenInit
 
 
 class EDA(ABC):
@@ -13,6 +15,9 @@ class EDA(ABC):
     approach is defined in this object. The specific configurations is defined in the class of each
     specific algorithm.
     """
+
+    _pm = None
+    _init = None
 
     def __init__(self,
                  size_gen: int,
@@ -39,8 +44,6 @@ class EDA(ABC):
         self.best_ind_global = -1
         self.evaluations = np.array(0)
 
-        self.pm = None
-        self.init = None
         self.generation = None
 
     def _new_generation(self):
@@ -89,14 +92,12 @@ class EDA(ABC):
             "disp": self.disp
         }
 
-    # run the class to find the optimum
     def minimize(self, cost_function: callable, output_runtime: bool = True):
         r"""
-        Args:
-            cost_function: Cost function to be optimized and accepts an array as argument.
-            output_runtime: True if information during runtime is desired.
-
+        :param cost_function: cost function to be optimized and accepts an array as argument.
+        :param output_runtime: true if information during runtime is desired.
         :return: EdaResult object
+        :rtype: EdaResult
         """
 
         history = []
@@ -139,3 +140,35 @@ class EDA(ABC):
                                history, self.export_settings())
 
         return eda_result
+
+    @property
+    def pm(self):
+        return self._pm
+
+    @pm.setter
+    def pm(self, value):
+        if isinstance(value, ProbabilisticModel):
+            self._pm = value
+        else:
+            raise ValueError('The object you try to set as a probabilistic model does not extend the '
+                             'class ProbabilisticModel provided by EDAspy')
+
+        if len(value.variables) != self.n_variables:
+            raise Exception('The number of variables of the probabilistic model is not equal to the number of '
+                            'variables of the EDA')
+
+    @property
+    def init(self):
+        return self._init
+
+    @init.setter
+    def init(self, value):
+        if isinstance(value, GenInit):
+            self._init = value
+        else:
+            raise ValueError('The object you try to set as an initializator does not extend the '
+                             'class GenInit provided by EDAspy')
+
+        if value.n_variables != self.n_variables:
+            raise Exception('The number of variables of the initializator is not equal to the number of '
+                            'variables of the EDA')

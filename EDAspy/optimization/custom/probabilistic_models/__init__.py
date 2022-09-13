@@ -3,7 +3,7 @@
 
 # __init__.py
 
-from .probabilistic_model import ProbabilisticModel
+from ._probabilistic_model import ProbabilisticModel
 from .univariate_binary import UniBin
 from .univariate_gaussian import UniGauss
 from .multivariate_gaussian import MultiGauss

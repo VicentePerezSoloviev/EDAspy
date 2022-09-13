@@ -2,6 +2,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import warnings
 
 
 def __normalize__(array):
@@ -86,6 +87,11 @@ class TransformationsFSEDA:
         :raises Exception: cost function is not callable
 
         """
+
+        warnings.warn(
+            "This implementation will be deprecated in following versions of EDAspy, and adapted to the rest "
+            "of EDAs implementations", PendingDeprecationWarning
+        )
 
         self.max_it = max_it
         self.size_gen = size_gen

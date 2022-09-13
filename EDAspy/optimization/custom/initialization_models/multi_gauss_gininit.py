@@ -3,10 +3,14 @@
 
 import numpy as np
 from ..probabilistic_models import MultiGauss
-from .generation_init import GenInit
+from ._generation_init import GenInit
 
 
 class MultiGaussGenInit(GenInit):
+
+    """
+    Initial generation simulator based on the probabilistic model of multivariate Gaussian distribution.
+    """
 
     def __init__(self,
                  n_variables: int,
@@ -14,6 +18,16 @@ class MultiGaussGenInit(GenInit):
                  cov_matrix: np.array = np.empty(0),
                  lower_bound: float = -100,
                  upper_bound: float = 100):
+
+        """
+        :param n_variables: Number of variables
+        :param means_vector: Array of means to initialize the item.
+        :type means_vector: np.array
+        :param cov_matrix: Covariance matrix to initialize the item.
+        :type cov_matrix: np.array
+        :param lower_bound: lower bound for the random covariance matrix.
+        :param upper_bound: upper bound for the random covariance matrix.
+        """
 
         super().__init__(n_variables)
         assert len(means_vector) == len(cov_matrix), "Lengths of means vector and covariance matrix must be the same."
@@ -31,5 +45,13 @@ class MultiGaussGenInit(GenInit):
 
         self.id = 3
 
-    def sample(self, size) -> np.array:
+    def sample(self, size: int) -> np.array:
+        """
+        Sample several times the initializator.
+
+        :param size: number of samplings.
+        :return: array with the dataset sampled.
+        :rtype: np.array
+        """
+
         return self.pm.sample(size)

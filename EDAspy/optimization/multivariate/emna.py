@@ -55,17 +55,16 @@ class EMNA(EDA):
                  lower_bound: float = 0.5,
                  upper_bound: float = 100):
         r"""
-        Args:
-            size_gen: Population size. Number of individuals in each generation.
-            max_iter: Maximum number of iterations during runtime.
-            dead_iter: Stopping criteria. Number of iterations with no improvement after which, the algorithm finish.
-            n_variables: Number of variables to be optimized.
-            landscape_bounds: Landscape bounds only for initialization. Limits in the search space.
-            alpha: Percentage of population selected to update the probabilistic model.
-            elite_factor: Percentage of previous population selected to add to new generation (elite approach).
-            lower_bound: Lower bound imposed in std of the variables to not converge to std=0.
-            upper_bound: Upper bound imposed in std of the variables.
-            disp: Set to True to print convergence messages.
+            :param size_gen: Population size. Number of individuals in each generation.
+            :param max_iter: Maximum number of iterations during runtime.
+            :param dead_iter: Stopping criteria. Number of iterations with no improvement after which, the algorithm finish.
+            :param n_variables: Number of variables to be optimized.
+            :param landscape_bounds: Landscape bounds only for initialization. Limits in the search space.
+            :param alpha: Percentage of population selected to update the probabilistic model.
+            :param elite_factor: Percentage of previous population selected to add to new generation (elite approach).
+            :param lower_bound: Lower bound imposed in std of the variables to not converge to std=0.
+            :param upper_bound: Upper bound imposed in std of the variables.
+            :param disp: Set to True to print convergence messages.
         """
         super().__init__(size_gen=size_gen, max_iter=max_iter, dead_iter=dead_iter,
                          n_variables=n_variables, alpha=alpha, elite_factor=elite_factor, disp=disp)

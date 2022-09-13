@@ -31,3 +31,10 @@ class EdaResult:
         self.n_fev = n_fev
         self.history = history
         self.settings = settings
+
+    def __str__(self):
+        string = "\tNFVALS = " + str(self.n_fev) + " F = " + str(self.best_cost) + \
+                 "\n\tX = " + str(self.best_ind) + \
+                 "\n\tSettings: " + str(self.settings) + \
+                 "\n\tHistory best cost per iteration: " + str(self.history)
+        return string
