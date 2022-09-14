@@ -1,0 +1,3 @@
+pandas>=1.2.0
+numpy>1.15.0
+pybnesian>=0.3.4
