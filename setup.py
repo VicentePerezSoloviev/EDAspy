@@ -21,12 +21,12 @@ setuptools.setup(
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: BSD 3-Clause License",
+        "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
     keywords=['EDA', 'estimation', 'bayesian', 'evolutionary', 'algorithm', 'optimization', 'time_series', 'feature',
               'selection', 'semiparametric', 'Gaussian'],
     python_requires='>=3.0',
-    license="bsd-3-clause",
+    license="MIT",
     install_requires=["pandas>=1.2.0", "numpy>1.15.0", "pybnesian>=0.3.4"]
 )
