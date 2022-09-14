@@ -20,14 +20,6 @@ EDAspy.optimization.custom.probabilistic\_models.multivariate\_gaussian module
    :undoc-members:
    :show-inheritance:
 
-EDAspy.optimization.custom.probabilistic\_models.probabilistic\_model module
-----------------------------------------------------------------------------
-
-.. automodule:: EDAspy.optimization.custom.probabilistic_models.probabilistic_model
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 EDAspy.optimization.custom.probabilistic\_models.univariate\_binary module
 --------------------------------------------------------------------------
 

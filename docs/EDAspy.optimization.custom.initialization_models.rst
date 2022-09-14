@@ -4,14 +4,6 @@ EDAspy.optimization.custom.initialization\_models package
 Submodules
 ----------
 
-EDAspy.optimization.custom.initialization\_models.generation\_init module
--------------------------------------------------------------------------
-
-.. automodule:: EDAspy.optimization.custom.initialization_models.generation_init
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 EDAspy.optimization.custom.initialization\_models.multi\_gauss\_gininit module
 ------------------------------------------------------------------------------
 

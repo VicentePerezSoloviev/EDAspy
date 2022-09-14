@@ -1,15 +1,13 @@
+********************************************************************************
+Using EDAs for time series and times series transformation selection
+********************************************************************************
 
-Time series transformations selection
-======================================
+When working with Time series in a Machine Learning project it is very common to try different
+combinations of the time series in order to perform better the forecasting model. In this section
+we will apply an EDA to select the optimal subset of variables and time series transformations to
+improve the model.
 
-In this example, we use a very easy Time series dataframe to perform a time series forecasting. We use EDAspy's time series transformations selector to choose the best time series transformations that make the forecasting to improve the Mean Absolute Error.
-
-.. code-block:: python
-
-    # # Time series transformation selection with Estimation of Distribution Algorithms
-
-    # When working with Time series in a Machine Learning project it is very common to try different combinations of the time series in order to perform better the forecasting model.
-    # An EDA approach is presented to select the best transformations of the time series.
+.. code-block:: python3
 
     # loading essential libraries first
     import pandas as pd
@@ -20,20 +18,26 @@ In this example, we use a very easy Time series dataframe to perform a time seri
 
     # EDAspy libraries
     from EDAspy.timeseries import EDA_ts_fts as EDA
-    from EDAspy.timeseries import TS_transformations
+    from EDAspy.timeseries import TSTransformations
+
+.. code-block:: python3
 
     # import some data
     mdata = sm.datasets.macrodata.load_pandas().data
     df = mdata.iloc[:, 2:12]
+    df.head()
+
+.. code-block:: python3
 
     variables = list(df.columns)
     variable_y = 'pop'  # pop is the variable we want to forecast
     variables = list(set(variables) - {variable_y})  # array of variables to select among transformations
     variables
 
-    # Build the dataset with all the transformations desired. If some more transformations are desired, then it must be added to the dataset following the next steps:
-    #  1. Add the transformation postfix
-    #  2. Add to the dataset the respective variable with name (name + postfix)
+    We define a cost function which receives a dictionary with variables names as keys of the dictionary and
+    values 1/0 if they are used or not respectively.
+
+.. code-block:: python3
 
     TSTransf = TSTransformations(df)
     transformations = ['detrend', 'smooth', 'log']  # postfix to variables, to denote the transformation
@@ -51,7 +55,9 @@ In this example, we use a very easy Time series dataframe to perform a time seri
         transformation = TSTransf.log(var)
         df[var + 'log'] = transformation
 
-    # Define the cost function to calculate the Mean Absolute Error
+Define the cost function to calculate the Mean Absolute Error
+
+.. code-block:: python3
 
     def cost_function(variables_list, nobs=20, maxlags=15, forecastings=10):
         """
@@ -81,25 +87,43 @@ In this example, we use a very easy Time series dataframe to perform a time seri
 
         return mae
 
-    # We take the normal variables without any time series transformation and try to forecast the y variable using the same cost function defined.
-    # This value is stored to be compared with the optimum solution found
+We take the normal variables without any time series transformation and try to forecast
+the y variable using the same cost function defined. This value is stored to be compared with
+the optimum solution found
+
+.. code-block:: python3
+
+    eda = UMDAd(size_gen=30, max_iter=100, dead_iter=10, n_variables=len(variables), alpha=0.5, vector=None,
+            lower_bound=0.2, upper_bound=0.9, elite_factor=0.2, disp=True)
+
+    eda_result = eda.minimize(cost_function=cost_function, output_runtime=True)
+
+Note that the algorithm is minimzing correctly, but doe to the fact that it is a toy example, there is
+not a high variance from the beginning to the end.
+
+.. code-block:: python3
 
     mae_pre_eda = cost_function(variables)
     print('MAE without using EDA:', mae_pre_eda)
 
-    # Initialization of the initial vector of statitstics. Each variable has a 50% probability to be or not chosen
+Initialization of the initial vector of statitstics. Each variable has a 50% probability to be or not chosen
 
+.. code-block:: python3
 
     vector = pd.DataFrame(columns=list(variables))
     vector.loc[0] = 0.5
 
-    # Run the algorithm. The code will print some further information during execution
+Run the algorithm. The code will print some further information during execution
+
+.. code-block:: python3
 
     eda = EDA(max_it=50, dead_it=5, size_gen=15, alpha=0.7, vector=vector,
-              array_transformations=transformations, cost_function=cost_function)
+          array_transformations=transformations, cost_function=cost_function)
     best_ind, best_MAE = eda.run(output=True)
 
-    # # Some plots
+We show some plots of the best solutions found during the execution in each iteration of the algorithm.
+
+.. code-block:: python3
 
     # some plots
     hist = eda.historic_best

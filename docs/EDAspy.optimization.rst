@@ -22,6 +22,14 @@ EDAspy.optimization.eda module
    :undoc-members:
    :show-inheritance:
 
+EDAspy.optimization.eda\_result module
+--------------------------------------
+
+.. automodule:: EDAspy.optimization.eda_result
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 

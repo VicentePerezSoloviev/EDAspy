@@ -1,5 +1,5 @@
-EDAspy
-======
+Formal documentation
+========================
 
 .. toctree::
    :maxdepth: 4
