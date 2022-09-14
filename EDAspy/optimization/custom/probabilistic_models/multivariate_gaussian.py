@@ -15,7 +15,10 @@ class MultiGauss(ProbabilisticModel):
 
     """
 
-    def __init__(self, variables, lower_bound: float, upper_bound: float):
+    def __init__(self,
+                 variables: list,
+                 lower_bound: float,
+                 upper_bound: float):
         super().__init__(variables)
 
         self.lower_bound = lower_bound

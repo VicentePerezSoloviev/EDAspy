@@ -24,6 +24,9 @@ The pseudocode of EDAs is the following:
 
 6. If stopping criteria is met, finish; else, go to 2.
 
+EDAspy allows to create a custom version of the EDA. Using the modular probabilistic models and the initializators, this can be embedded into the EDA baseline and used for different purposes. If this fits you, take a look on the examples section to the EDACustom example.
+
+
 The following implementations are available in EDAspy:
 
 * UMDAd: Univariate Marginal Distribution Algorithm binary. It can be used as a simple example of EDA where the variables are binary and there are not dependencies between variables. Some usages include feature selection, for example.

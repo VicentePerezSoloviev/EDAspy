@@ -64,7 +64,7 @@ class EDA(ABC):
         self.evaluations = np.take(self.evaluations, best_indices_truc)
 
     # check each individual of the generation
-    def _check_generation(self, objective_function):
+    def _check_generation(self, objective_function: callable):
         """
         Check the cost of each individual in the cost function implemented by the user, and updates the
         generation DataFrame.

@@ -38,7 +38,7 @@ class UMDAc(EDA):
 
             umda = UMDAc(size_gen=100, max_iter=100, dead_iter=10, n_variables=10, alpha=0.5)
             # We leave bound by default
-            eda_result = umda.minimize(cost_function=one_max_min, True)
+            eda_result = umda.minimize(benchmarking.cec4, True)
 
     References:
 

@@ -12,7 +12,7 @@ class UniBinGenInit(GenInit):
     Initial generation simulator based on the probabilistic model of univariate binary probabilities.
     """
 
-    def __init__(self, n_variables, means_vector: np.array = np.empty(0)):
+    def __init__(self, n_variables: int, means_vector: np.array = np.empty(0)):
         """
         :param n_variables: Number of variables.
         :param means_vector: Array of means to initialize the item.

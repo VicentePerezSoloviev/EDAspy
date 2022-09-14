@@ -126,7 +126,7 @@ class EDACustom(EDA):
         return dic
 
 
-def read_settings(settings) -> EDACustom:
+def read_settings(settings: dict) -> EDACustom:
 
     """
     This function is implemented to automatic implement the EDA custom by importing the configuration of
