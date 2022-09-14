@@ -16,12 +16,12 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     classifiers=[
         'Development Status :: 5 - Production/Stable',
-        "Programming Language :: Python :: 3.6",
-        "License :: OSI Approved :: GNU Lesser General Public License v2 or later (LGPLv2+)",
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: BSD 3-Clause License",
         "Operating System :: OS Independent",
     ],
     keywords=['EDA', 'estimation', 'bayesian', 'evolutionary', 'algorithm', 'optimization', 'time_series', 'feature',
-              'selection', 'semiparametric'],
+              'selection', 'semiparametric', 'Gaussian'],
     python_requires='>=3.0',
     license="bsd-3-clause",
     install_requires=["pandas>=1.2.0", "numpy>1.15.0", "pybnesian>=0.3.4"]

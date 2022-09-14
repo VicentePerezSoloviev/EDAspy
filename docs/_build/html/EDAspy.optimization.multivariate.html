@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EDAspy.optimization.multivariate package &mdash; EDAspy 1.0.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="EDAspy.optimization.univariate package" href="EDAspy.optimization.univariate.html" />
+    <link rel="prev" title="EDAspy.optimization.custom.probabilistic_models package" href="EDAspy.optimization.custom.probabilistic_models.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> EDAspy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">EDAspy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Getting started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Formal documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="EDAspy.html">EDAspy package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="EDAspy.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="EDAspy.benchmarks.html">EDAspy.benchmarks package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="EDAspy.optimization.html">EDAspy.optimization package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="EDAspy.timeseries.html">EDAspy.timeseries package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="EDAspy.html#module-EDAspy">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">EDAspy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="modules.html">Formal documentation</a> &raquo;</li>
+          <li><a href="EDAspy.html">EDAspy package</a> &raquo;</li>
+          <li><a href="EDAspy.optimization.html">EDAspy.optimization package</a> &raquo;</li>
+      <li>EDAspy.optimization.multivariate package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/EDAspy.optimization.multivariate.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="edaspy-optimization-multivariate-package">
+<h1>EDAspy.optimization.multivariate package<a class="headerlink" href="#edaspy-optimization-multivariate-package" title="Permalink to this headline"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline"></a></h2>
+</section>
+<section id="module-EDAspy.optimization.multivariate.egna">
+<span id="edaspy-optimization-multivariate-egna-module"></span><h2>EDAspy.optimization.multivariate.egna module<a class="headerlink" href="#module-EDAspy.optimization.multivariate.egna" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="EDAspy.optimization.multivariate.egna.EGNA">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">EDAspy.optimization.multivariate.egna.</span></span><span class="sig-name descname"><span class="pre">EGNA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size_gen</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dead_iter</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_variables</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">landscape_bounds</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elite_factor</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disp</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/optimization/multivariate/egna.html#EGNA"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.multivariate.egna.EGNA" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="EDAspy.optimization.html#EDAspy.optimization.eda.EDA" title="EDAspy.optimization.eda.EDA"><code class="xref py py-class docutils literal notranslate"><span class="pre">EDAspy.optimization.eda.EDA</span></code></a></p>
+<p>Estimation of Gaussian Networks Algorithm. This type of Estimation-of-Distribution Algorithm uses
+a Gaussian Bayesian Network from where new solutions are sampled. This multivariate probabilistic
+model is updated in each iteration with the best individuals of the previous generation.</p>
+<p>EGNA [1] has shown to improve the results for more complex optimization problem compared to the
+univariate EDAs that can be found implemented in this package. Different modifications have been
+done into this algorithm such as in [2] where some evidences are input to the Gaussian Bayesian
+Network in order to restrict the search space in the landscape.</p>
+<p class="rubric">Example</p>
+<p>This example uses some very well-known benchmarks from CEC14 conference to be solved using
+an Estimation of Gaussian Networks Algorithm (EGNA).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">EDAspy.optimization</span> <span class="kn">import</span> <span class="n">EGNA</span>
+<span class="kn">from</span> <span class="nn">EDAspy.benchmarks</span> <span class="kn">import</span> <span class="n">ContinuousBenchmarkingCEC14</span>
+
+<span class="n">benchmarking</span> <span class="o">=</span> <span class="n">ContinuousBenchmarkingCEC14</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="n">egna</span> <span class="o">=</span> <span class="n">EGNA</span><span class="p">(</span><span class="n">size_gen</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">dead_iter</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">n_variables</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+            <span class="n">landscape_bounds</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">60</span><span class="p">,</span> <span class="mi">60</span><span class="p">))</span>
+
+<span class="n">eda_result</span> <span class="o">=</span> <span class="n">egna</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">benchmarking</span><span class="o">.</span><span class="n">cec14_4</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">References</p>
+<p>[1]: Larrañaga, P., &amp; Lozano, J. A. (Eds.). (2001). Estimation of distribution algorithms:
+A new tool for evolutionary computation (Vol. 2). Springer Science &amp; Business Media.</p>
+<p>[2]: Vicente P. Soloviev, Pedro Larrañaga and Concha Bielza (2022). Estimation of distribution
+algorithms using Gaussian Bayesian networks to solve industrial optimization problems constrained
+by environment variables. Journal of Combinatorial Optimization.</p>
+</dd></dl>
+
+</section>
+<section id="module-EDAspy.optimization.multivariate.emna">
+<span id="edaspy-optimization-multivariate-emna-module"></span><h2>EDAspy.optimization.multivariate.emna module<a class="headerlink" href="#module-EDAspy.optimization.multivariate.emna" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="EDAspy.optimization.multivariate.emna.EMNA">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">EDAspy.optimization.multivariate.emna.</span></span><span class="sig-name descname"><span class="pre">EMNA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size_gen</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dead_iter</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_variables</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">landscape_bounds</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elite_factor</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disp</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_bound</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper_bound</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/optimization/multivariate/emna.html#EMNA"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.multivariate.emna.EMNA" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="EDAspy.optimization.html#EDAspy.optimization.eda.EDA" title="EDAspy.optimization.eda.EDA"><code class="xref py py-class docutils literal notranslate"><span class="pre">EDAspy.optimization.eda.EDA</span></code></a></p>
+<p>Estimation of Multivariate Normal Algorithm (EMNA) [1] is a multivariate continuous EDA in which no
+probabilistic graphical models are used during runtime. In each iteration the  new solutions are
+sampled from a multivariate normal distribution built from the elite selection of the previous
+generation.</p>
+<p>In this implementation, as in EGNA, the algorithm is initialized from a uniform sampling in the
+landscape bound you input in the constructor of the algorithm. If a different initialization_models is
+desired, then you can override the class and this specific method.</p>
+<p>This algorithm is widely used in the literature and compared for different optimization tasks with
+its competitors in the EDAs multivariate continuous research topic.</p>
+<p class="rubric">Example</p>
+<p>This example uses some very well-known benchmarks from CEC14 conference to be solved using
+an Estimation of Multivariate Normal Algorithm (EMNA).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">EDAspy.optimization</span> <span class="kn">import</span> <span class="n">EMNA</span>
+<span class="kn">from</span> <span class="nn">EDAspy.benchmarks</span> <span class="kn">import</span> <span class="n">ContinuousBenchmarkingCEC14</span>
+
+<span class="n">benchmarking</span> <span class="o">=</span> <span class="n">ContinuousBenchmarkingCEC14</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="n">emna</span> <span class="o">=</span> <span class="n">EMNA</span><span class="p">(</span><span class="n">size_gen</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">dead_iter</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">n_variables</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+            <span class="n">landscape_bounds</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">60</span><span class="p">,</span> <span class="mi">60</span><span class="p">),</span> <span class="n">std_bound</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="n">eda_result</span> <span class="o">=</span> <span class="n">emna</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">cost_function</span><span class="o">=</span><span class="n">benchmarking</span><span class="o">.</span><span class="n">cec14_4</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">References</p>
+<p>[1]: Larrañaga, P., &amp; Lozano, J. A. (Eds.). (2001). Estimation of distribution algorithms:
+A new tool for evolutionary computation (Vol. 2). Springer Science &amp; Business Media.</p>
+</dd></dl>
+
+</section>
+<section id="module-EDAspy.optimization.multivariate">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-EDAspy.optimization.multivariate" title="Permalink to this headline"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="EDAspy.optimization.custom.probabilistic_models.html" class="btn btn-neutral float-left" title="EDAspy.optimization.custom.probabilistic_models package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="EDAspy.optimization.univariate.html" class="btn btn-neutral float-right" title="EDAspy.optimization.univariate package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright BSD 3-Clause License.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
