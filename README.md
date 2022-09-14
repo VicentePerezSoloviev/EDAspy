@@ -33,11 +33,15 @@ The following implementations are available in EDAspy:
 
 * UMDAd: Univariate Marginal Distribution Algorithm binary. It can be used as a simple example of EDA where the variables are binary and there are not dependencies between variables. Some usages include feature selection, for example.
 
+
 * UMDAc: Univariate Marginal Distribution Algorithm continuous. In this EDA all the variables assume a Gaussian distribution and there are not dependencies considered between the variables. Some usages include hyperparameter optimization, for example.
+
 
 * EGNA: Estimation of Gaussian Distribution Algorithm. This is a complex implementation in which dependencies between the variables are considered during the optimization. In each iteration, a Gaussian Bayesian network is learned and sampled. The variables in the model are assumed to be Gaussian and also de dependencies between them. This implementation is focused in continuous optimization.
 
+
 * EMNA: Estimation of Multivariate Normal Algorithm. This is a similar implementation to EGNA, in which instead of using a Gaussian Bayesian network, a multivariate Gaussian distribution is iteratively learned and sampled. As in EGNA, the dependencies between variables are considered and assumed to be linear Gaussian. This implementation is focused in continuous optimization.
+
 
 * Categorical EDA. In this implementation we consider some independent categorical variables. Some usages include portfolio optimization, for exampled.
 
@@ -49,9 +53,9 @@ Some examples are available in https://github.com/VicentePerezSoloviev/EDAspy/tr
 
 For installing EDAspy from Pypi execute the following command using pip:
 
-.. code-block:: bash
-
+```bash
     pip install EDAspy
+```
 
 ## Build from Source
 
@@ -64,24 +68,23 @@ For installing EDAspy from Pypi execute the following command using pip:
 
 Clone the repository:
 
-.. code-block:: bash
-
+```bash
     git clone https://github.com/VicentePerezSoloviev/EDAspy.git
     cd EDAspy
     git checkout v1.0.0 # You can checkout a specific version if you want
     python setup.py install
-
+```
 ## Testing 
 
 The library contains tests that can be executed using `pytest <https://docs.pytest.org/>`_. Install it using 
 pip:
 
-.. code-block:: bash
-
-    pip install pytest
+```bash
+  pip install pytest
+```
 
 Run the tests with:
 
-.. code-block:: bash
-
-    pytest
+```bash
+  pytest
+```
