@@ -3,12 +3,16 @@ import setuptools
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
+__version__ = '1.0.0'  # also defined in EDAspy/__init__.py
+
 setuptools.setup(
     name="EDAspy",
-    version="1.0.0",
+    version=__version__,
     author="Vicente P. Soloviev",
     author_email="vicente.perez.soloviev@gmail.com",
-    description="Estimation of Distribution Algorithms for optimization",
+    description="EDAspy is a Python package that implements Estimation of Distribution Algorithms. EDAspy allows to"
+                "either use already existing implementations or customize the EDAs baseline easily building it by"
+                "modules so new research can be easily developed. It also has several benchmarks for comparisons.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     download_url="https://github.com/VicentePerezSoloviev/EDAspy/archive/1.0.0.tar.gz",
