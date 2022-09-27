@@ -5,6 +5,8 @@
 
 # EDAspy
 
+![alttext](https://raw.githubusercontent.com/VicentePerezSoloviev/EDAspy/master/Logo%20EDAspy.png)
+
 ## Introduction
 
 EDAspy presents some implementations of the Estimation of Distribution Algorithms (EDAs). EDAs are a type of
