@@ -1,11 +1,11 @@
+# <img src='https://raw.githubusercontent.com/VicentePerezSoloviev/EDAspy/master/Logo%20EDAspy.png' align="right" height="150"/>
+
 [![PyPI](https://img.shields.io/pypi/v/edaspy)](https://pypi.python.org/pypi/EDAspy/)
 [![PyPI license](https://img.shields.io/pypi/l/EDAspy.svg)](https://pypi.python.org/pypi/EDAspy/)
 [![Downloads](https://static.pepy.tech/personalized-badge/edaspy?period=total&units=none&left_color=grey&right_color=blue&left_text=downloads)](https://pepy.tech/project/edaspy)
 [![Documentation Status](https://readthedocs.org/projects/edaspy/badge/?version=latest)](https://edaspy.readthedocs.io/en/latest/?badge=latest)
 
 # EDAspy
-
-![alttext](https://raw.githubusercontent.com/VicentePerezSoloviev/EDAspy/master/Logo%20EDAspy.png)
 
 ## Introduction
 
