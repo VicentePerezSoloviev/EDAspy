@@ -2,6 +2,11 @@
 Changelog
 *********
 
+v1.0.1
+======
+
+- This version solves a bug in the UMDAd optimizer related to the limits of the std in each variable.
+
 v1.0.0
 ======
 

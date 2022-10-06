@@ -3,7 +3,7 @@ import setuptools
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-__version__ = '1.0.0'  # also defined in EDAspy/__init__.py
+__version__ = '1.0.1'  # also defined in EDAspy/__init__.py
 
 setuptools.setup(
     name="EDAspy",
