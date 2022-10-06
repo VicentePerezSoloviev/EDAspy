@@ -48,4 +48,4 @@ class UniBin(ProbabilisticModel):
 
         self.pm = sum(dataset) / len(dataset)
         self.pm[self.pm < self.lower_bound] = self.lower_bound
-        self.pm[self.pm < self.upper_bound] = self.upper_bound
+        self.pm[self.pm > self.upper_bound] = self.upper_bound
