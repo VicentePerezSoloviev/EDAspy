@@ -2,7 +2,7 @@
 # coding: utf-8
 
 import numpy as np
-from pybnesian import GaussianNetwork
+from pybnesian import GaussianNetwork, hc, GaussianNetworkType
 from ._probabilistic_model import ProbabilisticModel
 import pandas as pd
 
@@ -42,6 +42,7 @@ class GBN(ProbabilisticModel):
         """
 
         self.pm = GaussianNetwork(self.variables)
+        self.pm = hc(dataset, bn_type=GaussianNetworkType())
         self.pm.fit(pd.DataFrame(dataset))
 
     def print_structure(self) -> list:
