@@ -42,7 +42,7 @@ class GBN(ProbabilisticModel):
         """
 
         self.pm = GaussianNetwork(self.variables)
-        self.pm = hc(dataset, bn_type=GaussianNetworkType())
+        self.pm = hc(pd.DataFrame(dataset), bn_type=GaussianNetworkType())
         self.pm.fit(pd.DataFrame(dataset))
 
     def print_structure(self) -> list:
