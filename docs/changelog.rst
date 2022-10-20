@@ -2,6 +2,11 @@
 Changelog
 *********
 
+v1.0.2
+======
+
+- This version solves a bug in the EGNA optimizer related to the Gaussian Bayesian network structure learning.
+
 v1.0.1
 ======
 
