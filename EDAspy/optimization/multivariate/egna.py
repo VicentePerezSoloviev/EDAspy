@@ -52,7 +52,9 @@ class EGNA(EDA):
                  landscape_bounds: tuple,
                  alpha: float = 0.5,
                  elite_factor: float = 0.4,
-                 disp: bool = True):
+                 disp: bool = True,
+                 black_list: list = None,
+                 white_list: list = None):
         r"""
             :param size_gen: Population size. Number of individuals in each generation.
             :param max_iter: Maximum number of iterations during runtime.
@@ -62,6 +64,8 @@ class EGNA(EDA):
             :param alpha: Percentage of population selected to update the probabilistic model.
             :param elite_factor: Percentage of previous population selected to add to new generation (elite approach).
             :param disp: Set to True to print convergence messages.
+            :param black_list: list of tuples with the forbidden arcs in the GBN during runtime.
+            :param white_list: list of tuples with the mandatory arcs in the GBN during runtime.
         """
 
         super().__init__(size_gen=size_gen, max_iter=max_iter, dead_iter=dead_iter,
@@ -69,6 +73,6 @@ class EGNA(EDA):
 
         self.vars = [str(i) for i in range(n_variables)]
         self.landscape_bounds = landscape_bounds
-        self.pm = GBN(self.vars)
+        self.pm = GBN(self.vars, black_list=black_list, white_list=white_list)
         self.init = MultiGaussGenInit(self.n_variables, lower_bound=self.landscape_bounds[0],
                                       upper_bound=self.landscape_bounds[1])
