@@ -4,5 +4,5 @@
 # __init__.py
 
 from .initialization_models import MultiGaussGenInit, UniBinGenInit, UniGaussGenInit, UniformGenInit
-from .probabilistic_models import GBN, MultiGauss, UniGauss, UniBin
+from .probabilistic_models import GBN, MultiGauss, UniGauss, UniBin, SPBN
 from .eda_custom import EDACustom

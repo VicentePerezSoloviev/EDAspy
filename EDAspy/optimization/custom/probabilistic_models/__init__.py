@@ -8,3 +8,4 @@ from .univariate_binary import UniBin
 from .univariate_gaussian import UniGauss
 from .multivariate_gaussian import MultiGauss
 from .gaussian_bayesian_network import GBN
+from .semiparametric_bayesian_network import SPBN

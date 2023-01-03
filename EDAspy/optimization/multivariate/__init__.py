@@ -5,3 +5,4 @@
 
 from .egna import EGNA
 from .emna import EMNA
+from .speda import SPEDA
