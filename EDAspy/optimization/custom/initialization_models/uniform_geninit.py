@@ -38,4 +38,4 @@ class UniformGenInit(GenInit):
         :rtype: np.array.
         """
 
-        return np.random.randint(self.lower_bound, self.upper_bound, (size, self.n_variables)).astype(float)
+        return np.random.uniform(self.lower_bound, self.upper_bound, (size, self.n_variables))

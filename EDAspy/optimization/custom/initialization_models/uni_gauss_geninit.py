@@ -34,9 +34,9 @@ class UniGaussGenInit(GenInit):
         assert len(means_vector) == len(stds_vector), "Lengths of means and stds vector must be the same."
 
         if len(means_vector) == 0:
-            self.means_vector = np.random.randint(low=lower_bound, high=higher_bound, size=n_variables)
+            self.means_vector = np.random.uniform(low=lower_bound, high=higher_bound, size=n_variables)
             # the stds are random but using the lower_bound and higher_bound, minimizing the std
-            self.stds_vector = np.random.randint(low=abs(lower_bound/4), high=abs(higher_bound/2), size=n_variables)
+            self.stds_vector = np.random.uniform(low=abs(lower_bound/4), high=abs(higher_bound/2), size=n_variables)
         else:
             self.means_vector = means_vector
             self.stds_vector = stds_vector
