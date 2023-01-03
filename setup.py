@@ -3,7 +3,7 @@ import setuptools
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-__version__ = '1.0.2'  # also defined in EDAspy/__init__.py
+__version__ = '1.1.0'  # also defined in EDAspy/__init__.py
 
 setuptools.setup(
     name="EDAspy",
@@ -28,5 +28,5 @@ setuptools.setup(
               'selection', 'semiparametric', 'Gaussian'],
     python_requires='>=3.0',
     license="MIT",
-    install_requires=["pandas>=1.2.0", "numpy>1.15.0", "pybnesian>=0.3.4"]
+    install_requires=["pandas>=1.2.0", "numpy>1.15.0", "pybnesian>=0.4.3"]
 )
