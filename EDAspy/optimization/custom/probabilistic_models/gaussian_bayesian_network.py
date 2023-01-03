@@ -21,16 +21,20 @@ class GBN(ProbabilisticModel):
         for Bayesian networks. Neurocomputing, 504, 204-209.
     """
 
-    def __init__(self, variables: list):
-
+    def __init__(self, variables: list, white_list: list = None, black_list: list = None):
         """
         :param variables: Number of variables
+        :param white_list: List of tuples with mandatory arcs in the BN structure
+        :param black_list: List of tuples with forbidden arcs in the BN structure
         """
 
         super().__init__(variables)
 
         self.variables = variables
         self.pm = GaussianNetwork(variables)
+
+        self.white_list = white_list
+        self.black_list = black_list
 
         self.id = 4
 
@@ -42,7 +46,17 @@ class GBN(ProbabilisticModel):
         """
 
         self.pm = GaussianNetwork(self.variables)
-        self.pm = hc(pd.DataFrame(dataset), bn_type=GaussianNetworkType())
+
+        if self.white_list and self.black_list:
+            self.pm = hc(pd.DataFrame(dataset), bn_type=GaussianNetworkType(),
+                         arc_blacklist=self.black_list, arc_whitelist=self.white_list)
+        elif self.white_list:
+            self.pm = hc(pd.DataFrame(dataset), bn_type=GaussianNetworkType(), arc_whitelist=self.white_list)
+        elif self.black_list:
+            self.pm = hc(pd.DataFrame(dataset), bn_type=GaussianNetworkType(), arc_blacklist=self.black_list)
+        else:
+            self.pm = hc(pd.DataFrame(dataset), bn_type=GaussianNetworkType())
+
         self.pm.fit(pd.DataFrame(dataset))
 
     def print_structure(self) -> list:
