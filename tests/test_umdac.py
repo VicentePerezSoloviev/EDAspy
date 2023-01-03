@@ -66,3 +66,41 @@ class TestUMDAc(TestCase):
         benchmarking = ContinuousBenchmarkingCEC14(n_vars)
         umda._check_generation(benchmarking.cec14_4)
         assert len(umda.evaluations) == len(umda.generation)
+
+    def test_evaluate_solution(self):
+        """
+        Test if the generation is correctly evaluated, and the results are the same as if they are evaluated
+        outside of the EDA framework.
+        """
+        n_variables = 10
+        umda = UMDAc(size_gen=100, max_iter=100, dead_iter=10, n_variables=n_variables, alpha=0.5)
+
+        gen = np.random.normal(
+            [0] * umda.n_variables, [10] * umda.n_variables, [umda.size_gen, umda.n_variables]
+        )
+        umda.generation = gen
+        benchmarking = ContinuousBenchmarkingCEC14(n_variables)
+        umda._check_generation(benchmarking.cec14_4)
+
+        evaluations = []
+        for sol in gen:
+            evaluations.append(benchmarking.cec14_4(sol))
+
+        assert (umda.evaluations == evaluations).all()
+
+    def test_truncation(self):
+        """
+        Test if the size after truncation y correct
+        """
+        n_variables = 10
+        umda = UMDAc(size_gen=100, max_iter=100, dead_iter=10, n_variables=n_variables, alpha=0.5)
+
+        gen = np.random.normal(
+            [0] * umda.n_variables, [10] * umda.n_variables, [umda.size_gen, umda.n_variables]
+        )
+        umda.generation = gen
+        benchmarking = ContinuousBenchmarkingCEC14(n_variables)
+        umda._check_generation(benchmarking.cec14_4)
+
+        umda._truncation()
+        assert len(umda.generation) == int(umda.size_gen*umda.alpha)

@@ -4,7 +4,7 @@ from EDAspy.benchmarks.binary import one_max
 import numpy as np
 
 
-class TestUMDAc(TestCase):
+class TestUMDAd(TestCase):
 
     def test_constructor(self):
         n_variables = 10
@@ -65,3 +65,39 @@ class TestUMDAc(TestCase):
 
         umda._check_generation(one_max)
         assert len(umda.evaluations) == len(umda.generation)
+
+    def test_evaluate_solution(self):
+        """
+        Test if the generation is correctly evaluated, and the results are the same as if they are evaluated
+        outside of the EDA framework.
+        """
+        n_variables = 10
+        umda = UMDAd(size_gen=100, max_iter=100, dead_iter=10, n_variables=n_variables, alpha=0.5)
+
+        gen = np.random.normal(
+            [0] * umda.n_variables, [10] * umda.n_variables, [umda.size_gen, umda.n_variables]
+        )
+        umda.generation = gen
+        umda._check_generation(one_max)
+
+        evaluations = []
+        for sol in gen:
+            evaluations.append(one_max(sol))
+
+        assert (umda.evaluations == evaluations).all()
+
+    def test_truncation(self):
+        """
+        Test if the size after truncation y correct
+        """
+        n_variables = 10
+        umda = UMDAd(size_gen=100, max_iter=100, dead_iter=10, n_variables=n_variables, alpha=0.5)
+
+        gen = np.random.normal(
+            [0] * umda.n_variables, [10] * umda.n_variables, [umda.size_gen, umda.n_variables]
+        )
+        umda.generation = gen
+        umda._check_generation(one_max)
+
+        umda._truncation()
+        assert len(umda.generation) == int(umda.size_gen*umda.alpha)
