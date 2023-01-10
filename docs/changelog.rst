@@ -2,6 +2,15 @@
 Changelog
 *********
 
+v1.1.0
+======
+
+- This version implements the SPEDA algorithm to allow dependencies between variables that fit Gaussian distributions and KDE nodes.
+- This version implements a function to plot the BN structure learnt in the EDA implementations.
+- This version enforces the tests to avoid bugs in the algorithms.
+- This version implements the possibility of settings white and black boxes to set the mandatory or forbidden arcs in the BN structure learnt in each iteration.
+- This version solves several bugs present in v1.0.2.
+
 v1.0.2
 ======
 

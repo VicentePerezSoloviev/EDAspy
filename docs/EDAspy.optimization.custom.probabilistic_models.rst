@@ -4,6 +4,14 @@ EDAspy.optimization.custom.probabilistic\_models package
 Submodules
 ----------
 
+EDAspy.optimization.custom.probabilistic\_models.semiparametric\_bayesian\_network module
+-----------------------------------------------------------------------------------
+
+.. automodule:: EDAspy.optimization.custom.probabilistic_models.semiparametric_bayesian_network
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 EDAspy.optimization.custom.probabilistic\_models.gaussian\_bayesian\_network module
 -----------------------------------------------------------------------------------
 
