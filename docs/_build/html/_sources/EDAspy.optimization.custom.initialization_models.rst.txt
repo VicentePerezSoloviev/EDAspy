@@ -4,10 +4,10 @@ EDAspy.optimization.custom.initialization\_models package
 Submodules
 ----------
 
-EDAspy.optimization.custom.initialization\_models.multi\_gauss\_gininit module
+EDAspy.optimization.custom.initialization\_models.multi\_gauss\_geninit module
 ------------------------------------------------------------------------------
 
-.. automodule:: EDAspy.optimization.custom.initialization_models.multi_gauss_gininit
+.. automodule:: EDAspy.optimization.custom.initialization_models.multi_gauss_geninit
    :members:
    :undoc-members:
    :show-inheritance:

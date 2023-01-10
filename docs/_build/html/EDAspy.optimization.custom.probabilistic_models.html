@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EDAspy.optimization.custom.probabilistic_models package &mdash; EDAspy 1.0.0 documentation</title>
+  <title>EDAspy.optimization.custom.probabilistic_models package &mdash; EDAspy 1.1.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -91,11 +91,69 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline"></a></h2>
 </section>
+<section id="module-EDAspy.optimization.custom.probabilistic_models.semiparametric_bayesian_network">
+<span id="edaspy-optimization-custom-probabilistic-models-semiparametric-bayesian-network-module"></span><h2>EDAspy.optimization.custom.probabilistic_models.semiparametric_bayesian_network module<a class="headerlink" href="#module-EDAspy.optimization.custom.probabilistic_models.semiparametric_bayesian_network" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="EDAspy.optimization.custom.probabilistic_models.semiparametric_bayesian_network.SPBN">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">EDAspy.optimization.custom.probabilistic_models.semiparametric_bayesian_network.</span></span><span class="sig-name descname"><span class="pre">SPBN</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variables</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">white_list</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">black_list</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/optimization/custom/probabilistic_models/semiparametric_bayesian_network.html#SPBN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.custom.probabilistic_models.semiparametric_bayesian_network.SPBN" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">EDAspy.optimization.custom.probabilistic_models._probabilistic_model.ProbabilisticModel</span></code></p>
+<p>This probabilistic model is a Semiparametric Bayesian network [1]. It allows dependencies between variables
+which have been estimated using KDE with variables which fit a Gaussian distribution.</p>
+<p class="rubric">References</p>
+<p>[1]: Atienza, D., Bielza, C., &amp; Larrañaga, P. (2022). PyBNesian: an extensible Python package
+for Bayesian networks. Neurocomputing, 504, 204-209.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="EDAspy.optimization.custom.probabilistic_models.semiparametric_bayesian_network.SPBN.learn">
+<span class="sig-name descname"><span class="pre">learn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.array</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/optimization/custom/probabilistic_models/semiparametric_bayesian_network.html#SPBN.learn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.custom.probabilistic_models.semiparametric_bayesian_network.SPBN.learn" title="Permalink to this definition"></a></dt>
+<dd><p>Learn a semiparametric Bayesian network from the dataset passed as argument.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dataset</strong> – dataset from which learn the GBN.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="EDAspy.optimization.custom.probabilistic_models.semiparametric_bayesian_network.SPBN.print_structure">
+<span class="sig-name descname"><span class="pre">print_structure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">list</span><a class="reference internal" href="_modules/EDAspy/optimization/custom/probabilistic_models/semiparametric_bayesian_network.html#SPBN.print_structure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.custom.probabilistic_models.semiparametric_bayesian_network.SPBN.print_structure" title="Permalink to this definition"></a></dt>
+<dd><p>Prints the arcs between the nodes that represent the variables in the dataset. This function
+must be used after the learning process.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>list of arcs between variables</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="EDAspy.optimization.custom.probabilistic_models.semiparametric_bayesian_network.SPBN.sample">
+<span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.array</span><a class="reference internal" href="_modules/EDAspy/optimization/custom/probabilistic_models/semiparametric_bayesian_network.html#SPBN.sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.custom.probabilistic_models.semiparametric_bayesian_network.SPBN.sample" title="Permalink to this definition"></a></dt>
+<dd><p>Samples the Gaussian Bayesian network several times defined by the user. The dataset is returned
+as a numpy matrix. The sampling process is implemented using probabilistic logic sampling.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>size</strong> – number of samplings of the Gaussian Bayesian network.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>array with the dataset sampled.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
 <section id="module-EDAspy.optimization.custom.probabilistic_models.gaussian_bayesian_network">
 <span id="edaspy-optimization-custom-probabilistic-models-gaussian-bayesian-network-module"></span><h2>EDAspy.optimization.custom.probabilistic_models.gaussian_bayesian_network module<a class="headerlink" href="#module-EDAspy.optimization.custom.probabilistic_models.gaussian_bayesian_network" title="Permalink to this headline"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="EDAspy.optimization.custom.probabilistic_models.gaussian_bayesian_network.GBN">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">EDAspy.optimization.custom.probabilistic_models.gaussian_bayesian_network.</span></span><span class="sig-name descname"><span class="pre">GBN</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variables</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/optimization/custom/probabilistic_models/gaussian_bayesian_network.html#GBN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.custom.probabilistic_models.gaussian_bayesian_network.GBN" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">EDAspy.optimization.custom.probabilistic_models.gaussian_bayesian_network.</span></span><span class="sig-name descname"><span class="pre">GBN</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variables</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">white_list</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">black_list</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/optimization/custom/probabilistic_models/gaussian_bayesian_network.html#GBN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.custom.probabilistic_models.gaussian_bayesian_network.GBN" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">EDAspy.optimization.custom.probabilistic_models._probabilistic_model.ProbabilisticModel</span></code></p>
 <p>This probabilistic model is  Gaussian Bayesian Network. All the relationships between the variables in
 the model are defined to be linearly Gaussian, and the variables distributions are assumed to be

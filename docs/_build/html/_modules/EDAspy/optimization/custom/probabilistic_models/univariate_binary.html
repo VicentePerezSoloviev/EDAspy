@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EDAspy.optimization.custom.probabilistic_models.univariate_binary &mdash; EDAspy 1.0.0 documentation</title>
+  <title>EDAspy.optimization.custom.probabilistic_models.univariate_binary &mdash; EDAspy 1.1.0 documentation</title>
       <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -118,7 +118,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">pm</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pm</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">pm</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pm</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">pm</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper_bound</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pm</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">pm</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper_bound</span></div></div>
 </pre></div>
 
            </div>

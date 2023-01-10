@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EDAspy.optimization.custom.probabilistic_models.semiparametric_bayesian_network &mdash; EDAspy 1.1.0 documentation</title>
+      <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+        <script src="../../../../../_static/jquery.js"></script>
+        <script src="../../../../../_static/underscore.js"></script>
+        <script src="../../../../../_static/doctools.js"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../../../index.html" class="icon icon-home"> EDAspy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../introduction.html">EDAspy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../installation.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">Formal documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">EDAspy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+      <li>EDAspy.optimization.custom.probabilistic_models.semiparametric_bayesian_network</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for EDAspy.optimization.custom.probabilistic_models.semiparametric_bayesian_network</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># coding: utf-8</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">pybnesian</span> <span class="kn">import</span> <span class="n">SemiparametricBN</span><span class="p">,</span> <span class="n">hc</span>
+<span class="kn">from</span> <span class="nn">._probabilistic_model</span> <span class="kn">import</span> <span class="n">ProbabilisticModel</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+
+<div class="viewcode-block" id="SPBN"><a class="viewcode-back" href="../../../../../EDAspy.optimization.custom.probabilistic_models.html#EDAspy.optimization.custom.probabilistic_models.semiparametric_bayesian_network.SPBN">[docs]</a><span class="k">class</span> <span class="nc">SPBN</span><span class="p">(</span><span class="n">ProbabilisticModel</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This probabilistic model is a Semiparametric Bayesian network [1]. It allows dependencies between variables</span>
+<span class="sd">    which have been estimated using KDE with variables which fit a Gaussian distribution.</span>
+
+<span class="sd">    References:</span>
+
+<span class="sd">        [1]: Atienza, D., Bielza, C., &amp; Larrañaga, P. (2022). PyBNesian: an extensible Python package</span>
+<span class="sd">        for Bayesian networks. Neurocomputing, 504, 204-209.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">white_list</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">black_list</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param variables: Number of variables</span>
+<span class="sd">        :param white_list: List of tuples with mandatory arcs in the BN structure</span>
+<span class="sd">        :param black_list: List of tuples with forbidden arcs in the BN structure</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">variables</span> <span class="o">=</span> <span class="n">variables</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pm</span> <span class="o">=</span> <span class="n">SemiparametricBN</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">white_list</span> <span class="o">=</span> <span class="n">white_list</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">black_list</span> <span class="o">=</span> <span class="n">black_list</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="mi">5</span>
+
+<div class="viewcode-block" id="SPBN.learn"><a class="viewcode-back" href="../../../../../EDAspy.optimization.custom.probabilistic_models.html#EDAspy.optimization.custom.probabilistic_models.semiparametric_bayesian_network.SPBN.learn">[docs]</a>    <span class="k">def</span> <span class="nf">learn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Learn a semiparametric Bayesian network from the dataset passed as argument.</span>
+
+<span class="sd">        :param dataset: dataset from which learn the GBN.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pm</span> <span class="o">=</span> <span class="n">SemiparametricBN</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">white_list</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">black_list</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pm</span> <span class="o">=</span> <span class="n">hc</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dataset</span><span class="p">),</span> <span class="n">start</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pm</span><span class="p">,</span> <span class="n">operators</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;arcs&quot;</span><span class="p">,</span> <span class="s2">&quot;node_type&quot;</span><span class="p">],</span>
+                                   <span class="n">arc_whitelist</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">white_list</span><span class="p">,</span> <span class="n">arc_blacklist</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">black_list</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">white_list</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pm</span> <span class="o">=</span> <span class="n">hc</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dataset</span><span class="p">),</span> <span class="n">start</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pm</span><span class="p">,</span> <span class="n">operators</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;arcs&quot;</span><span class="p">,</span> <span class="s2">&quot;node_type&quot;</span><span class="p">],</span>
+                                   <span class="n">arc_whitelist</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">white_list</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">black_list</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pm</span> <span class="o">=</span> <span class="n">hc</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dataset</span><span class="p">),</span> <span class="n">start</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pm</span><span class="p">,</span> <span class="n">operators</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;arcs&quot;</span><span class="p">,</span> <span class="s2">&quot;node_type&quot;</span><span class="p">],</span>
+                                   <span class="n">arc_blacklist</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">black_list</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pm</span> <span class="o">=</span> <span class="n">hc</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dataset</span><span class="p">),</span> <span class="n">start</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pm</span><span class="p">,</span> <span class="n">operators</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;arcs&quot;</span><span class="p">,</span> <span class="s2">&quot;node_type&quot;</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pm</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dataset</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="SPBN.print_structure"><a class="viewcode-back" href="../../../../../EDAspy.optimization.custom.probabilistic_models.html#EDAspy.optimization.custom.probabilistic_models.semiparametric_bayesian_network.SPBN.print_structure">[docs]</a>    <span class="k">def</span> <span class="nf">print_structure</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prints the arcs between the nodes that represent the variables in the dataset. This function</span>
+<span class="sd">        must be used after the learning process.</span>
+
+<span class="sd">        :return: list of arcs between variables</span>
+<span class="sd">        :rtype: list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pm</span><span class="o">.</span><span class="n">arcs</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SPBN.sample"><a class="viewcode-back" href="../../../../../EDAspy.optimization.custom.probabilistic_models.html#EDAspy.optimization.custom.probabilistic_models.semiparametric_bayesian_network.SPBN.sample">[docs]</a>    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Samples the Gaussian Bayesian network several times defined by the user. The dataset is returned</span>
+<span class="sd">        as a numpy matrix. The sampling process is implemented using probabilistic logic sampling.</span>
+
+<span class="sd">        :param size: number of samplings of the Gaussian Bayesian network.</span>
+<span class="sd">        :return: array with the dataset sampled.</span>
+<span class="sd">        :rtype: np.array</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">dataset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">size</span><span class="p">)</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">dataset</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright BSD 3-Clause License.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

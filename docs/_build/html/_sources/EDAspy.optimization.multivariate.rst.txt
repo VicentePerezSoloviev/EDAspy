@@ -4,6 +4,14 @@ EDAspy.optimization.multivariate package
 Submodules
 ----------
 
+EDAspy.optimization.multivariate.speda module
+--------------------------------------------
+
+.. automodule:: EDAspy.optimization.multivariate.speda
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 EDAspy.optimization.multivariate.egna module
 --------------------------------------------
 

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EDAspy.optimization package &mdash; EDAspy 1.0.0 documentation</title>
+  <title>EDAspy.optimization package &mdash; EDAspy 1.1.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -94,7 +94,7 @@
 <li class="toctree-l2"><a class="reference internal" href="EDAspy.optimization.custom.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="EDAspy.optimization.custom.initialization_models.html">EDAspy.optimization.custom.initialization_models package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="EDAspy.optimization.custom.initialization_models.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="EDAspy.optimization.custom.initialization_models.html#module-EDAspy.optimization.custom.initialization_models.multi_gauss_gininit">EDAspy.optimization.custom.initialization_models.multi_gauss_gininit module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="EDAspy.optimization.custom.initialization_models.html#edaspy-optimization-custom-initialization-models-multi-gauss-gininit-module">EDAspy.optimization.custom.initialization_models.multi_gauss_gininit module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="EDAspy.optimization.custom.initialization_models.html#module-EDAspy.optimization.custom.initialization_models.uni_bin_geninit">EDAspy.optimization.custom.initialization_models.uni_bin_geninit module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="EDAspy.optimization.custom.initialization_models.html#module-EDAspy.optimization.custom.initialization_models.uni_gauss_geninit">EDAspy.optimization.custom.initialization_models.uni_gauss_geninit module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="EDAspy.optimization.custom.initialization_models.html#module-EDAspy.optimization.custom.initialization_models.uniform_geninit">EDAspy.optimization.custom.initialization_models.uniform_geninit module</a></li>
@@ -103,6 +103,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="EDAspy.optimization.custom.probabilistic_models.html">EDAspy.optimization.custom.probabilistic_models package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="EDAspy.optimization.custom.probabilistic_models.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="EDAspy.optimization.custom.probabilistic_models.html#edaspy-optimization-custom-probabilistic-models-semiparametric-bayesian-network-module">EDAspy.optimization.custom.probabilistic_models.semiparametric_bayesian_network module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="EDAspy.optimization.custom.probabilistic_models.html#module-EDAspy.optimization.custom.probabilistic_models.gaussian_bayesian_network">EDAspy.optimization.custom.probabilistic_models.gaussian_bayesian_network module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="EDAspy.optimization.custom.probabilistic_models.html#module-EDAspy.optimization.custom.probabilistic_models.multivariate_gaussian">EDAspy.optimization.custom.probabilistic_models.multivariate_gaussian module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="EDAspy.optimization.custom.probabilistic_models.html#module-EDAspy.optimization.custom.probabilistic_models.univariate_binary">EDAspy.optimization.custom.probabilistic_models.univariate_binary module</a></li>
@@ -119,6 +120,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="EDAspy.optimization.multivariate.html">EDAspy.optimization.multivariate package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="EDAspy.optimization.multivariate.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="EDAspy.optimization.multivariate.html#edaspy-optimization-multivariate-speda-module">EDAspy.optimization.multivariate.speda module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="EDAspy.optimization.multivariate.html#module-EDAspy.optimization.multivariate.egna">EDAspy.optimization.multivariate.egna module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="EDAspy.optimization.multivariate.html#module-EDAspy.optimization.multivariate.emna">EDAspy.optimization.multivariate.emna module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="EDAspy.optimization.multivariate.html#module-EDAspy.optimization.multivariate">Module contents</a></li>
@@ -192,6 +194,56 @@ specific algorithm.</p>
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">EDAspy.optimization.eda_result.</span></span><span class="sig-name descname"><span class="pre">EdaResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">best_ind</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">best_cost</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_fev</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">history</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">settings</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/optimization/eda_result.html#EdaResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.eda_result.EdaResult" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Object used to encapsulate the result and information of the EDA during the execution</p>
+</dd></dl>
+
+</section>
+<section id="module-EDAspy.optimization.tools">
+<span id="edaspy-optimization-tools-module"></span><h2>EDAspy.optimization.tools module<a class="headerlink" href="#module-EDAspy.optimization.tools" title="Permalink to this headline"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="EDAspy.optimization.tools.arcs2adj_mat">
+<span class="sig-prename descclassname"><span class="pre">EDAspy.optimization.tools.</span></span><span class="sig-name descname"><span class="pre">arcs2adj_mat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arcs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_variables</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.array</span><a class="reference internal" href="_modules/EDAspy/optimization/tools.html#arcs2adj_mat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.tools.arcs2adj_mat" title="Permalink to this definition"></a></dt>
+<dd><p>This function transforms the list of arcs in the BN structure to an adjacency matrix.
+:param arcs: list of arcs in the BN structure.
+:param n_variables: number of variables.
+:type arcs: list
+:type n_variables: int
+:return: adjacency matrix
+:rtype: np.array</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="EDAspy.optimization.tools.plot_bn">
+<span class="sig-prename descclassname"><span class="pre">EDAspy.optimization.tools.</span></span><span class="sig-name descname"><span class="pre">plot_bn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arcs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_variables</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">curved_arcs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">curvature</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">-</span> <span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_color</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'red'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_color</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'black'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arrow_size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_transparency</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_transparency</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_line_widths</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/optimization/tools.html#plot_bn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.tools.plot_bn" title="Permalink to this definition"></a></dt>
+<dd><p>This function Plots a BN structure as a directed acyclic graph.
+:param arcs: Arcs in the BN structure.
+:param n_variables: Number of variables in the BN structure.
+:param pos: Positions in the plot for each node.
+:param curved_arcs: True if curved arcs are desired.
+:param curvature: Radians of curvature for edges. By default, -0.3.
+:param node_size: Size of the nodes in the graph. By default, 500.
+:param node_color: Color set to nodes. By default, ‘red’.
+:param edge_color: Color set to edges. By default, ‘black’.
+:param arrow_size: Size of arrows in edges. By default, 15.
+:param node_transparency: Alpha value [0, 1] that defines the transparency of the node. By default, 0.9.
+:param edge_transparency: Alpha value [0, 1] that defines the transparency of the edge. By default, 0.9.
+:param node_line_widths: Width of the nodes contour lines. By default, 2.0.
+:param title: Title for Figure. By default, None.
+:param output_file: Path to save the figure locally.
+:type arcs: List of tuples.
+:type n_variables: int.
+:type pos: dict with name of variables as keys and tuples with coordinates as values.
+:type curved_arcs: bool.
+:type curvature: float.
+:type node_size: int.
+:type node_color: str.
+:type edge_color: str.
+:type arrow_size: int.
+:type node_transparency: float.
+:type edge_transparency: float.
+:type node_line_widths: float.
+:type title: str.
+:type output_file: str.
+:return: Figure.</p>
 </dd></dl>
 
 </section>

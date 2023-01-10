@@ -5,7 +5,7 @@ Submodules
 ----------
 
 EDAspy.optimization.custom.probabilistic\_models.semiparametric\_bayesian\_network module
------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------
 
 .. automodule:: EDAspy.optimization.custom.probabilistic_models.semiparametric_bayesian_network
    :members:
