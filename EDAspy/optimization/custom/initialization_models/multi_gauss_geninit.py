@@ -33,8 +33,8 @@ class MultiGaussGenInit(GenInit):
         assert len(means_vector) == len(cov_matrix), "Lengths of means vector and covariance matrix must be the same."
 
         if len(means_vector) == 0:
-            self.means_vector = np.random.randint(low=lower_bound, high=upper_bound, size=n_variables)
-            self.cov_matrix = np.random.randint(low=lower_bound, high=upper_bound, size=(n_variables, n_variables))
+            self.means_vector = np.random.choice(np.arange(lower_bound, upper_bound + 1), n_variables)
+            self.cov_matrix = np.random.choice(np.arange(lower_bound, upper_bound + 1), (n_variables, n_variables))
         else:
             self.means_vector = means_vector
             self.cov_matrix = cov_matrix

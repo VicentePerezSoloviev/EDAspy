@@ -39,8 +39,7 @@ class MultiGauss(ProbabilisticModel):
         :rtype: np.array
         """
 
-        dataset = np.random.multivariate_normal(self.pm_means, self.pm_cov, size)
-        return dataset
+        return np.random.multivariate_normal(self.pm_means, self.pm_cov, size)
 
     def learn(self, dataset: np.array):
         """
