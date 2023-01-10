@@ -36,7 +36,7 @@ class UniGaussGenInit(GenInit):
         if len(means_vector) == 0:
             self.means_vector = np.random.choice(np.arange(lower_bound, higher_bound+1), n_variables)
             # the stds are random but using the lower_bound and higher_bound, minimizing the std
-            self.stds_vector = np.random.choice(np.arange(lower_bound/4, abs(higher_bound/2)), n_variables)
+            self.stds_vector = np.random.choice(np.arange(abs(lower_bound/4), abs(higher_bound/2)), n_variables)
         else:
             self.means_vector = means_vector
             self.stds_vector = stds_vector

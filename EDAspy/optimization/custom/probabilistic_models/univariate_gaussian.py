@@ -30,11 +30,9 @@ class UniGauss(ProbabilisticModel):
         :return: array with the dataset sampled
         :rtype: np.array
         """
-
-        dataset = np.random.normal(
-            self.pm[0, :], self.pm[1, :], [size, self.len_variables]
+        return np.random.normal(
+            self.pm[0, :], self.pm[1, :], (size, self.len_variables)
         )
-        return dataset
 
     def learn(self, dataset: np.array):
         """
