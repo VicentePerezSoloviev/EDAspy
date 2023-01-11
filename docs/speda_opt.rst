@@ -38,3 +38,11 @@ We plot the best cost found in each iteration of the algorithm.
     plt.xlabel('iteration')
     plt.ylabel('MAE')
     plt.show()
+
+Let's visualize the BN structure learnt in the last iteration of the algorithm.
+
+.. code-block:: python3
+
+    from EDAspy.optimization import plot_bn
+
+    plot_bn(speda.pm.print_structure(), n_variables=n_vars)
