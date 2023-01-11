@@ -45,7 +45,13 @@ The following implementations are available in EDAspy:
 * EMNA: Estimation of Multivariate Normal Algorithm. This is a similar implementation to EGNA, in which instead of using a Gaussian Bayesian network, a multivariate Gaussian distribution is iteratively learned and sampled. As in EGNA, the dependencies between variables are considered and assumed to be linear Gaussian. This implementation is focused in continuous optimization.
 
 
+* SPEDA: Semiparametric Estimation of Distribution Algorithm. This multivariate EDA allows estimating the density of a variable using either KDE or Gaussians, and allow dependencies between both types of variables. It is an archive-based approach where the probabilistic model is updated given the best individuals of l previous generations. 
+
+
 * Categorical EDA. In this implementation we consider some independent categorical variables. Some usages include portfolio optimization, for exampled.
+
+
+Some tools are also available in EDAspy such as the Bayesian network structure plotting, for visualizing the graph learnt in some of the implementations, if needed.
 
 ## Examples
 
