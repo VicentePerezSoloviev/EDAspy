@@ -69,7 +69,7 @@ For installing EDAspy from Pypi execute the following command using pip:
 
 ### Prerequisites
 
-- Python 3.6, 3.7, 3.8 or 3.9.
+- Python >= 3.0
 - Pybnesian, numpy, pandas.
 
 ### Building

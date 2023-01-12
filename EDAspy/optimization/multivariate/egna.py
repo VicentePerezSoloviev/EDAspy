@@ -3,7 +3,7 @@
 
 from ..eda import EDA
 from ..custom.probabilistic_models import GBN
-from ..custom.initialization_models import MultiGaussGenInit
+from ..custom.initialization_models import UniformGenInit
 
 
 class EGNA(EDA):
@@ -74,5 +74,5 @@ class EGNA(EDA):
         self.vars = [str(i) for i in range(n_variables)]
         self.landscape_bounds = landscape_bounds
         self.pm = GBN(self.vars, black_list=black_list, white_list=white_list)
-        self.init = MultiGaussGenInit(self.n_variables, lower_bound=self.landscape_bounds[0],
-                                      upper_bound=self.landscape_bounds[1])
+        self.init = UniformGenInit(self.n_variables, lower_bound=self.landscape_bounds[0],
+                                   upper_bound=self.landscape_bounds[1])
