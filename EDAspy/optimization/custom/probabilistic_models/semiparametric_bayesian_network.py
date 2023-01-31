@@ -46,16 +46,16 @@ class SPBN(ProbabilisticModel):
         self.pm = SemiparametricBN(self.variables)
 
         if self.white_list and self.black_list:
-            self.pm = self.pm = hc(pd.DataFrame(dataset), start=self.pm, operators=["arcs", "node_type"],
-                                   arc_whitelist=self.white_list, arc_blacklist=self.black_list)
+            self.pm = hc(pd.DataFrame(dataset), start=self.pm, operators=["arcs", "node_type"],
+                         arc_whitelist=self.white_list, arc_blacklist=self.black_list)
         elif self.white_list:
-            self.pm = self.pm = hc(pd.DataFrame(dataset), start=self.pm, operators=["arcs", "node_type"],
-                                   arc_whitelist=self.white_list)
+            self.pm = hc(pd.DataFrame(dataset), start=self.pm, operators=["arcs", "node_type"],
+                         arc_whitelist=self.white_list)
         elif self.black_list:
-            self.pm = self.pm = hc(pd.DataFrame(dataset), start=self.pm, operators=["arcs", "node_type"],
-                                   arc_blacklist=self.black_list)
+            self.pm = hc(pd.DataFrame(dataset), start=self.pm, operators=["arcs", "node_type"],
+                         arc_blacklist=self.black_list)
         else:
-            self.pm = self.pm = hc(pd.DataFrame(dataset), start=self.pm, operators=["arcs", "node_type"])
+            self.pm = hc(pd.DataFrame(dataset), start=self.pm, operators=["arcs", "node_type"])
 
         self.pm.fit(pd.DataFrame(dataset))
 
