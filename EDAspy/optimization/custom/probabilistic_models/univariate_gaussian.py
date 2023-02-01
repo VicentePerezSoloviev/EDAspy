@@ -46,3 +46,6 @@ class UniGauss(ProbabilisticModel):
 
             if self.pm[1, i] < self.lower_bound:
                 self.pm[1, i] = self.lower_bound
+
+    def print_structure(self) -> list:
+        return list()

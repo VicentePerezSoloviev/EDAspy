@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 import pandas as pd
-from EDAspy.optimization.custom import GBN, SPBN
+from EDAspy.optimization.custom import GBN, SPBN, UniGauss, UniBin
 import numpy as np
 
 
@@ -92,3 +92,39 @@ class TestPM(TestCase):
 
         assert all(elem in spbn.print_structure() for elem in white_list)
         assert not all(elem in spbn.print_structure() for elem in black_list)
+
+    def test_print_structure_uni_gauss(self):
+        n_vars = 30
+        var_names = [str(i) for i in range(n_vars)]
+
+        pm = UniGauss(variables=var_names, lower_bound=0.1)
+        data = np.random.random((1000, n_vars))
+        pm.learn(data)
+
+        assert pm.print_structure() == list()
+
+    def test_print_structure_uni_bin(self):
+        n_vars = 30
+        var_names = [str(i) for i in range(n_vars)]
+
+        pm = UniBin(variables=var_names, lower_bound=0.1, upper_bound=0.9)
+        data = np.random.choice([0, 1], (1000, n_vars))
+        pm.learn(data)
+
+        assert pm.print_structure() == list()
+
+    def test_bounds_uni_bin(self):
+        n_vars = 30
+        var_names = [str(i) for i in range(n_vars)]
+        flag = False
+
+        # case in which the upper bound is lower than the lower one
+        try:
+            UniBin(variables=var_names, lower_bound=0.9, upper_bound=0.1)
+        except (Exception, ):
+            flag = True
+
+        assert flag
+
+        # correct case
+        UniBin(variables=var_names, lower_bound=0.1, upper_bound=0.9)

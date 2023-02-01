@@ -17,6 +17,8 @@ class UniBin(ProbabilisticModel):
     def __init__(self, variables: list, upper_bound: float, lower_bound: float):
         super().__init__(variables)
 
+        assert upper_bound > lower_bound, "The upper bound should be higher than lower bound"
+
         self.upper_bound = upper_bound
         self.lower_bound = lower_bound
 
@@ -49,3 +51,6 @@ class UniBin(ProbabilisticModel):
         self.pm = sum(dataset) / len(dataset)
         self.pm[self.pm < self.lower_bound] = self.lower_bound
         self.pm[self.pm > self.upper_bound] = self.upper_bound
+
+    def print_structure(self) -> list:
+        return list()
