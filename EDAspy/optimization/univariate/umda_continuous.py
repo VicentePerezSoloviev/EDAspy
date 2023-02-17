@@ -16,7 +16,7 @@ class UMDAc(EDA):
     UMDA [1] is a specific type of Estimation of Distribution Algorithm (EDA) where new individuals
     are sampled from univariate normal distributions and are updated in each iteration of the
     algorithm by the best individuals found in the previous iteration. In this implementation each
-    individual is an array of 0s and 1s so new individuals are sampled from a univariate probabilistic
+    individual is an array of real data so new individuals are sampled from a univariate probabilistic
     model updated in each iteration. Optionally it is possible to set lower bound to the standard
     deviation of the normal distribution for the variables to avoid premature convergence.
 
@@ -26,7 +26,7 @@ class UMDAc(EDA):
 
     Example:
 
-        This short example runs UMDAc for a toy example of the One-Max problem in the continuous space.
+        This short example runs UMDAc for a benchmark function optimization problem in the continuous space.
 
         .. code-block:: python
 

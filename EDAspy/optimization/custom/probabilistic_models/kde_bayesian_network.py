@@ -2,16 +2,16 @@
 # coding: utf-8
 
 import numpy as np
-from pybnesian import SemiparametricBN, hc
+from pybnesian import KDENetwork, hc
 from ._probabilistic_model import ProbabilisticModel
 import pandas as pd
 
 
-class SPBN(ProbabilisticModel):
+class KDEBN(ProbabilisticModel):
 
     """
-    This probabilistic model is a Semiparametric Bayesian network [1]. It allows dependencies between variables
-    which have been estimated using KDE with variables which fit a Gaussian distribution.
+    This probabilistic model is a Kernel Density Estimation Bayesian network [1]. It allows dependencies
+    between variables which have been estimated using KDE.
 
     References:
 
@@ -29,37 +29,51 @@ class SPBN(ProbabilisticModel):
         super().__init__(variables)
 
         self.variables = variables
-        self.pm = SemiparametricBN(variables)
+        self.pm = KDENetwork(variables)
 
         self.white_list = white_list
         self.black_list = black_list
 
-        self.id = 5
+        self.id = 6
 
     def learn(self, dataset: np.array, num_folds: int = 10):
         """
-        Learn a semiparametric Bayesian network from the dataset passed as argument.
+        Learn a KDE Bayesian network from the dataset passed as argument.
 
-        :param dataset: dataset from which learn the SPBN.
+        :param dataset: dataset from which learn the KDEBN.
         :param num_folds: Number of folds used for the SPBN learning. The higher, the more accurate, but also higher
         CPU demand. By default, it is set to 10.
         """
 
-        self.pm = SemiparametricBN(self.variables)
+        self.pm = KDENetwork(self.variables)
 
         if self.white_list and self.black_list:
-            self.pm = hc(pd.DataFrame(dataset), start=self.pm, operators=["arcs", "node_type"],
+            self.pm = hc(pd.DataFrame(dataset), start=self.pm, operators=["arcs"],
                          arc_whitelist=self.white_list, arc_blacklist=self.black_list, num_folds=num_folds)
         elif self.white_list:
-            self.pm = hc(pd.DataFrame(dataset), start=self.pm, operators=["arcs", "node_type"],
+            self.pm = hc(pd.DataFrame(dataset), start=self.pm, operators=["arcs"],
                          arc_whitelist=self.white_list, num_folds=num_folds)
         elif self.black_list:
-            self.pm = hc(pd.DataFrame(dataset), start=self.pm, operators=["arcs", "node_type"],
+            self.pm = hc(pd.DataFrame(dataset), start=self.pm, operators=["arcs"],
                          arc_blacklist=self.black_list, num_folds=num_folds)
         else:
-            self.pm = hc(pd.DataFrame(dataset), start=self.pm, operators=["arcs", "node_type"], num_folds=num_folds)
+            self.pm = hc(pd.DataFrame(dataset), start=self.pm, operators=["arcs"], num_folds=num_folds)
 
         self.pm.fit(pd.DataFrame(dataset))
+
+    def sample(self, size: int) -> np.array:
+        """
+        Samples the KDE Bayesian network several times defined by the user. The dataset is returned
+        as a numpy matrix. The sampling process is implemented using probabilistic logic sampling.
+
+        :param size: number of samplings of the KDE Bayesian network.
+        :return: array with the dataset sampled.
+        :rtype: np.array
+        """
+
+        dataset = self.pm.sample(size).to_pandas()
+        dataset = dataset[self.variables].to_numpy()
+        return dataset
 
     def print_structure(self) -> list:
         """
@@ -71,17 +85,3 @@ class SPBN(ProbabilisticModel):
         """
 
         return self.pm.arcs()
-
-    def sample(self, size: int) -> np.array:
-        """
-        Samples the Semiparametric Bayesian network several times defined by the user. The dataset is
-        returned as a numpy matrix. The sampling process is implemented using probabilistic logic sampling.
-
-        :param size: number of samplings of the Semiparametric Bayesian network.
-        :return: array with the dataset sampled.
-        :rtype: np.array
-        """
-
-        dataset = self.pm.sample(size).to_pandas()
-        dataset = dataset[self.variables].to_numpy()
-        return dataset

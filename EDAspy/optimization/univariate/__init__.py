@@ -5,3 +5,4 @@
 
 from .umda_continuous import UMDAc
 from .umda_binary import UMDAd
+from .keda import UnivariateKEDA

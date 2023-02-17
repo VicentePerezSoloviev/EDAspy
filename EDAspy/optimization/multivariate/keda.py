@@ -2,41 +2,35 @@
 # coding: utf-8
 
 from ..eda import EDA
-from ..custom.probabilistic_models import SPBN
+from ..custom.probabilistic_models import KDEBN
 from ..custom.initialization_models import UniformGenInit
 
 import numpy as np
 
 
-class SPEDA(EDA):
+class MultivariateKEDA(EDA):
     """
-    Semiparametric Estimation of Distribution Algorithm [1]. This type of Estimation-of-Distribution
-    Algorithm uses a semiparametric Bayesian network [2] which allows dependencies between variables
-    which have been estimated using KDE with variables which fits a Gaussian distribution. By this
-    way, it avoid the assumption of Gaussianity in the variables of the optimization problem. This
-    multivariate probabilistic model is updated in each iteration with the best individuals of the
-    previous generations.
-
-    SPEDA has shown to improve the results for more complex optimization problem compared to the
-    univariate EDAs that can be found implemented in this package, multivariate EDAs such as
-    EGNA, or EMNA, and other population-based algorithms. See [1] for numerical results.
+    Kernel Estimation of Distribution Algorithm [1]. This type of Estimation-of-Distribution
+    Algorithm uses a KDE Bayesian network [2] which allows dependencies between variables which have
+    been estimated using KDE. This multivariate probabilistic model is updated in each iteration
+    with the best individuals of the previous generations.
 
     Example:
 
         This example uses some very well-known benchmarks from CEC14 conference to be solved using
-        a Semiparametric Estimation of Distribution Algorithm (SPEDA).
+        a Kernel Estimation of Distribution Algorithm (KEDA).
 
         .. code-block:: python
 
-            from EDAspy.optimization import SPEDA
+            from EDAspy.optimization import MultivariateKEDA
             from EDAspy.benchmarks import ContinuousBenchmarkingCEC14
 
             benchmarking = ContinuousBenchmarkingCEC14(10)
 
-            speda = SPEDA(size_gen=300, max_iter=100, dead_iter=20, n_variables=10,
-                          landscape_bounds=(-60, 60), l=10)
+            keda = MultivariateKEDA(size_gen=300, max_iter=100, dead_iter=20, n_variables=10,
+                                    landscape_bounds=(-60, 60), l=10)
 
-            eda_result = speda.minimize(benchmarking.cec14_4, True)
+            eda_result = keda.minimize(benchmarking.cec14_4, True)
 
     References:
 
@@ -62,16 +56,17 @@ class SPEDA(EDA):
         r"""
             :param size_gen: Population size. Number of individuals in each generation.
             :param max_iter: Maximum number of iterations during runtime.
-            :param dead_iter: Stopping criteria. Number of iterations with no improvement after which, the algorithm finish.
+            :param dead_iter: Stopping criteria. Number of iterations with no improvement after which, the algorithm finishes.
             :param n_variables: Number of variables to be optimized.
             :param landscape_bounds: Landscape bounds only for initialization. Limits in the search space.
             :param alpha: Percentage of population selected to update the probabilistic model.
-            :param l: SPEDA is an archive-base approach. Thus, in each generation updates the probabilistic model with
-            the best solutions of the previous l generations.
+            :param l: this implementation is an archive-base approach. Thus, in each generation updates the
+            probabilistic model with the best solutions of the previous l generations. If this characteristic is not
+            desired, then l=1.
             :param alpha: Percentage of population selected to update the probabilistic model in each generation.
             :param disp: Set to True to print convergence messages.
-            :param black_list: list of tuples with the forbidden arcs in the SPBN during runtime.
-            :param white_list: list of tuples with the mandatory arcs in the SPBN during runtime.
+            :param black_list: list of tuples with the forbidden arcs in the KDEBN during runtime.
+            :param white_list: list of tuples with the mandatory arcs in the KDEBN during runtime.
         """
 
         super().__init__(size_gen=size_gen, max_iter=max_iter, dead_iter=dead_iter,
@@ -79,7 +74,7 @@ class SPEDA(EDA):
 
         self.vars = [str(i) for i in range(n_variables)]
         self.landscape_bounds = landscape_bounds
-        self.pm = SPBN(self.vars, black_list=black_list, white_list=white_list)
+        self.pm = KDEBN(self.vars, black_list=black_list, white_list=white_list)
 
         self.l_len = l*int(size_gen*self.alpha)  # maximum number of individuals in the archive
         self.archive = np.empty((0, self.n_variables))

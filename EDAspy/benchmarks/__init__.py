@@ -3,5 +3,5 @@
 
 # __init__.py
 
-from .binary import *
+from .binary import one_max
 from .continuous import ContinuousBenchmarkingCEC14

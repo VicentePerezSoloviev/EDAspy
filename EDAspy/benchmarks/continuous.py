@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# coding: utf-8
+
 import numpy as np
 import os
 from typing import Union
@@ -44,7 +47,6 @@ class ContinuousBenchmarkingCEC14:
     def bent_cigar_function(self, x: Union[np.array, list]) -> float:
         """
         Bent Cigar function
-
         :param x: solution to be evaluated
         :return: solution evaluation
         :rtype: float
@@ -59,7 +61,6 @@ class ContinuousBenchmarkingCEC14:
     def discuss_function(self, x: Union[np.array, list]) -> float:
         """
         Discuss function
-
         :param x: solution to be evaluated
         :return: solution evaluation
         :rtype: float
@@ -73,7 +74,6 @@ class ContinuousBenchmarkingCEC14:
     def rosenbrock_function(self, x: Union[np.array, list]) -> float:
         """
         Rosenbrock’s Function
-
         :param x: solution to be evaluated
         :return: solution evaluation
         :rtype: float
@@ -87,7 +87,6 @@ class ContinuousBenchmarkingCEC14:
     def ackley_function(self, x: Union[np.array, list]) -> float:
         """
         Ackley’s Function
-
         :param x: solution to be evaluated
         :return: solution evaluation
         :rtype: float
@@ -100,7 +99,6 @@ class ContinuousBenchmarkingCEC14:
     def weierstrass_function(self, x: Union[np.array, list]) -> float:
         """
         Weierstrass Function
-
         :param x: solution to be evaluated
         :return: solution evaluation
         :rtype: float
@@ -125,7 +123,6 @@ class ContinuousBenchmarkingCEC14:
     def griewank_function(self, x: Union[np.array, list]) -> float:
         """
         Griewank’s Function
-
         :param x: solution to be evaluated
         :return: solution evaluation
         :rtype: float
@@ -142,7 +139,6 @@ class ContinuousBenchmarkingCEC14:
     def rastrigins_function(self, x: Union[np.array, list]) -> float:
         """
         Rastrigin’s Function
-
         :param x: solution to be evaluated
         :return: solution evaluation
         :rtype: float
@@ -162,7 +158,6 @@ class ContinuousBenchmarkingCEC14:
     def mod_schwefels_function(self, x: Union[np.array, list]) -> float:
         """
         Modified Schwefel’s Function
-
         :param x: solution to be evaluated
         :return: solution evaluation
         :rtype: float
@@ -177,7 +172,6 @@ class ContinuousBenchmarkingCEC14:
     def katsuura_function(self, x: Union[np.array, list]) -> float:
         """
         Katsuura Function
-
         :param x: solution to be evaluated
         :return: solution evaluation
         :rtype: float
@@ -195,7 +189,6 @@ class ContinuousBenchmarkingCEC14:
     def happycat_function(self, x: Union[np.array, list]) -> float:
         """
         HappyCat Function
-
         :param x: solution to be evaluated
         :return: solution evaluation
         :rtype: float
@@ -209,7 +202,6 @@ class ContinuousBenchmarkingCEC14:
     def hgbat_function(self, x: Union[np.array, list]) -> float:
         """
         HGBat Function
-
         :param x: solution to be evaluated
         :return: solution evaluation
         :rtype: float
@@ -223,7 +215,6 @@ class ContinuousBenchmarkingCEC14:
     def expanded_scaffer_f6_function(self, x: Union[np.array, list]):
         """
         Expanded Scaffer’s F6 Function
-
         :param x: solution to be evaluated
         :return: solution evaluation
         :rtype: float
@@ -236,7 +227,6 @@ class ContinuousBenchmarkingCEC14:
     def cec14_1(self, x: Union[np.array, list]) -> float:
         """
         Rotated High Conditioned Elliptic Function
-
         :param x: solution to be evaluated
         :return: solution evaluation
         :rtype: float
@@ -250,7 +240,6 @@ class ContinuousBenchmarkingCEC14:
     def cec14_2(self, x: Union[np.array, list]) -> float:
         """
         Rotated Bent Cigar Function
-
         :param x: solution to be evaluated
         :return: solution evaluation
         :rtype: float
@@ -264,7 +253,6 @@ class ContinuousBenchmarkingCEC14:
     def cec14_3(self, x: Union[np.array, list]) -> float:
         """
         Rotated Discus Function
-
         :param x: solution to be evaluated
         :return: solution evaluation
         :rtype: float
@@ -278,7 +266,6 @@ class ContinuousBenchmarkingCEC14:
     def cec14_4(self, x: Union[np.array, list]) -> float:
         """
         Shifted and Rotated Rosenbrock’s Function
-
         :param x: solution to be evaluated
         :return: solution evaluation
         :rtype: float
@@ -292,7 +279,6 @@ class ContinuousBenchmarkingCEC14:
     def cec14_5(self, x: Union[np.array, list]) -> float:
         """
         Shifted and Rotated Rosenbrock’s Function
-
         :param x: solution to be evaluated
         :return: solution evaluation
         :rtype: float
@@ -306,7 +292,6 @@ class ContinuousBenchmarkingCEC14:
     def cec14_6(self, x: Union[np.array, list]) -> float:
         """
         Shifted and Rotated Weierstrass Function
-
         :param x: solution to be evaluated
         :return: solution evaluation
         :rtype: float
@@ -320,7 +305,6 @@ class ContinuousBenchmarkingCEC14:
     def cec14_7(self, x: Union[np.array, list]) -> float:
         """
         Shifted and Rotated Griewank’s Function
-
         :param x: solution to be evaluated
         :return: solution evaluation
         :rtype: float
@@ -334,7 +318,6 @@ class ContinuousBenchmarkingCEC14:
     def cec14_8(self, x: Union[np.array, list]) -> float:
         """
         Shifted Rastrigin’s Function
-
         :param x: solution to be evaluated
         :return: solution evaluation
         :rtype: float
@@ -347,7 +330,6 @@ class ContinuousBenchmarkingCEC14:
     def cec14_9(self, x: Union[np.array, list]) -> float:
         """
         Shifted and Rotated Rastrigin’s Function
-
         :param x: solution to be evaluated
         :return: solution evaluation
         :rtype: float
@@ -362,7 +344,6 @@ class ContinuousBenchmarkingCEC14:
     def cec14_10(self, x: Union[np.array, list]) -> float:
         """
         Shifted Schwefel’s Function
-
         :param x: solution to be evaluated
         :return: solution evaluation
         :rtype: float
@@ -375,7 +356,6 @@ class ContinuousBenchmarkingCEC14:
     def cec14_11(self, x: Union[np.array, list]) -> float:
         """
         Shifted and Rotated Schwefel’s Function
-
         :param x: solution to be evaluated
         :return: solution evaluation
         :rtype: float
@@ -389,7 +369,6 @@ class ContinuousBenchmarkingCEC14:
     def cec14_12(self, x: Union[np.array, list]) -> float:
         """
         Shifted and Rotated Katsuura Function
-
         :param x: solution to be evaluated
         :return: solution evaluation
         :rtype: float
@@ -403,7 +382,6 @@ class ContinuousBenchmarkingCEC14:
     def cec14_13(self, x: Union[np.array, list]) -> float:
         """
         Shifted and Rotated HappyCat Function
-
         :param x: solution to be evaluated
         :return: solution evaluation
         :rtype: float
@@ -417,7 +395,6 @@ class ContinuousBenchmarkingCEC14:
     def cec14_14(self, x: Union[np.array, list]) -> float:
         """
         Shifted and Rotated HGBat Function
-
         :param x: solution to be evaluated
         :return: solution evaluation
         :rtype: float
@@ -431,7 +408,6 @@ class ContinuousBenchmarkingCEC14:
     def cec14_16(self, x: Union[np.array, list]) -> float:
         """
         Shifted and Rotated Expanded Scaffer’s F6 Function
-
         :param x: solution to be evaluated
         :return: solution evaluation
         :rtype: float

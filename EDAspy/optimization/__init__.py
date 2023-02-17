@@ -3,8 +3,8 @@
 
 # __init__.py
 
-from .univariate import UMDAd, UMDAc
-from .multivariate import EGNA, EMNA, SPEDA
+from .univariate import UMDAd, UMDAc, UnivariateKEDA
+from .multivariate import EGNA, EMNA, SPEDA, MultivariateKEDA
 
 from .tools import plot_bn, arcs2adj_mat
 
