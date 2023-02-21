@@ -46,14 +46,10 @@ def _set_positions(variables: list) -> dict:
             pos_list[i][0] += noise_list[i]
             pos_list[i][1] += noise_list[i]'''
 
-    pos = {}
-    for i in range(n_variables):
-        pos.update({variables[i]: pos_list[i]})
-
-    return pos
+    return {variables[i]: pos_list[i] for i in range(n_variables)}
 
 
-def plot_bn(arcs: list, n_variables: int, pos: dict = None, curved_arcs: bool = True,
+def plot_bn(arcs: list, var_names: list, pos: dict = None, curved_arcs: bool = True,
             curvature: float = -0.3, node_size: int = 500, node_color: str = 'red',
             edge_color: str = 'black', arrow_size: int = 15, node_transparency: float = 0.9,
             edge_transparency: float = 0.9, node_line_widths: float = 2, title: str = None,
@@ -61,7 +57,7 @@ def plot_bn(arcs: list, n_variables: int, pos: dict = None, curved_arcs: bool = 
     """
     This function Plots a BN structure as a directed acyclic graph.
     :param arcs: Arcs in the BN structure.
-    :param n_variables: Number of variables in the BN structure.
+    :param var_names: List of variables.
     :param pos: Positions in the plot for each node.
     :param curved_arcs: True if curved arcs are desired.
     :param curvature: Radians of curvature for edges. By default, -0.3.
@@ -75,7 +71,6 @@ def plot_bn(arcs: list, n_variables: int, pos: dict = None, curved_arcs: bool = 
     :param title: Title for Figure. By default, None.
     :param output_file: Path to save the figure locally.
     :type arcs: List of tuples.
-    :type n_variables: int.
     :type pos: dict with name of variables as keys and tuples with coordinates as values.
     :type curved_arcs: bool.
     :type curvature: float.
@@ -91,14 +86,12 @@ def plot_bn(arcs: list, n_variables: int, pos: dict = None, curved_arcs: bool = 
     :return: Figure.
     """
 
-    nodes = [str(i) for i in range(n_variables)]
-
     g = nx.DiGraph()
-    g.add_nodes_from(nodes)
+    g.add_nodes_from(var_names)
     g.add_edges_from(arcs)
 
     if not pos:
-        pos = _set_positions(nodes)
+        pos = _set_positions(var_names)
 
     nx.draw_networkx_nodes(g, pos, node_size=node_size, node_color=node_color, alpha=node_transparency,
                            linewidths=node_line_widths)
