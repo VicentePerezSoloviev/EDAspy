@@ -25,7 +25,7 @@ class UniBinGenInit(GenInit):
         else:
             self.means_vector = means_vector
 
-        self.pm = UniBin(list(range(self.n_variables)), lower_bound=0, upper_bound=0)  # dismiss bounds
+        self.pm = UniBin(list(range(self.n_variables)), lower_bound=0, upper_bound=1)  # dismiss bounds
         self.pm.pm = self.means_vector
 
         self.id = 2
