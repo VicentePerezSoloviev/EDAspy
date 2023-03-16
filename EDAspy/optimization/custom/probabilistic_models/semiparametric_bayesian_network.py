@@ -85,3 +85,13 @@ class SPBN(ProbabilisticModel):
         dataset = self.pm.sample(size).to_pandas()
         dataset = dataset[self.variables].to_numpy()
         return dataset
+
+    def logl(self, data: pd.DataFrame):
+        """
+        Returns de log-likelihood of some data in the model.
+
+        :param data: dataset to evaluate its likelihood in the model.
+        :return: log-likelihood of the instances in the model.
+        :rtype: np.array
+        """
+        return self.pm.logl(data)
