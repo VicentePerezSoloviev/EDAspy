@@ -1,8 +1,8 @@
-matplotlib>=3.3.4
-networkx>=2.5
-numpy>=1.22.4
-pandas>=1.2.4
+matplotlib
+networkx
+numpy
+pandas
 pybnesian==0.4.2
-scikit_learn>=1.2.2
-scipy>=1.6.2
-setuptools>=65.5.1
+scikit_learn
+scipy
+setuptools
