@@ -13,6 +13,7 @@ links.
    feature_selection_umdad
    eda_custom
    speda_opt
+   multivariate_keda_opt.rst
    egna_opt
    emna_opt
    time_series_opt
