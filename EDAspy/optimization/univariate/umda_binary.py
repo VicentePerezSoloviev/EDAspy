@@ -56,7 +56,9 @@ class UMDAd(EDA):
                  lower_bound: float = 0.2,
                  upper_bound: float = 0.8,
                  elite_factor: float = 0.4,
-                 disp: bool = True):
+                 disp: bool = True,
+                 parallelize: bool = False,
+                 init_data: np.array = None):
         r"""
         Args:
             size_gen: Population size of each generation.
@@ -69,9 +71,14 @@ class UMDAd(EDA):
             upper_bound: Upper bound imposed to the probabilities of the variables. If not desired, set to 1.
             elite_factor: Percentage of previous population selected to add to new generation (elite approach).
             disp: Set to True to print convergence messages.
+            parallelize: True if the evaluation of the solutions is desired to be parallelized in multiple cores.
+            init_data: Numpy array containing the data the EDA is desired to be initialized from. By default, an
+            initializer is used.
         """
 
-        super().__init__(size_gen, max_iter, dead_iter, n_variables, alpha, elite_factor, disp)
+        super().__init__(size_gen=size_gen, max_iter=max_iter, dead_iter=dead_iter, n_variables=n_variables,
+                         alpha=alpha, elite_factor=elite_factor, disp=disp, parallelize=parallelize,
+                         init_data=init_data)
 
         self.lower_bound = lower_bound
         self.upper_bound = upper_bound
