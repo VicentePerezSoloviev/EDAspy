@@ -5,4 +5,4 @@ pandas==1.2.4
 pybnesian==0.4.2
 scikit_learn==1.2.2
 scipy==1.6.2
-setuptools==52.0.0.post20210125
+setuptools>=65.5.1
