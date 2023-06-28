@@ -2,7 +2,7 @@
 Changelog
 *********
 
-v1.1.0
+v1.1.1
 ======
 
 - This version implements the SPEDA algorithm to allow dependencies between variables that fit Gaussian distributions and KDE nodes.

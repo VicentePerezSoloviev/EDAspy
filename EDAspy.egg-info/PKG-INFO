@@ -1,12 +1,12 @@
 Metadata-Version: 2.1
 Name: EDAspy
-Version: 1.1.0
+Version: 1.1.1
 Summary: EDAspy is a Python package that implements Estimation of Distribution Algorithms. EDAspy allows toeither use already existing implementations or customize the EDAs baseline easily building it bymodules so new research can be easily developed. It also has several benchmarks for comparisons.
 Home-page: https://github.com/VicentePerezSoloviev/EDAspy
 Author: Vicente P. Soloviev
 Author-email: vicente.perez.soloviev@gmail.com
 License: MIT
-Download-URL: https://github.com/VicentePerezSoloviev/EDAspy/archive/1.1.0.tar.gz
+Download-URL: https://github.com/VicentePerezSoloviev/EDAspy/archive/1.1.1.tar.gz
 Description: # <img src='https://raw.githubusercontent.com/VicentePerezSoloviev/EDAspy/master/Logo%20EDAspy.png' align="right" height="150"/>
         
         [![PyPI](https://img.shields.io/pypi/v/edaspy)](https://pypi.python.org/pypi/EDAspy/)

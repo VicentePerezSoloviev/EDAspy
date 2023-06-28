@@ -49,6 +49,7 @@ tests/test_emna.py
 tests/test_gbn.py
 tests/test_geninit.py
 tests/test_kdebn.py
+tests/test_keda.py
 tests/test_multivariate_keda.py
 tests/test_pm.py
 tests/test_spbn.py
