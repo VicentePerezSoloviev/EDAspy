@@ -97,27 +97,6 @@
 <p>Tool to calculate time series transformations. Some time series transformations are given.
 This is just a very simple tool. It is not mandatory to use this tool to use the time series transformations
 selector. It is only disposed to be handy.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="EDAspy.timeseries.TS_transformations.TSTransformations.box_cox">
-<span class="sig-name descname"><span class="pre">box_cox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lmbda</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/timeseries/TS_transformations.html#TSTransformations.box_cox"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.timeseries.TS_transformations.TSTransformations.box_cox" title="Permalink to this definition"></a></dt>
-<dd><p>Calculate Box Cox time series transformation.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>variable</strong> (<em>string</em>) – name of variable</p></li>
-<li><p><strong>lmbda</strong> (<em>float</em>) – lambda parameter of Box Cox transformation</p></li>
-<li><p><strong>plot</strong> (<em>bool</em>) – if True, plot is given.ç</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>time series transformation</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>list</p>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="py attribute">
 <dt class="sig sig-object py" id="EDAspy.timeseries.TS_transformations.TSTransformations.data">
 <span class="sig-name descname"><span class="pre">data</span></span><em class="property"> <span class="pre">=</span> <span class="pre">-1</span></em><a class="headerlink" href="#EDAspy.timeseries.TS_transformations.TSTransformations.data" title="Permalink to this definition"></a></dt>
@@ -144,15 +123,14 @@ selector. It is only disposed to be handy.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="EDAspy.timeseries.TS_transformations.TSTransformations.exponential">
-<span class="sig-name descname"><span class="pre">exponential</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numerator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/timeseries/TS_transformations.html#TSTransformations.exponential"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.timeseries.TS_transformations.TSTransformations.exponential" title="Permalink to this definition"></a></dt>
-<dd><p>Calculate exponential time series transformation.</p>
+<dt class="sig sig-object py" id="EDAspy.timeseries.TS_transformations.TSTransformations.log">
+<span class="sig-name descname"><span class="pre">log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/timeseries/TS_transformations.html#TSTransformations.log"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.timeseries.TS_transformations.TSTransformations.log" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the logarithm of the time series.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>variable</strong> (<em>string</em>) – name of variable</p></li>
-<li><p><strong>numerator</strong> (<em>int</em>) – numerator of the transformation</p></li>
-<li><p><strong>plot</strong> (<em>bool</em>) – if True, plot is given</p></li>
+<li><p><strong>variable</strong> (<em>string</em>) – name of variables</p></li>
+<li><p><strong>plot</strong> (<em>bool</em>) – if True a plot is given.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -165,14 +143,36 @@ selector. It is only disposed to be handy.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="EDAspy.timeseries.TS_transformations.TSTransformations.log">
-<span class="sig-name descname"><span class="pre">log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/timeseries/TS_transformations.html#TSTransformations.log"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.timeseries.TS_transformations.TSTransformations.log" title="Permalink to this definition"></a></dt>
-<dd><p>Calculate the logarithm of the time series.</p>
+<dt class="sig sig-object py" id="EDAspy.timeseries.TS_transformations.TSTransformations.box_cox">
+<span class="sig-name descname"><span class="pre">box_cox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lmbda</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/timeseries/TS_transformations.html#TSTransformations.box_cox"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.timeseries.TS_transformations.TSTransformations.box_cox" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate Box Cox time series transformation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>variable</strong> (<em>string</em>) – name of variables</p></li>
-<li><p><strong>plot</strong> (<em>bool</em>) – if True a plot is given.</p></li>
+<li><p><strong>variable</strong> (<em>string</em>) – name of variable</p></li>
+<li><p><strong>lmbda</strong> (<em>float</em>) – lambda parameter of Box Cox transformation</p></li>
+<li><p><strong>plot</strong> (<em>bool</em>) – if True, plot is given.ç</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>time series transformation</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="EDAspy.timeseries.TS_transformations.TSTransformations.smoothing">
+<span class="sig-name descname"><span class="pre">smoothing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/timeseries/TS_transformations.html#TSTransformations.smoothing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.timeseries.TS_transformations.TSTransformations.smoothing" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate time series smoothing transformation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>variable</strong> (<em>string</em>) – name of variable</p></li>
+<li><p><strong>window</strong> (<em>int</em>) – number of previous instances taken to smooth.</p></li>
+<li><p><strong>plot</strong> (<em>bool</em>) – if True, plot is given</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -206,14 +206,14 @@ selector. It is only disposed to be handy.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="EDAspy.timeseries.TS_transformations.TSTransformations.smoothing">
-<span class="sig-name descname"><span class="pre">smoothing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/timeseries/TS_transformations.html#TSTransformations.smoothing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.timeseries.TS_transformations.TSTransformations.smoothing" title="Permalink to this definition"></a></dt>
-<dd><p>Calculate time series smoothing transformation.</p>
+<dt class="sig sig-object py" id="EDAspy.timeseries.TS_transformations.TSTransformations.exponential">
+<span class="sig-name descname"><span class="pre">exponential</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numerator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/timeseries/TS_transformations.html#TSTransformations.exponential"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.timeseries.TS_transformations.TSTransformations.exponential" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate exponential time series transformation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>variable</strong> (<em>string</em>) – name of variable</p></li>
-<li><p><strong>window</strong> (<em>int</em>) – number of previous instances taken to smooth.</p></li>
+<li><p><strong>numerator</strong> (<em>int</em>) – numerator of the transformation</p></li>
 <li><p><strong>plot</strong> (<em>bool</em>) – if True, plot is given</p></li>
 </ul>
 </dd>
@@ -259,6 +259,21 @@ transformations that best improve the cost function to optimize.</p>
 </dd>
 </dl>
 <dl class="py attribute">
+<dt class="sig sig-object py" id="EDAspy.timeseries.TransformationsFeatureSelection.TransformationsFSEDA.generation">
+<span class="sig-name descname"><span class="pre">generation</span></span><em class="property"> <span class="pre">=</span> <span class="pre">Empty</span> <span class="pre">DataFrame</span> <span class="pre">Columns:</span> <span class="pre">[]</span> <span class="pre">Index:</span> <span class="pre">[]</span></em><a class="headerlink" href="#EDAspy.timeseries.TransformationsFeatureSelection.TransformationsFSEDA.generation" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="EDAspy.timeseries.TransformationsFeatureSelection.TransformationsFSEDA.output_plot">
+<span class="sig-name descname"><span class="pre">output_plot</span></span><em class="property"> <span class="pre">=</span> <span class="pre">''</span></em><a class="headerlink" href="#EDAspy.timeseries.TransformationsFeatureSelection.TransformationsFSEDA.output_plot" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="EDAspy.timeseries.TransformationsFeatureSelection.TransformationsFSEDA.historic_best">
+<span class="sig-name descname"><span class="pre">historic_best</span></span><em class="property"> <span class="pre">=</span> <span class="pre">[]</span></em><a class="headerlink" href="#EDAspy.timeseries.TransformationsFeatureSelection.TransformationsFSEDA.historic_best" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="EDAspy.timeseries.TransformationsFeatureSelection.TransformationsFSEDA.best_MAE">
 <span class="sig-name descname"><span class="pre">best_MAE</span></span><em class="property"> <span class="pre">=</span> <span class="pre">99999999999</span></em><a class="headerlink" href="#EDAspy.timeseries.TransformationsFeatureSelection.TransformationsFSEDA.best_MAE" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
@@ -269,20 +284,16 @@ transformations that best improve the cost function to optimize.</p>
 <dd></dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="EDAspy.timeseries.TransformationsFeatureSelection.TransformationsFSEDA.new_generation">
+<span class="sig-name descname"><span class="pre">new_generation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/timeseries/TransformationsFeatureSelection.html#TransformationsFSEDA.new_generation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.timeseries.TransformationsFeatureSelection.TransformationsFSEDA.new_generation" title="Permalink to this definition"></a></dt>
+<dd><p>Creates a new generation of individuals. Updates the generation DataFrame</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="EDAspy.timeseries.TransformationsFeatureSelection.TransformationsFSEDA.check_generation">
 <span class="sig-name descname"><span class="pre">check_generation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/timeseries/TransformationsFeatureSelection.html#TransformationsFSEDA.check_generation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.timeseries.TransformationsFeatureSelection.TransformationsFSEDA.check_generation" title="Permalink to this definition"></a></dt>
 <dd><p>Check the cost of each individual of the generation in the cost function</p>
 </dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="EDAspy.timeseries.TransformationsFeatureSelection.TransformationsFSEDA.generation">
-<span class="sig-name descname"><span class="pre">generation</span></span><em class="property"> <span class="pre">=</span> <span class="pre">Empty</span> <span class="pre">DataFrame</span> <span class="pre">Columns:</span> <span class="pre">[]</span> <span class="pre">Index:</span> <span class="pre">[]</span></em><a class="headerlink" href="#EDAspy.timeseries.TransformationsFeatureSelection.TransformationsFSEDA.generation" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="EDAspy.timeseries.TransformationsFeatureSelection.TransformationsFSEDA.historic_best">
-<span class="sig-name descname"><span class="pre">historic_best</span></span><em class="property"> <span class="pre">=</span> <span class="pre">[]</span></em><a class="headerlink" href="#EDAspy.timeseries.TransformationsFeatureSelection.TransformationsFSEDA.historic_best" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="EDAspy.timeseries.TransformationsFeatureSelection.TransformationsFSEDA.individuals_selection">
@@ -291,15 +302,10 @@ transformations that best improve the cost function to optimize.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="EDAspy.timeseries.TransformationsFeatureSelection.TransformationsFSEDA.new_generation">
-<span class="sig-name descname"><span class="pre">new_generation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/timeseries/TransformationsFeatureSelection.html#TransformationsFSEDA.new_generation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.timeseries.TransformationsFeatureSelection.TransformationsFSEDA.new_generation" title="Permalink to this definition"></a></dt>
-<dd><p>Creates a new generation of individuals. Updates the generation DataFrame</p>
+<dt class="sig sig-object py" id="EDAspy.timeseries.TransformationsFeatureSelection.TransformationsFSEDA.update_vector_probabilities">
+<span class="sig-name descname"><span class="pre">update_vector_probabilities</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/timeseries/TransformationsFeatureSelection.html#TransformationsFSEDA.update_vector_probabilities"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.timeseries.TransformationsFeatureSelection.TransformationsFSEDA.update_vector_probabilities" title="Permalink to this definition"></a></dt>
+<dd><p>Re-build the vector of statistics based on the selection of the best individuals of the generation.</p>
 </dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="EDAspy.timeseries.TransformationsFeatureSelection.TransformationsFSEDA.output_plot">
-<span class="sig-name descname"><span class="pre">output_plot</span></span><em class="property"> <span class="pre">=</span> <span class="pre">''</span></em><a class="headerlink" href="#EDAspy.timeseries.TransformationsFeatureSelection.TransformationsFSEDA.output_plot" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="EDAspy.timeseries.TransformationsFeatureSelection.TransformationsFSEDA.run">
@@ -316,12 +322,6 @@ transformations that best improve the cost function to optimize.</p>
 <dd class="field-odd"><p>list, float</p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="EDAspy.timeseries.TransformationsFeatureSelection.TransformationsFSEDA.update_vector_probabilities">
-<span class="sig-name descname"><span class="pre">update_vector_probabilities</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/timeseries/TransformationsFeatureSelection.html#TransformationsFSEDA.update_vector_probabilities"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.timeseries.TransformationsFeatureSelection.TransformationsFSEDA.update_vector_probabilities" title="Permalink to this definition"></a></dt>
-<dd><p>Re-build the vector of statistics based on the selection of the best individuals of the generation.</p>
 </dd></dl>
 
 </dd></dl>

@@ -15,7 +15,8 @@ class EdaResult:
                  best_cost: float,
                  n_fev: int,
                  history: list,
-                 settings: dict):
+                 settings: dict,
+                 cpu_time: float):
 
         """
 
@@ -24,6 +25,7 @@ class EdaResult:
         :param n_fev: Number of cost function evaluations.
         :param history: Best result found in each iteration of the algorithm.
         :param settings: Configuration of the parameters of the EDA.
+        :param cpu_time: CPU time invested in the optimization.
         """
 
         self.best_ind = best_ind
@@ -31,10 +33,10 @@ class EdaResult:
         self.n_fev = n_fev
         self.history = history
         self.settings = settings
+        self.cpu_time = cpu_time
 
     def __str__(self):
-        string = "\tNFVALS = " + str(self.n_fev) + " F = " + str(self.best_cost) + \
-                 "\n\tX = " + str(self.best_ind) + \
-                 "\n\tSettings: " + str(self.settings) + \
+        string = "\tNFVALS = " + str(self.n_fev) + " F = " + str(self.best_cost) + "CPU time (s) = " + \
+                 str(self.cpu_time) + "\n\tX = " + str(self.best_ind) + "\n\tSettings: " + str(self.settings) + \
                  "\n\tHistory best cost per iteration: " + str(self.history)
         return string

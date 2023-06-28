@@ -36,7 +36,7 @@ class KDEBN(ProbabilisticModel):
 
         self.id = 6
 
-    def learn(self, dataset: np.array, num_folds: int = 10):
+    def learn(self, dataset: np.array, num_folds: int = 10, *args, **kwargs):
         """
         Learn a KDE Bayesian network from the dataset passed as argument.
 
@@ -44,22 +44,22 @@ class KDEBN(ProbabilisticModel):
         :param num_folds: Number of folds used for the SPBN learning. The higher, the more accurate, but also higher
         CPU demand. By default, it is set to 10.
         """
-
+        data = pd.DataFrame(dataset, columns=self.variables)
         self.pm = KDENetwork(self.variables)
 
         if self.white_list and self.black_list:
-            self.pm = hc(pd.DataFrame(dataset), start=self.pm, operators=["arcs"],
+            self.pm = hc(data, start=self.pm, operators=["arcs"],
                          arc_whitelist=self.white_list, arc_blacklist=self.black_list, num_folds=num_folds)
         elif self.white_list:
-            self.pm = hc(pd.DataFrame(dataset), start=self.pm, operators=["arcs"],
+            self.pm = hc(data, start=self.pm, operators=["arcs"],
                          arc_whitelist=self.white_list, num_folds=num_folds)
         elif self.black_list:
-            self.pm = hc(pd.DataFrame(dataset), start=self.pm, operators=["arcs"],
+            self.pm = hc(data, start=self.pm, operators=["arcs"],
                          arc_blacklist=self.black_list, num_folds=num_folds)
         else:
-            self.pm = hc(pd.DataFrame(dataset), start=self.pm, operators=["arcs"], num_folds=num_folds)
+            self.pm = hc(data, start=self.pm, operators=["arcs"], num_folds=num_folds)
 
-        self.pm.fit(pd.DataFrame(dataset))
+        self.pm.fit(data)
 
     def sample(self, size: int) -> np.array:
         """
@@ -71,7 +71,7 @@ class KDEBN(ProbabilisticModel):
         :rtype: np.array
         """
 
-        dataset = self.pm.sample(size).to_pandas()
+        dataset = self.pm.sample(size, ordered=True).to_pandas()
         dataset = dataset[self.variables].to_numpy()
         return dataset
 

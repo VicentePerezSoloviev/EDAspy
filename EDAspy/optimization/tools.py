@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 def arcs2adj_mat(arcs: list, n_variables: int) -> np.array:
     """
     This function transforms the list of arcs in the BN structure to an adjacency matrix.
+
     :param arcs: list of arcs in the BN structure.
     :param n_variables: number of variables.
     :type arcs: list
@@ -56,6 +57,7 @@ def plot_bn(arcs: list, var_names: list, pos: dict = None, curved_arcs: bool = T
             output_file: str = None):
     """
     This function Plots a BN structure as a directed acyclic graph.
+
     :param arcs: Arcs in the BN structure.
     :param var_names: List of variables.
     :param pos: Positions in the plot for each node.
@@ -70,19 +72,20 @@ def plot_bn(arcs: list, var_names: list, pos: dict = None, curved_arcs: bool = T
     :param node_line_widths: Width of the nodes contour lines. By default, 2.0.
     :param title: Title for Figure. By default, None.
     :param output_file: Path to save the figure locally.
-    :type arcs: List of tuples.
-    :type pos: dict with name of variables as keys and tuples with coordinates as values.
-    :type curved_arcs: bool.
-    :type curvature: float.
-    :type node_size: int.
-    :type node_color: str.
-    :type edge_color: str.
-    :type arrow_size: int.
-    :type node_transparency: float.
-    :type edge_transparency: float.
-    :type node_line_widths: float.
-    :type title: str.
-    :type output_file: str.
+    :type arcs: list(tuple)
+    :type var_names: list
+    :type pos: dict {name of variables: tuples with coordinates}
+    :type curved_arcs: bool
+    :type curvature: float
+    :type node_size: int
+    :type node_color: str
+    :type edge_color: str
+    :type arrow_size: int
+    :type node_transparency: float
+    :type edge_transparency: float
+    :type node_line_widths: float
+    :type title: str
+    :type output_file: str
     :return: Figure.
     """
 

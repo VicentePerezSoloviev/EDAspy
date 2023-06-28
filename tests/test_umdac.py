@@ -104,3 +104,27 @@ class TestUMDAc(TestCase):
 
         umda._truncation()
         assert len(umda.generation) == int(umda.size_gen*umda.alpha)
+
+    def test_data_init(self):
+        """
+        Test if it is possible to initialize the EDA with custom data.
+        """
+        n_variables, size_gen, alpha = 10, 4, 0.5
+        gen = np.random.normal(
+            [0] * n_variables, [10] * n_variables, [size_gen, n_variables]
+        )
+        eda = UMDAc(size_gen=size_gen, max_iter=1, dead_iter=1, n_variables=n_variables, alpha=alpha,
+                    init_data=gen)
+        benchmarking = ContinuousBenchmarkingCEC14(n_variables)
+        eda.best_mae_global = 0  # to force breaking the loop when dead_iter = 1
+
+        evaluations = []
+        for sol in gen:
+            evaluations.append(benchmarking.cec14_4(sol))
+        evaluations = np.array(evaluations)
+        ordering = evaluations.argsort()
+        best_indices_truc = ordering[: int(alpha * size_gen)]
+
+        eda.minimize(benchmarking.cec14_4, output_runtime=False)
+
+        assert (eda.generation == gen[best_indices_truc]).all()

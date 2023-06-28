@@ -19,7 +19,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Using EMNA for continuous optimization" href="emna_opt.html" />
-    <link rel="prev" title="Building my own EDA implementation" href="eda_custom.html" /> 
+    <link rel="prev" title="Using SPEDA for continuous optimization" href="speda_opt.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -44,6 +44,7 @@
 <li class="toctree-l2"><a class="reference internal" href="hyperparameter_umdac.html">Using UMDAc for continuous optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="feature_selection_umdad.html">Using UMDAd for feature selection in a toy example</a></li>
 <li class="toctree-l2"><a class="reference internal" href="eda_custom.html">Building my own EDA implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="speda_opt.html">Using SPEDA for continuous optimization</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Using EGNA for continuous optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="emna_opt.html">Using EMNA for continuous optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="time_series_opt.html">Using EDAs for time series and times series transformation selection</a></li>
@@ -109,13 +110,19 @@ sampled a GBN in each iteration. Import the algorithm and the benchmarks from ED
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
+<p>Let’s visualize the BN structure learnt in the last iteration of the algorithm.</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">EDAspy.optimization</span> <span class="kn">import</span> <span class="n">plot_bn</span>
+
+<span class="n">plot_bn</span><span class="p">(</span><span class="n">egna</span><span class="o">.</span><span class="n">pm</span><span class="o">.</span><span class="n">print_structure</span><span class="p">(),</span> <span class="n">n_variables</span><span class="o">=</span><span class="n">n_variables</span><span class="p">)</span>
+</pre></div>
+</div>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="eda_custom.html" class="btn btn-neutral float-left" title="Building my own EDA implementation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="speda_opt.html" class="btn btn-neutral float-left" title="Using SPEDA for continuous optimization" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="emna_opt.html" class="btn btn-neutral float-right" title="Using EMNA for continuous optimization" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

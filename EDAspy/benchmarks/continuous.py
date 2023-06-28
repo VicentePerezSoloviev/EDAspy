@@ -28,21 +28,26 @@ class ContinuousBenchmarkingCEC14:
         :param dim: number of variables to be evaluated in the cost function
         """
 
+        assert dim in [1, 10, 20, 30, 50, 100], 'The benchmarking set is not implemented for such dimension. Try one ' \
+                                                'of 1, 10, 20, 30, 50, 100.'
+
         self.d = dim
         self.package_directory = os.path.dirname(os.path.abspath(__file__))
 
     def _load_shift(self, number):
         text_file = open(os.path.join(self.package_directory, 'input_data', "shift_data_" + str(number) + ".txt"), "r")
         shifts = text_file.read().split()
+        text_file.close()
         return np.array(shifts[:self.d]).astype(float)
 
     def _load_rot(self, number):
         matrix_file = open(os.path.join(self.package_directory, 'input_data', "M_" + str(number) +
                                         "_D" + str(self.d) + ".txt"), "r")
-        matrix_file = matrix_file.read().split()
-        matrix_file = np.array(matrix_file).astype(float)
-        matrix_file = np.reshape(matrix_file, (self.d, self.d))
-        return matrix_file
+        matrix_file_read = matrix_file.read().split()
+        matrix_file.close()
+        matrix_file_read = np.array(matrix_file_read).astype(float)
+        matrix_file_read = np.reshape(matrix_file_read, (self.d, self.d))
+        return matrix_file_read
 
     def bent_cigar_function(self, x: Union[np.array, list]) -> float:
         """

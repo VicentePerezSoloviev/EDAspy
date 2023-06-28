@@ -34,7 +34,7 @@ class UniGauss(ProbabilisticModel):
             self.pm[0, :], self.pm[1, :], (size, self.len_variables)
         )
 
-    def learn(self, dataset: np.array):
+    def learn(self, dataset: np.array, *args, **kwargs):
         """
         Estimates the independent Gaussian for each variable.
 

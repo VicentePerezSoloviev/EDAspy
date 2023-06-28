@@ -15,7 +15,7 @@ setuptools.setup(
                 "modules so new research can be easily developed. It also has several benchmarks for comparisons.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    download_url="https://github.com/VicentePerezSoloviev/EDAspy/archive/1.0.0.tar.gz",
+    download_url="https://github.com/VicentePerezSoloviev/EDAspy/archive/1.1.0.tar.gz",
     url="https://github.com/VicentePerezSoloviev/EDAspy",
     packages=setuptools.find_packages(),
     classifiers=[
@@ -28,5 +28,6 @@ setuptools.setup(
               'selection', 'semiparametric', 'Gaussian'],
     python_requires='>=3.0',
     license="MIT",
-    install_requires=["pandas>=1.2.0", "numpy>1.15.0", "pybnesian>=0.4.3"]
+    include_package_data=True,
+    package_data={'': ['benchmarks/input_data/*.txt']}
 )

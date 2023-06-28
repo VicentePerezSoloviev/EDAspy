@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
+import numpy as np
 
 from ..eda import EDA
 from ..custom.probabilistic_models import GBN
@@ -54,7 +55,9 @@ class EGNA(EDA):
                  elite_factor: float = 0.4,
                  disp: bool = True,
                  black_list: list = None,
-                 white_list: list = None):
+                 white_list: list = None,
+                 parallelize: bool = False,
+                 init_data: np.array = None):
         r"""
             :param size_gen: Population size. Number of individuals in each generation.
             :param max_iter: Maximum number of iterations during runtime.
@@ -66,10 +69,14 @@ class EGNA(EDA):
             :param disp: Set to True to print convergence messages.
             :param black_list: list of tuples with the forbidden arcs in the GBN during runtime.
             :param white_list: list of tuples with the mandatory arcs in the GBN during runtime.
+            :param parallelize: True if the evaluation of the solutions is desired to be parallelized in multiple cores.
+            :param init_data: Numpy array containing the data the EDA is desired to be initialized from. By default, an
+            initializer is used.
         """
 
         super().__init__(size_gen=size_gen, max_iter=max_iter, dead_iter=dead_iter,
-                         n_variables=n_variables, alpha=alpha, elite_factor=elite_factor, disp=disp)
+                         n_variables=n_variables, alpha=alpha, elite_factor=elite_factor, disp=disp,
+                         parallelize=parallelize, init_data=init_data)
 
         self.vars = [str(i) for i in range(n_variables)]
         self.landscape_bounds = landscape_bounds

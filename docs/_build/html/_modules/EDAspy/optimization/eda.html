@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EDAspy.optimization.eda &mdash; EDAspy 1.0.0 documentation</title>
+  <title>EDAspy.optimization.eda &mdash; EDAspy 1.1.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -76,6 +76,8 @@
 <span class="kn">from</span> <span class="nn">.eda_result</span> <span class="kn">import</span> <span class="n">EdaResult</span>
 <span class="kn">from</span> <span class="nn">.custom.probabilistic_models</span> <span class="kn">import</span> <span class="n">ProbabilisticModel</span>
 <span class="kn">from</span> <span class="nn">.custom.initialization_models</span> <span class="kn">import</span> <span class="n">GenInit</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">_parallel_apply_along_axis</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">process_time</span>
 
 
 <div class="viewcode-block" id="EDA"><a class="viewcode-back" href="../../../EDAspy.optimization.html#EDAspy.optimization.eda.EDA">[docs]</a><span class="k">class</span> <span class="nc">EDA</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
@@ -96,7 +98,10 @@
                  <span class="n">n_variables</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
                  <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
                  <span class="n">elite_factor</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.4</span><span class="p">,</span>
-                 <span class="n">disp</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+                 <span class="n">disp</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                 <span class="n">parallelize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                 <span class="n">init_data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">disp</span> <span class="o">=</span> <span class="n">disp</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">size_gen</span> <span class="o">=</span> <span class="n">size_gen</span>
@@ -106,21 +111,44 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">truncation_length</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">size_gen</span> <span class="o">*</span> <span class="n">alpha</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">elite_factor</span> <span class="o">=</span> <span class="n">elite_factor</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">elite_length</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">size_gen</span> <span class="o">*</span> <span class="n">elite_factor</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parallelize</span> <span class="o">=</span> <span class="n">parallelize</span>
 
         <span class="k">assert</span> <span class="n">dead_iter</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_iter</span><span class="p">,</span> <span class="s1">&#39;dead_iter must be lower than max_iter&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dead_iter</span> <span class="o">=</span> <span class="n">dead_iter</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">best_mae_global</span> <span class="o">=</span> <span class="mi">999999999999</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">best_ind_global</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">best_ind_global</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">n_variables</span><span class="p">)</span>
+        <span class="c1"># TODO: test if best ind global works</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">evaluations</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">generation</span> <span class="o">=</span> <span class="kc">None</span>
 
+        <span class="k">if</span> <span class="n">parallelize</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_check_generation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_generation_parallel</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_check_generation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_generation_no_parallel</span>
+
+        <span class="c1"># allow initialize EDA with data</span>
+        <span class="k">if</span> <span class="n">init_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">init_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">n_variables</span><span class="p">,</span> <span class="s1">&#39;The inserted data shape and the number of variables do not match&#39;</span>
+            <span class="c1"># assert init_data.shape[0] == size_gen, &#39;The inserted data shape and the generation size do not match&#39;</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">init_data</span> <span class="o">=</span> <span class="n">init_data</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_generation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_generation_with_data</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_generation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_generation_with_init</span>
+
     <span class="k">def</span> <span class="nf">_new_generation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">generation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">size_gen</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">elite_temp</span><span class="p">])</span>
 
-    <span class="k">def</span> <span class="nf">_initialize_generation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">_initialize_generation_with_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">init_data</span>
+
+    <span class="k">def</span> <span class="nf">_initialize_generation_with_init</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">size_gen</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_initialize_generation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Not implemented function&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_truncation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -139,6 +167,12 @@
 <span class="sd">        Check the cost of each individual in the cost function implemented by the user, and updates the</span>
 <span class="sd">        generation DataFrame.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Not implemented function&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_check_generation_parallel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">objective_function</span><span class="p">:</span> <span class="n">callable</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evaluations</span> <span class="o">=</span> <span class="n">_parallel_apply_along_axis</span><span class="p">(</span><span class="n">objective_function</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_check_generation_no_parallel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">objective_function</span><span class="p">:</span> <span class="n">callable</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">evaluations</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">apply_along_axis</span><span class="p">(</span><span class="n">objective_function</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_update_pm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -150,7 +184,9 @@
 <div class="viewcode-block" id="EDA.export_settings"><a class="viewcode-back" href="../../../EDAspy.optimization.html#EDAspy.optimization.eda.EDA.export_settings">[docs]</a>    <span class="k">def</span> <span class="nf">export_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Export the configuration of the algorithm to an object to be loaded in other execution.</span>
-<span class="sd">        :return: dict</span>
+
+<span class="sd">        :return: configuration dictionary.</span>
+<span class="sd">        :rtype: dict</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">{</span>
             <span class="s2">&quot;size_gen&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">size_gen</span><span class="p">,</span>
@@ -159,20 +195,25 @@
             <span class="s2">&quot;n_variables&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_variables</span><span class="p">,</span>
             <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">,</span>
             <span class="s2">&quot;elite_factor&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">elite_factor</span><span class="p">,</span>
-            <span class="s2">&quot;disp&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">disp</span>
+            <span class="s2">&quot;disp&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">disp</span><span class="p">,</span>
+            <span class="s2">&quot;parallelize&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">parallelize</span>
         <span class="p">}</span></div>
 
-<div class="viewcode-block" id="EDA.minimize"><a class="viewcode-back" href="../../../EDAspy.optimization.html#EDAspy.optimization.eda.EDA.minimize">[docs]</a>    <span class="k">def</span> <span class="nf">minimize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cost_function</span><span class="p">:</span> <span class="n">callable</span><span class="p">,</span> <span class="n">output_runtime</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="EDA.minimize"><a class="viewcode-back" href="../../../EDAspy.optimization.html#EDAspy.optimization.eda.EDA.minimize">[docs]</a>    <span class="k">def</span> <span class="nf">minimize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cost_function</span><span class="p">:</span> <span class="n">callable</span><span class="p">,</span> <span class="n">output_runtime</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EdaResult</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Minimize function to execute the EDA optimization. By default, the optimizer is designed to minimize a cost</span>
+<span class="sd">        function; if maximization is desired, just add a minus sign to your cost function.</span>
+
 <span class="sd">        :param cost_function: cost function to be optimized and accepts an array as argument.</span>
 <span class="sd">        :param output_runtime: true if information during runtime is desired.</span>
-<span class="sd">        :return: EdaResult object</span>
+<span class="sd">        :return: EdaResult object with results and information.</span>
 <span class="sd">        :rtype: EdaResult</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">history</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">not_better</span> <span class="o">=</span> <span class="mi">0</span>
 
+        <span class="n">t1</span> <span class="o">=</span> <span class="n">process_time</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">generation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_generation</span><span class="p">()</span>
 
         <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_iter</span><span class="p">):</span>
@@ -203,16 +244,23 @@
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;IT: &#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">Best cost: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_mae_global</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">disp</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">NFVALS = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">history</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">size_gen</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; F = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">best_mae_global</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">NFEVALS = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">history</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">size_gen</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; F = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">best_mae_global</span><span class="p">))</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">X = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">best_ind_global</span><span class="p">))</span>
 
+        <span class="n">t2</span> <span class="o">=</span> <span class="n">process_time</span><span class="p">()</span>
         <span class="n">eda_result</span> <span class="o">=</span> <span class="n">EdaResult</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">best_ind_global</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_mae_global</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">history</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">size_gen</span><span class="p">,</span>
-                               <span class="n">history</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">export_settings</span><span class="p">())</span>
+                               <span class="n">history</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">export_settings</span><span class="p">(),</span> <span class="n">t2</span><span class="o">-</span><span class="n">t1</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">eda_result</span></div>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">pm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">pm</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ProbabilisticModel</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the probabilistic model used in the EDA implementation.</span>
+
+<span class="sd">        :return: probabilistic model.</span>
+<span class="sd">        :rtype: ProbabilisticModel</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pm</span>
 
     <span class="nd">@pm</span><span class="o">.</span><span class="n">setter</span>
@@ -221,14 +269,20 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_pm</span> <span class="o">=</span> <span class="n">value</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The object you try to set as a probabilistic model does not extend the &#39;</span>
-                             <span class="s1">&#39;class ProbabilisticModel provided by EDAspy&#39;</span><span class="p">)</span>
+                             <span class="s1">&#39;class ProbabilisticModel provided by EDAspy.&#39;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">variables</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_variables</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;The number of variables of the probabilistic model is not equal to the number of &#39;</span>
-                            <span class="s1">&#39;variables of the EDA&#39;</span><span class="p">)</span>
+                            <span class="s1">&#39;variables of the EDA.&#39;</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">init</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GenInit</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the initializer used in the EDA implementation.</span>
+
+<span class="sd">        :return: initializer.</span>
+<span class="sd">        :rtype: GenInit</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_init</span>
 
     <span class="nd">@init</span><span class="o">.</span><span class="n">setter</span>

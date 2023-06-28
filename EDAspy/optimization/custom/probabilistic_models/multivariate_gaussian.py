@@ -41,7 +41,7 @@ class MultiGauss(ProbabilisticModel):
 
         return np.random.multivariate_normal(self.pm_means, self.pm_cov, size)
 
-    def learn(self, dataset: np.array):
+    def learn(self, dataset: np.array, *args, **kwargs):
         """
         Estimates a multivariate Gaussian distribution from the dataset.
 

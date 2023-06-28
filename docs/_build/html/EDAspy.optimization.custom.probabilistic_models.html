@@ -104,11 +104,15 @@ which have been estimated using KDE with variables which fit a Gaussian distribu
 for Bayesian networks. Neurocomputing, 504, 204-209.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="EDAspy.optimization.custom.probabilistic_models.semiparametric_bayesian_network.SPBN.learn">
-<span class="sig-name descname"><span class="pre">learn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.array</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/optimization/custom/probabilistic_models/semiparametric_bayesian_network.html#SPBN.learn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.custom.probabilistic_models.semiparametric_bayesian_network.SPBN.learn" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">learn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_folds</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/optimization/custom/probabilistic_models/semiparametric_bayesian_network.html#SPBN.learn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.custom.probabilistic_models.semiparametric_bayesian_network.SPBN.learn" title="Permalink to this definition"></a></dt>
 <dd><p>Learn a semiparametric Bayesian network from the dataset passed as argument.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>dataset</strong> – dataset from which learn the GBN.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> – dataset from which learn the SPBN.</p></li>
+<li><p><strong>num_folds</strong> – Number of folds used for the SPBN learning. The higher, the more accurate, but also higher CPU demand. By default, it is set to 10.</p></li>
+<li><p><strong>max_iters</strong> – number maximum of iterations for the learning process.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -131,14 +135,31 @@ must be used after the learning process.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="EDAspy.optimization.custom.probabilistic_models.semiparametric_bayesian_network.SPBN.sample">
 <span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.array</span><a class="reference internal" href="_modules/EDAspy/optimization/custom/probabilistic_models/semiparametric_bayesian_network.html#SPBN.sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.custom.probabilistic_models.semiparametric_bayesian_network.SPBN.sample" title="Permalink to this definition"></a></dt>
-<dd><p>Samples the Gaussian Bayesian network several times defined by the user. The dataset is returned
-as a numpy matrix. The sampling process is implemented using probabilistic logic sampling.</p>
+<dd><p>Samples the Semiparametric Bayesian network several times defined by the user. The dataset is
+returned as a numpy matrix. The sampling process is implemented using probabilistic logic sampling.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>size</strong> – number of samplings of the Gaussian Bayesian network.</p>
+<dd class="field-odd"><p><strong>size</strong> – number of samplings of the Semiparametric Bayesian network.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>array with the dataset sampled.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="EDAspy.optimization.custom.probabilistic_models.semiparametric_bayesian_network.SPBN.logl">
+<span class="sig-name descname"><span class="pre">logl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pandas.core.frame.DataFrame</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/optimization/custom/probabilistic_models/semiparametric_bayesian_network.html#SPBN.logl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.custom.probabilistic_models.semiparametric_bayesian_network.SPBN.logl" title="Permalink to this definition"></a></dt>
+<dd><p>Returns de log-likelihood of some data in the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> – dataset to evaluate its likelihood in the model.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>log-likelihood of the instances in the model.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>np.array</p>
@@ -153,7 +174,7 @@ as a numpy matrix. The sampling process is implemented using probabilistic logic
 <span id="edaspy-optimization-custom-probabilistic-models-gaussian-bayesian-network-module"></span><h2>EDAspy.optimization.custom.probabilistic_models.gaussian_bayesian_network module<a class="headerlink" href="#module-EDAspy.optimization.custom.probabilistic_models.gaussian_bayesian_network" title="Permalink to this headline"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="EDAspy.optimization.custom.probabilistic_models.gaussian_bayesian_network.GBN">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">EDAspy.optimization.custom.probabilistic_models.gaussian_bayesian_network.</span></span><span class="sig-name descname"><span class="pre">GBN</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variables</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">white_list</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">black_list</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/optimization/custom/probabilistic_models/gaussian_bayesian_network.html#GBN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.custom.probabilistic_models.gaussian_bayesian_network.GBN" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">EDAspy.optimization.custom.probabilistic_models.gaussian_bayesian_network.</span></span><span class="sig-name descname"><span class="pre">GBN</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variables</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">white_list</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">black_list</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evidences</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/optimization/custom/probabilistic_models/gaussian_bayesian_network.html#GBN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.custom.probabilistic_models.gaussian_bayesian_network.GBN" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">EDAspy.optimization.custom.probabilistic_models._probabilistic_model.ProbabilisticModel</span></code></p>
 <p>This probabilistic model is  Gaussian Bayesian Network. All the relationships between the variables in
 the model are defined to be linearly Gaussian, and the variables distributions are assumed to be
@@ -164,7 +185,7 @@ to learn a Gaussian distributions between variables. This implementation uses Py
 for Bayesian networks. Neurocomputing, 504, 204-209.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="EDAspy.optimization.custom.probabilistic_models.gaussian_bayesian_network.GBN.learn">
-<span class="sig-name descname"><span class="pre">learn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.array</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/optimization/custom/probabilistic_models/gaussian_bayesian_network.html#GBN.learn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.custom.probabilistic_models.gaussian_bayesian_network.GBN.learn" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">learn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.array</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/optimization/custom/probabilistic_models/gaussian_bayesian_network.html#GBN.learn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.custom.probabilistic_models.gaussian_bayesian_network.GBN.learn" title="Permalink to this definition"></a></dt>
 <dd><p>Learn a Gaussian Bayesian network from the dataset passed as argument.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -191,19 +212,69 @@ must be used after the learning process.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="EDAspy.optimization.custom.probabilistic_models.gaussian_bayesian_network.GBN.sample">
 <span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.array</span><a class="reference internal" href="_modules/EDAspy/optimization/custom/probabilistic_models/gaussian_bayesian_network.html#GBN.sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.custom.probabilistic_models.gaussian_bayesian_network.GBN.sample" title="Permalink to this definition"></a></dt>
-<dd><p>Samples the Gaussian Bayesian network several times defined by the user. The dataset is returned
-as a numpy matrix. The sampling process is implemented using probabilistic logic sampling.</p>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="EDAspy.optimization.custom.probabilistic_models.gaussian_bayesian_network.GBN.logl">
+<span class="sig-name descname"><span class="pre">logl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pandas.core.frame.DataFrame</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/optimization/custom/probabilistic_models/gaussian_bayesian_network.html#GBN.logl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.custom.probabilistic_models.gaussian_bayesian_network.GBN.logl" title="Permalink to this definition"></a></dt>
+<dd><p>Returns de log-likelihood of some data in the model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>size</strong> – number of samplings of the Gaussian Bayesian network.</p>
+<dd class="field-odd"><p><strong>data</strong> – dataset to evaluate its likelihood in the model.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>array with the dataset sampled.</p>
+<dd class="field-even"><p>log-likelihood of the instances in the model.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>np.array</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="EDAspy.optimization.custom.probabilistic_models.gaussian_bayesian_network.GBN.get_mu">
+<span class="sig-name descname"><span class="pre">get_mu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var_mus</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.array</span><a class="reference internal" href="_modules/EDAspy/optimization/custom/probabilistic_models/gaussian_bayesian_network.html#GBN.get_mu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.custom.probabilistic_models.gaussian_bayesian_network.GBN.get_mu" title="Permalink to this definition"></a></dt>
+<dd><p>Computes the conditional mean of the Gaussians of each node in the GBN.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>var_mus</strong> (<em>list</em>) – Variables to compute its Gaussian mean. If None, then all the variables are computed.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Array with the conditional Gaussian means.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="EDAspy.optimization.custom.probabilistic_models.gaussian_bayesian_network.GBN.get_sigma">
+<span class="sig-name descname"><span class="pre">get_sigma</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var_sigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.array</span><a class="reference internal" href="_modules/EDAspy/optimization/custom/probabilistic_models/gaussian_bayesian_network.html#GBN.get_sigma"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.custom.probabilistic_models.gaussian_bayesian_network.GBN.get_sigma" title="Permalink to this definition"></a></dt>
+<dd><p>Computes the conditional covariance matrix of the model for the variables in the GBN.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>var_sigma</strong> (<em>list</em>) – Variables to compute its Gaussian mean. If None, then all the variables are computed.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Matrix with the conditional covariance matrix.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="EDAspy.optimization.custom.probabilistic_models.gaussian_bayesian_network.GBN.inference">
+<span class="sig-name descname"><span class="pre">inference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">evidence</span></em>, <em class="sig-param"><span class="pre">var_names)</span> <span class="pre">-&gt;</span> <span class="pre">(&lt;built-in</span> <span class="pre">function</span> <span class="pre">array&gt;</span></em>, <em class="sig-param"><span class="pre">&lt;built-in</span> <span class="pre">function</span> <span class="pre">array&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/optimization/custom/probabilistic_models/gaussian_bayesian_network.html#GBN.inference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.custom.probabilistic_models.gaussian_bayesian_network.GBN.inference" title="Permalink to this definition"></a></dt>
+<dd><p>Compute the posterior conditional probability distribution conditioned to some given evidences.
+:param evidence: list of values fixed as evidences in the model.
+:type evidence: list
+:param var_names: list of variables measured in the model.
+:type var_names: list
+:return: (posterior mean, posterior covariance matrix)
+:rtype: (np.array, np.array)</p>
 </dd></dl>
 
 </dd></dl>
@@ -219,17 +290,6 @@ as a numpy matrix. The sampling process is implemented using probabilistic logic
 by a vector of means and a covariance matrix among the variables. This is a simpler approach compared to
 Gaussian Bayesian networks, as multivariate Gaussian distributions do not identify conditional dependeces
 between the variables.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="EDAspy.optimization.custom.probabilistic_models.multivariate_gaussian.MultiGauss.learn">
-<span class="sig-name descname"><span class="pre">learn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.array</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/optimization/custom/probabilistic_models/multivariate_gaussian.html#MultiGauss.learn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.custom.probabilistic_models.multivariate_gaussian.MultiGauss.learn" title="Permalink to this definition"></a></dt>
-<dd><p>Estimates a multivariate Gaussian distribution from the dataset.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>dataset</strong> – dataset from which learn the multivariate Gaussian distribution.</p>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="EDAspy.optimization.custom.probabilistic_models.multivariate_gaussian.MultiGauss.sample">
 <span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.array</span><a class="reference internal" href="_modules/EDAspy/optimization/custom/probabilistic_models/multivariate_gaussian.html#MultiGauss.sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.custom.probabilistic_models.multivariate_gaussian.MultiGauss.sample" title="Permalink to this definition"></a></dt>
@@ -248,6 +308,17 @@ is returned as a numpy matrix.</p>
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="EDAspy.optimization.custom.probabilistic_models.multivariate_gaussian.MultiGauss.learn">
+<span class="sig-name descname"><span class="pre">learn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.array</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/optimization/custom/probabilistic_models/multivariate_gaussian.html#MultiGauss.learn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.custom.probabilistic_models.multivariate_gaussian.MultiGauss.learn" title="Permalink to this definition"></a></dt>
+<dd><p>Estimates a multivariate Gaussian distribution from the dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dataset</strong> – dataset from which learn the multivariate Gaussian distribution.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -261,17 +332,6 @@ is returned as a numpy matrix.</p>
 all the solutions are binary. The implementation involves a vector of independent probabilities [0, 1].
 When sampling, a random float is sampled [0, 1]. If the float is below the probability, then the sampling
 is a 1. Thus, the probabilities show probabilities of a sampling being 1.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="EDAspy.optimization.custom.probabilistic_models.univariate_binary.UniBin.learn">
-<span class="sig-name descname"><span class="pre">learn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.array</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/optimization/custom/probabilistic_models/univariate_binary.html#UniBin.learn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.custom.probabilistic_models.univariate_binary.UniBin.learn" title="Permalink to this definition"></a></dt>
-<dd><p>Estimates the independent probability of each variable of being 1.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>dataset</strong> – dataset from which learn the probabilistic model.</p>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="EDAspy.optimization.custom.probabilistic_models.univariate_binary.UniBin.sample">
 <span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.array</span><a class="reference internal" href="_modules/EDAspy/optimization/custom/probabilistic_models/univariate_binary.html#UniBin.sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.custom.probabilistic_models.univariate_binary.UniBin.sample" title="Permalink to this definition"></a></dt>
@@ -290,6 +350,22 @@ from its respective binary probability.</p>
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="EDAspy.optimization.custom.probabilistic_models.univariate_binary.UniBin.learn">
+<span class="sig-name descname"><span class="pre">learn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.array</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/optimization/custom/probabilistic_models/univariate_binary.html#UniBin.learn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.custom.probabilistic_models.univariate_binary.UniBin.learn" title="Permalink to this definition"></a></dt>
+<dd><p>Estimates the independent probability of each variable of being 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dataset</strong> – dataset from which learn the probabilistic model.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="EDAspy.optimization.custom.probabilistic_models.univariate_binary.UniBin.print_structure">
+<span class="sig-name descname"><span class="pre">print_structure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">list</span><a class="reference internal" href="_modules/EDAspy/optimization/custom/probabilistic_models/univariate_binary.html#UniBin.print_structure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.custom.probabilistic_models.univariate_binary.UniBin.print_structure" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 </section>
@@ -302,17 +378,6 @@ from its respective binary probability.</p>
 <p>This class implements the univariate Gaussians. With this implementation we are updating N univariate Gaussians
 in each iteration. When a dataset is given, each column is updated independently. The implementation involves a
 matrix with two rows, in which the first row are the means and the second one, are the standard deviations.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="EDAspy.optimization.custom.probabilistic_models.univariate_gaussian.UniGauss.learn">
-<span class="sig-name descname"><span class="pre">learn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.array</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/optimization/custom/probabilistic_models/univariate_gaussian.html#UniGauss.learn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.custom.probabilistic_models.univariate_gaussian.UniGauss.learn" title="Permalink to this definition"></a></dt>
-<dd><p>Estimates the independent Gaussian for each variable.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>dataset</strong> – dataset from which learn the probabilistic model.</p>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="EDAspy.optimization.custom.probabilistic_models.univariate_gaussian.UniGauss.sample">
 <span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.array</span><a class="reference internal" href="_modules/EDAspy/optimization/custom/probabilistic_models/univariate_gaussian.html#UniGauss.sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.custom.probabilistic_models.univariate_gaussian.UniGauss.sample" title="Permalink to this definition"></a></dt>
@@ -330,6 +395,22 @@ from its respective normal distribution.</p>
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="EDAspy.optimization.custom.probabilistic_models.univariate_gaussian.UniGauss.learn">
+<span class="sig-name descname"><span class="pre">learn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.array</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/optimization/custom/probabilistic_models/univariate_gaussian.html#UniGauss.learn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.custom.probabilistic_models.univariate_gaussian.UniGauss.learn" title="Permalink to this definition"></a></dt>
+<dd><p>Estimates the independent Gaussian for each variable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dataset</strong> – dataset from which learn the probabilistic model.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="EDAspy.optimization.custom.probabilistic_models.univariate_gaussian.UniGauss.print_structure">
+<span class="sig-name descname"><span class="pre">print_structure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">list</span><a class="reference internal" href="_modules/EDAspy/optimization/custom/probabilistic_models/univariate_gaussian.html#UniGauss.print_structure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.custom.probabilistic_models.univariate_gaussian.UniGauss.print_structure" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 

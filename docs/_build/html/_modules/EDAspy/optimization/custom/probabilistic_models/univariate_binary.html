@@ -87,6 +87,8 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">upper_bound</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">lower_bound</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span>
 
+        <span class="k">assert</span> <span class="n">upper_bound</span> <span class="o">&gt;</span> <span class="n">lower_bound</span><span class="p">,</span> <span class="s2">&quot;The upper bound should be higher than lower bound&quot;</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">upper_bound</span> <span class="o">=</span> <span class="n">upper_bound</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span> <span class="o">=</span> <span class="n">lower_bound</span>
 
@@ -109,7 +111,7 @@
         <span class="n">dataset</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">dataset</span></div>
 
-<div class="viewcode-block" id="UniBin.learn"><a class="viewcode-back" href="../../../../../EDAspy.optimization.custom.probabilistic_models.html#EDAspy.optimization.custom.probabilistic_models.univariate_binary.UniBin.learn">[docs]</a>    <span class="k">def</span> <span class="nf">learn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">):</span>
+<div class="viewcode-block" id="UniBin.learn"><a class="viewcode-back" href="../../../../../EDAspy.optimization.custom.probabilistic_models.html#EDAspy.optimization.custom.probabilistic_models.univariate_binary.UniBin.learn">[docs]</a>    <span class="k">def</span> <span class="nf">learn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Estimates the independent probability of each variable of being 1.</span>
 
@@ -118,7 +120,10 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">pm</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pm</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">pm</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pm</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">pm</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper_bound</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pm</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">pm</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper_bound</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper_bound</span></div>
+
+<div class="viewcode-block" id="UniBin.print_structure"><a class="viewcode-back" href="../../../../../EDAspy.optimization.custom.probabilistic_models.html#EDAspy.optimization.custom.probabilistic_models.univariate_binary.UniBin.print_structure">[docs]</a>    <span class="k">def</span> <span class="nf">print_structure</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">()</span></div></div>
 </pre></div>
 
            </div>

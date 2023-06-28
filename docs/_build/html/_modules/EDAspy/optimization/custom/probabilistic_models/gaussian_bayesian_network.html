@@ -77,6 +77,10 @@
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 
+<span class="k">def</span> <span class="nf">_check_symmetric</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">a</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">tol</span><span class="p">)</span>
+
+
 <div class="viewcode-block" id="GBN"><a class="viewcode-back" href="../../../../../EDAspy.optimization.custom.probabilistic_models.html#EDAspy.optimization.custom.probabilistic_models.gaussian_bayesian_network.GBN">[docs]</a><span class="k">class</span> <span class="nc">GBN</span><span class="p">(</span><span class="n">ProbabilisticModel</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;</span>
@@ -91,43 +95,55 @@
 <span class="sd">        for Bayesian networks. Neurocomputing, 504, 204-209.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">white_list</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">black_list</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">white_list</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">black_list</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">evidences</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :param variables: Number of variables</span>
 <span class="sd">        :param white_list: List of tuples with mandatory arcs in the BN structure</span>
 <span class="sd">        :param black_list: List of tuples with forbidden arcs in the BN structure</span>
+<span class="sd">        :param evidences: Dictionary with name of variables as keys and values fixed as values of the dictionary</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">variables</span> <span class="o">=</span> <span class="n">variables</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">top_order</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pm</span> <span class="o">=</span> <span class="n">GaussianNetwork</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">white_list</span> <span class="o">=</span> <span class="n">white_list</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">black_list</span> <span class="o">=</span> <span class="n">black_list</span>
 
+        <span class="k">if</span> <span class="n">evidences</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">evidences</span> <span class="o">=</span> <span class="n">evidences</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sample</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sample_evidence</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">vars_1</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">evidences</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>  <span class="c1"># not fixed</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vars_2</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">evidences</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>  <span class="c1"># evidence</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sample</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sample_normal</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="mi">4</span>
 
-<div class="viewcode-block" id="GBN.learn"><a class="viewcode-back" href="../../../../../EDAspy.optimization.custom.probabilistic_models.html#EDAspy.optimization.custom.probabilistic_models.gaussian_bayesian_network.GBN.learn">[docs]</a>    <span class="k">def</span> <span class="nf">learn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">):</span>
+<div class="viewcode-block" id="GBN.learn"><a class="viewcode-back" href="../../../../../EDAspy.optimization.custom.probabilistic_models.html#EDAspy.optimization.custom.probabilistic_models.gaussian_bayesian_network.GBN.learn">[docs]</a>    <span class="k">def</span> <span class="nf">learn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Learn a Gaussian Bayesian network from the dataset passed as argument.</span>
 
 <span class="sd">        :param dataset: dataset from which learn the GBN.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
+        <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pm</span> <span class="o">=</span> <span class="n">GaussianNetwork</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">white_list</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">black_list</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">pm</span> <span class="o">=</span> <span class="n">hc</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dataset</span><span class="p">),</span> <span class="n">bn_type</span><span class="o">=</span><span class="n">GaussianNetworkType</span><span class="p">(),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pm</span> <span class="o">=</span> <span class="n">hc</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">bn_type</span><span class="o">=</span><span class="n">GaussianNetworkType</span><span class="p">(),</span>
                          <span class="n">arc_blacklist</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">black_list</span><span class="p">,</span> <span class="n">arc_whitelist</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">white_list</span><span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">white_list</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">pm</span> <span class="o">=</span> <span class="n">hc</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dataset</span><span class="p">),</span> <span class="n">bn_type</span><span class="o">=</span><span class="n">GaussianNetworkType</span><span class="p">(),</span> <span class="n">arc_whitelist</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">white_list</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pm</span> <span class="o">=</span> <span class="n">hc</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">bn_type</span><span class="o">=</span><span class="n">GaussianNetworkType</span><span class="p">(),</span> <span class="n">arc_whitelist</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">white_list</span><span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">black_list</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">pm</span> <span class="o">=</span> <span class="n">hc</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dataset</span><span class="p">),</span> <span class="n">bn_type</span><span class="o">=</span><span class="n">GaussianNetworkType</span><span class="p">(),</span> <span class="n">arc_blacklist</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">black_list</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pm</span> <span class="o">=</span> <span class="n">hc</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">bn_type</span><span class="o">=</span><span class="n">GaussianNetworkType</span><span class="p">(),</span> <span class="n">arc_blacklist</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">black_list</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">pm</span> <span class="o">=</span> <span class="n">hc</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dataset</span><span class="p">),</span> <span class="n">bn_type</span><span class="o">=</span><span class="n">GaussianNetworkType</span><span class="p">())</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pm</span> <span class="o">=</span> <span class="n">hc</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">bn_type</span><span class="o">=</span><span class="n">GaussianNetworkType</span><span class="p">())</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">pm</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dataset</span><span class="p">))</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pm</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">top_order</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pm</span><span class="o">.</span><span class="n">graph</span><span class="p">()</span><span class="o">.</span><span class="n">topological_sort</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="GBN.print_structure"><a class="viewcode-back" href="../../../../../EDAspy.optimization.custom.probabilistic_models.html#EDAspy.optimization.custom.probabilistic_models.gaussian_bayesian_network.GBN.print_structure">[docs]</a>    <span class="k">def</span> <span class="nf">print_structure</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -141,18 +157,142 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pm</span><span class="o">.</span><span class="n">arcs</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="GBN.sample"><a class="viewcode-back" href="../../../../../EDAspy.optimization.custom.probabilistic_models.html#EDAspy.optimization.custom.probabilistic_models.gaussian_bayesian_network.GBN.sample">[docs]</a>    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Samples the Gaussian Bayesian network several times defined by the user. The dataset is returned</span>
-<span class="sd">        as a numpy matrix. The sampling process is implemented using probabilistic logic sampling.</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Not implemented function&#39;</span><span class="p">)</span></div>
 
-<span class="sd">        :param size: number of samplings of the Gaussian Bayesian network.</span>
-<span class="sd">        :return: array with the dataset sampled.</span>
+    <span class="k">def</span> <span class="nf">_sample_evidence</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">ordered</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+        <span class="n">mu_infer</span><span class="p">,</span> <span class="n">cov_infer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inference</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">evidences</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="bp">self</span><span class="o">.</span><span class="n">vars_2</span><span class="p">)</span>
+        <span class="n">sample</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span><span class="n">mu_infer</span><span class="p">,</span> <span class="n">cov_infer</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+
+        <span class="n">dataset</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vars_1</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">vars_2</span><span class="p">:</span>
+            <span class="n">dataset</span><span class="p">[</span><span class="n">var</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evidences</span><span class="p">[</span><span class="n">var</span><span class="p">]</span>
+
+        <span class="n">top_order</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pm</span><span class="o">.</span><span class="n">graph</span><span class="p">()</span><span class="o">.</span><span class="n">topological_sort</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">ordered</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">dataset</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">dataset</span><span class="p">[</span><span class="n">top_order</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_sample_normal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">ordered</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">dataset</span>
+
+<div class="viewcode-block" id="GBN.logl"><a class="viewcode-back" href="../../../../../EDAspy.optimization.custom.probabilistic_models.html#EDAspy.optimization.custom.probabilistic_models.gaussian_bayesian_network.GBN.logl">[docs]</a>    <span class="k">def</span> <span class="nf">logl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns de log-likelihood of some data in the model.</span>
+
+<span class="sd">        :param data: dataset to evaluate its likelihood in the model.</span>
+<span class="sd">        :return: log-likelihood of the instances in the model.</span>
+<span class="sd">        :rtype: np.array</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pm</span><span class="o">.</span><span class="n">logl</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="GBN.get_mu"><a class="viewcode-back" href="../../../../../EDAspy.optimization.custom.probabilistic_models.html#EDAspy.optimization.custom.probabilistic_models.gaussian_bayesian_network.GBN.get_mu">[docs]</a>    <span class="k">def</span> <span class="nf">get_mu</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var_mus</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computes the conditional mean of the Gaussians of each node in the GBN.</span>
+
+<span class="sd">        :param var_mus: Variables to compute its Gaussian mean. If None, then all the variables are computed.</span>
+<span class="sd">        :type var_mus: list</span>
+<span class="sd">        :return: Array with the conditional Gaussian means.</span>
 <span class="sd">        :rtype: np.array</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">dataset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">size</span><span class="p">)</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
-        <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">dataset</span></div></div>
+        <span class="n">top_order</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pm</span><span class="o">.</span><span class="n">graph</span><span class="p">()</span><span class="o">.</span><span class="n">topological_sort</span><span class="p">()</span>
+        <span class="n">mu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">top_order</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">top_order</span><span class="p">)):</span>
+            <span class="n">node_name</span> <span class="o">=</span> <span class="n">top_order</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">parents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pm</span><span class="o">.</span><span class="n">cpd</span><span class="p">(</span><span class="n">node_name</span><span class="p">)</span><span class="o">.</span><span class="n">evidence</span><span class="p">()</span>
+            <span class="n">coefs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pm</span><span class="o">.</span><span class="n">cpd</span><span class="p">(</span><span class="n">node_name</span><span class="p">)</span><span class="o">.</span><span class="n">beta</span>
+
+            <span class="n">mu</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">coefs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">coefs</span><span class="p">)):</span>
+                <span class="n">parent_name</span> <span class="o">=</span> <span class="n">parents</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">mu</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">coefs</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">mu</span><span class="p">[</span><span class="n">top_order</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">parent_name</span><span class="p">)]</span>
+
+        <span class="k">if</span> <span class="n">var_mus</span><span class="p">:</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="p">[</span><span class="n">top_order</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">var_mus</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">mu</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">mu</span></div>
+
+<div class="viewcode-block" id="GBN.get_sigma"><a class="viewcode-back" href="../../../../../EDAspy.optimization.custom.probabilistic_models.html#EDAspy.optimization.custom.probabilistic_models.gaussian_bayesian_network.GBN.get_sigma">[docs]</a>    <span class="k">def</span> <span class="nf">get_sigma</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var_sigma</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computes the conditional covariance matrix of the model for the variables in the GBN.</span>
+
+<span class="sd">        :param var_sigma: Variables to compute its Gaussian mean. If None, then all the variables are computed.</span>
+<span class="sd">        :type var_sigma: list</span>
+<span class="sd">        :return: Matrix with the conditional covariance matrix.</span>
+<span class="sd">        :rtype: np.array</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">top_order</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pm</span><span class="o">.</span><span class="n">graph</span><span class="p">()</span><span class="o">.</span><span class="n">topological_sort</span><span class="p">()</span>
+        <span class="n">sigmas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">top_order</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">top_order</span><span class="p">)))</span>
+
+        <span class="c1"># compute diagonal variances</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">top_order</span><span class="p">)):</span>
+            <span class="n">node_name</span> <span class="o">=</span> <span class="n">top_order</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">sigmas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pm</span><span class="o">.</span><span class="n">cpd</span><span class="p">(</span><span class="n">node_name</span><span class="p">)</span><span class="o">.</span><span class="n">variance</span>
+            <span class="n">parents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pm</span><span class="o">.</span><span class="n">cpd</span><span class="p">(</span><span class="n">node_name</span><span class="p">)</span><span class="o">.</span><span class="n">evidence</span><span class="p">()</span>
+            <span class="n">coefs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pm</span><span class="o">.</span><span class="n">cpd</span><span class="p">(</span><span class="n">node_name</span><span class="p">)</span><span class="o">.</span><span class="n">beta</span>
+
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">coefs</span><span class="p">)):</span>
+                <span class="n">parent_name</span> <span class="o">=</span> <span class="n">parents</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+                <span class="n">idx_parent</span> <span class="o">=</span> <span class="n">top_order</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">parent_name</span><span class="p">)</span>
+                <span class="n">sigmas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">sigmas</span><span class="p">[</span><span class="n">idx_parent</span><span class="p">,</span> <span class="n">idx_parent</span><span class="p">]</span> <span class="o">*</span> <span class="n">coefs</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span>
+
+        <span class="c1"># compute covariances</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">top_order</span><span class="p">)):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">top_order</span><span class="p">)):</span>
+                <span class="n">node_name</span> <span class="o">=</span> <span class="n">top_order</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                <span class="n">coefs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pm</span><span class="o">.</span><span class="n">cpd</span><span class="p">(</span><span class="n">node_name</span><span class="p">)</span><span class="o">.</span><span class="n">beta</span>
+                <span class="n">parents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pm</span><span class="o">.</span><span class="n">cpd</span><span class="p">(</span><span class="n">top_order</span><span class="p">[</span><span class="n">j</span><span class="p">])</span><span class="o">.</span><span class="n">evidence</span><span class="p">()</span>
+
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">coefs</span><span class="p">)):</span>
+                    <span class="n">parent_name</span> <span class="o">=</span> <span class="n">parents</span><span class="p">[</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+                    <span class="n">sigmas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="n">coefs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">sigmas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">top_order</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">parent_name</span><span class="p">)]</span>
+
+                <span class="n">sigmas</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sigmas</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+
+        <span class="k">assert</span> <span class="n">_check_symmetric</span><span class="p">(</span><span class="n">sigmas</span><span class="p">),</span> <span class="s1">&#39;ERROR: covariance matrix must be symmetric.&#39;</span>
+
+        <span class="k">if</span> <span class="n">var_sigma</span><span class="p">:</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="p">[</span><span class="n">top_order</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">var_sigma</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">sigmas</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ix_</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">idx</span><span class="p">)]</span>
+
+        <span class="k">return</span> <span class="n">sigmas</span></div>
+
+<div class="viewcode-block" id="GBN.inference"><a class="viewcode-back" href="../../../../../EDAspy.optimization.custom.probabilistic_models.html#EDAspy.optimization.custom.probabilistic_models.gaussian_bayesian_network.GBN.inference">[docs]</a>    <span class="k">def</span> <span class="nf">inference</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">evidence</span><span class="p">,</span> <span class="n">var_names</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the posterior conditional probability distribution conditioned to some given evidences.</span>
+<span class="sd">        :param evidence: list of values fixed as evidences in the model.</span>
+<span class="sd">        :type evidence: list</span>
+<span class="sd">        :param var_names: list of variables measured in the model.</span>
+<span class="sd">        :type var_names: list</span>
+<span class="sd">        :return: (posterior mean, posterior covariance matrix)</span>
+<span class="sd">        :rtype: (np.array, np.array)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">vars_1</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_order</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">var_names</span><span class="p">))</span>
+        <span class="n">vars_2</span> <span class="o">=</span> <span class="n">var_names</span>
+
+        <span class="n">mus</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_mu</span><span class="p">(</span><span class="n">vars_1</span> <span class="o">+</span> <span class="n">vars_2</span><span class="p">)</span>
+
+        <span class="n">mu_1</span> <span class="o">=</span> <span class="n">mus</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">vars_1</span><span class="p">)]</span>
+        <span class="n">mu_2</span> <span class="o">=</span> <span class="n">mus</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">vars_1</span><span class="p">):]</span>
+
+        <span class="n">sigma</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_sigma</span><span class="p">(</span><span class="n">vars_1</span> <span class="o">+</span> <span class="n">vars_2</span><span class="p">)</span>
+        <span class="n">sigma_11</span> <span class="o">=</span> <span class="n">sigma</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">vars_1</span><span class="p">),</span> <span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">vars_1</span><span class="p">)]</span>
+        <span class="n">sigma_12</span> <span class="o">=</span> <span class="n">sigma</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">vars_1</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">vars_1</span><span class="p">):]</span>
+        <span class="n">sigma_21</span> <span class="o">=</span> <span class="n">sigma</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">vars_1</span><span class="p">):,</span> <span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">vars_1</span><span class="p">)]</span>
+        <span class="n">sigma_22</span> <span class="o">=</span> <span class="n">sigma</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">vars_1</span><span class="p">):,</span> <span class="nb">len</span><span class="p">(</span><span class="n">vars_1</span><span class="p">):]</span>
+
+        <span class="n">inv_sigma_22</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">pinv</span><span class="p">(</span><span class="n">sigma_22</span><span class="p">)</span>  <span class="c1"># pseudo-inverse</span>
+
+        <span class="n">mu_1_2</span> <span class="o">=</span> <span class="n">mu_1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">sigma_12</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">inv_sigma_22</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">evidence</span><span class="p">)</span> <span class="o">-</span> <span class="n">mu_2</span><span class="p">)))</span>
+        <span class="n">sigma_1_2</span> <span class="o">=</span> <span class="n">sigma_11</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">sigma_12</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">inv_sigma_22</span><span class="p">,</span> <span class="n">sigma_21</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">mu_1_2</span><span class="p">,</span> <span class="n">sigma_1_2</span></div></div>
 </pre></div>
 
            </div>

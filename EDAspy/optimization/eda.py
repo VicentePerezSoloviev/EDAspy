@@ -6,6 +6,8 @@ from abc import ABC
 from .eda_result import EdaResult
 from .custom.probabilistic_models import ProbabilisticModel
 from .custom.initialization_models import GenInit
+from .utils import _parallel_apply_along_axis
+from time import process_time
 
 
 class EDA(ABC):
@@ -26,7 +28,10 @@ class EDA(ABC):
                  n_variables: int,
                  alpha: float = 0.5,
                  elite_factor: float = 0.4,
-                 disp: bool = True):
+                 disp: bool = True,
+                 parallelize: bool = False,
+                 init_data: np.array = None,
+                 *args, **kwargs):
 
         self.disp = disp
         self.size_gen = size_gen
@@ -36,21 +41,44 @@ class EDA(ABC):
         self.truncation_length = int(size_gen * alpha)
         self.elite_factor = elite_factor
         self.elite_length = int(size_gen * elite_factor)
+        self.parallelize = parallelize
 
         assert dead_iter <= self.max_iter, 'dead_iter must be lower than max_iter'
         self.dead_iter = dead_iter
 
         self.best_mae_global = 999999999999
-        self.best_ind_global = -1
+        self.best_ind_global = np.array([0]*self.n_variables)
+        # TODO: test if best ind global works
         self.evaluations = np.array(0)
 
         self.generation = None
 
+        if parallelize:
+            self._check_generation = self._check_generation_parallel
+        else:
+            self._check_generation = self._check_generation_no_parallel
+
+        # allow initialize EDA with data
+        if init_data is not None:
+            assert init_data.shape[1] == n_variables, 'The inserted data shape and the number of variables do not match'
+            # assert init_data.shape[0] == size_gen, 'The inserted data shape and the generation size do not match'
+
+            self.init_data = init_data
+            self._initialize_generation = self._initialize_generation_with_data
+        else:
+            self._initialize_generation = self._initialize_generation_with_init
+
     def _new_generation(self):
         self.generation = np.concatenate([self.pm.sample(size=self.size_gen), self.elite_temp])
 
-    def _initialize_generation(self) -> np.array:
+    def _initialize_generation_with_data(self) -> np.array:
+        return self.init_data
+
+    def _initialize_generation_with_init(self) -> np.array:
         return self.init.sample(size=self.size_gen)
+
+    def _initialize_generation(self) -> np.array:
+        raise Exception('Not implemented function')
 
     def _truncation(self):
         """
@@ -69,6 +97,12 @@ class EDA(ABC):
         Check the cost of each individual in the cost function implemented by the user, and updates the
         generation DataFrame.
         """
+        raise Exception('Not implemented function')
+
+    def _check_generation_parallel(self, objective_function: callable):
+        self.evaluations = _parallel_apply_along_axis(objective_function, 1, self.generation)
+
+    def _check_generation_no_parallel(self, objective_function: callable):
         self.evaluations = np.apply_along_axis(objective_function, 1, self.generation)
 
     def _update_pm(self):
@@ -80,7 +114,9 @@ class EDA(ABC):
     def export_settings(self) -> dict:
         """
         Export the configuration of the algorithm to an object to be loaded in other execution.
-        :return: dict
+
+        :return: configuration dictionary.
+        :rtype: dict
         """
         return {
             "size_gen": self.size_gen,
@@ -89,20 +125,25 @@ class EDA(ABC):
             "n_variables": self.n_variables,
             "alpha": self.alpha,
             "elite_factor": self.elite_factor,
-            "disp": self.disp
+            "disp": self.disp,
+            "parallelize": self.parallelize
         }
 
-    def minimize(self, cost_function: callable, output_runtime: bool = True):
-        r"""
+    def minimize(self, cost_function: callable, output_runtime: bool = True, *args, **kwargs) -> EdaResult:
+        """
+        Minimize function to execute the EDA optimization. By default, the optimizer is designed to minimize a cost
+        function; if maximization is desired, just add a minus sign to your cost function.
+
         :param cost_function: cost function to be optimized and accepts an array as argument.
         :param output_runtime: true if information during runtime is desired.
-        :return: EdaResult object
+        :return: EdaResult object with results and information.
         :rtype: EdaResult
         """
 
         history = []
         not_better = 0
 
+        t1 = process_time()
         self.generation = self._initialize_generation()
 
         for _ in range(self.max_iter):
@@ -133,16 +174,23 @@ class EDA(ABC):
                 print('IT: ', _, '\tBest cost: ', self.best_mae_global)
 
         if self.disp:
-            print("\tNFVALS = " + str(len(history) * self.size_gen) + " F = " + str(self.best_mae_global))
+            print("\tNFEVALS = " + str(len(history) * self.size_gen) + " F = " + str(self.best_mae_global))
             print("\tX = " + str(self.best_ind_global))
 
+        t2 = process_time()
         eda_result = EdaResult(self.best_ind_global, self.best_mae_global, len(history) * self.size_gen,
-                               history, self.export_settings())
+                               history, self.export_settings(), t2-t1)
 
         return eda_result
 
     @property
-    def pm(self):
+    def pm(self) -> ProbabilisticModel:
+        """
+        Returns the probabilistic model used in the EDA implementation.
+
+        :return: probabilistic model.
+        :rtype: ProbabilisticModel
+        """
         return self._pm
 
     @pm.setter
@@ -151,14 +199,20 @@ class EDA(ABC):
             self._pm = value
         else:
             raise ValueError('The object you try to set as a probabilistic model does not extend the '
-                             'class ProbabilisticModel provided by EDAspy')
+                             'class ProbabilisticModel provided by EDAspy.')
 
         if len(value.variables) != self.n_variables:
             raise Exception('The number of variables of the probabilistic model is not equal to the number of '
-                            'variables of the EDA')
+                            'variables of the EDA.')
 
     @property
-    def init(self):
+    def init(self) -> GenInit:
+        """
+        Returns the initializer used in the EDA implementation.
+
+        :return: initializer.
+        :rtype: GenInit
+        """
         return self._init
 
     @init.setter

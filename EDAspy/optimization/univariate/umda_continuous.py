@@ -59,7 +59,9 @@ class UMDAc(EDA):
                  vector: np.array = None,
                  lower_bound: float = 0.5,
                  elite_factor: float = 0.4,
-                 disp: bool = True):
+                 disp: bool = True,
+                 parallelize: bool = False,
+                 init_data: np.array = None):
         r"""
         Args:
             size_gen: Population size of each generation.
@@ -71,13 +73,18 @@ class UMDAc(EDA):
             lower_bound: Lower bound imposed in std of the variables to not converge to std=0.
             elite_factor: Percentage of previous population selected to add to new generation (elite approach).
             disp: Set to True to print convergence messages.
+            parallelize: True if the evaluation of the solutions is desired to be parallelized in multiple cores.
+            init_data: Numpy array containing the data the EDA is desired to be initialized from. By default, an
+            initializer is used.
         """
 
         self.vector = vector
         self.lower_bound = lower_bound
         self.names_vars = list(range(n_variables))
 
-        super().__init__(size_gen, max_iter, dead_iter, n_variables, alpha, elite_factor, disp)
+        super().__init__(size_gen=size_gen, max_iter=max_iter, dead_iter=dead_iter, n_variables=n_variables,
+                         alpha=alpha, elite_factor=elite_factor, disp=disp, parallelize=parallelize,
+                         init_data=init_data)
 
         if self.vector is None:
             self.vector = np.zeros((2, n_variables))

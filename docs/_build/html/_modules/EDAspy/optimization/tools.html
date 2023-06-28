@@ -79,6 +79,7 @@
 <div class="viewcode-block" id="arcs2adj_mat"><a class="viewcode-back" href="../../../EDAspy.optimization.html#EDAspy.optimization.tools.arcs2adj_mat">[docs]</a><span class="k">def</span> <span class="nf">arcs2adj_mat</span><span class="p">(</span><span class="n">arcs</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">n_variables</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function transforms the list of arcs in the BN structure to an adjacency matrix.</span>
+
 <span class="sd">    :param arcs: list of arcs in the BN structure.</span>
 <span class="sd">    :param n_variables: number of variables.</span>
 <span class="sd">    :type arcs: list</span>
@@ -116,22 +117,19 @@
 <span class="sd">            pos_list[i][0] += noise_list[i]</span>
 <span class="sd">            pos_list[i][1] += noise_list[i]&#39;&#39;&#39;</span>
 
-    <span class="n">pos</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_variables</span><span class="p">):</span>
-        <span class="n">pos</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span> <span class="n">pos_list</span><span class="p">[</span><span class="n">i</span><span class="p">]})</span>
-
-    <span class="k">return</span> <span class="n">pos</span>
+    <span class="k">return</span> <span class="p">{</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span> <span class="n">pos_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_variables</span><span class="p">)}</span>
 
 
-<div class="viewcode-block" id="plot_bn"><a class="viewcode-back" href="../../../EDAspy.optimization.html#EDAspy.optimization.tools.plot_bn">[docs]</a><span class="k">def</span> <span class="nf">plot_bn</span><span class="p">(</span><span class="n">arcs</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">n_variables</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">pos</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">curved_arcs</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<div class="viewcode-block" id="plot_bn"><a class="viewcode-back" href="../../../EDAspy.optimization.html#EDAspy.optimization.tools.plot_bn">[docs]</a><span class="k">def</span> <span class="nf">plot_bn</span><span class="p">(</span><span class="n">arcs</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">var_names</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">pos</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">curved_arcs</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
             <span class="n">curvature</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">node_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span> <span class="n">node_color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span>
             <span class="n">edge_color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">arrow_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span> <span class="n">node_transparency</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.9</span><span class="p">,</span>
             <span class="n">edge_transparency</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.9</span><span class="p">,</span> <span class="n">node_line_widths</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
             <span class="n">output_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function Plots a BN structure as a directed acyclic graph.</span>
+
 <span class="sd">    :param arcs: Arcs in the BN structure.</span>
-<span class="sd">    :param n_variables: Number of variables in the BN structure.</span>
+<span class="sd">    :param var_names: List of variables.</span>
 <span class="sd">    :param pos: Positions in the plot for each node.</span>
 <span class="sd">    :param curved_arcs: True if curved arcs are desired.</span>
 <span class="sd">    :param curvature: Radians of curvature for edges. By default, -0.3.</span>
@@ -144,31 +142,29 @@
 <span class="sd">    :param node_line_widths: Width of the nodes contour lines. By default, 2.0.</span>
 <span class="sd">    :param title: Title for Figure. By default, None.</span>
 <span class="sd">    :param output_file: Path to save the figure locally.</span>
-<span class="sd">    :type arcs: List of tuples.</span>
-<span class="sd">    :type n_variables: int.</span>
-<span class="sd">    :type pos: dict with name of variables as keys and tuples with coordinates as values.</span>
-<span class="sd">    :type curved_arcs: bool.</span>
-<span class="sd">    :type curvature: float.</span>
-<span class="sd">    :type node_size: int.</span>
-<span class="sd">    :type node_color: str.</span>
-<span class="sd">    :type edge_color: str.</span>
-<span class="sd">    :type arrow_size: int.</span>
-<span class="sd">    :type node_transparency: float.</span>
-<span class="sd">    :type edge_transparency: float.</span>
-<span class="sd">    :type node_line_widths: float.</span>
-<span class="sd">    :type title: str.</span>
-<span class="sd">    :type output_file: str.</span>
+<span class="sd">    :type arcs: list(tuple)</span>
+<span class="sd">    :type var_names: list</span>
+<span class="sd">    :type pos: dict {name of variables: tuples with coordinates}</span>
+<span class="sd">    :type curved_arcs: bool</span>
+<span class="sd">    :type curvature: float</span>
+<span class="sd">    :type node_size: int</span>
+<span class="sd">    :type node_color: str</span>
+<span class="sd">    :type edge_color: str</span>
+<span class="sd">    :type arrow_size: int</span>
+<span class="sd">    :type node_transparency: float</span>
+<span class="sd">    :type edge_transparency: float</span>
+<span class="sd">    :type node_line_widths: float</span>
+<span class="sd">    :type title: str</span>
+<span class="sd">    :type output_file: str</span>
 <span class="sd">    :return: Figure.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">nodes</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_variables</span><span class="p">)]</span>
-
     <span class="n">g</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">()</span>
-    <span class="n">g</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span>
+    <span class="n">g</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">(</span><span class="n">var_names</span><span class="p">)</span>
     <span class="n">g</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">(</span><span class="n">arcs</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">pos</span><span class="p">:</span>
-        <span class="n">pos</span> <span class="o">=</span> <span class="n">_set_positions</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">_set_positions</span><span class="p">(</span><span class="n">var_names</span><span class="p">)</span>
 
     <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_nodes</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">node_size</span><span class="o">=</span><span class="n">node_size</span><span class="p">,</span> <span class="n">node_color</span><span class="o">=</span><span class="n">node_color</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">node_transparency</span><span class="p">,</span>
                            <span class="n">linewidths</span><span class="o">=</span><span class="n">node_line_widths</span><span class="p">)</span>

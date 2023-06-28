@@ -94,7 +94,7 @@
 <span id="edaspy-optimization-univariate-umda-binary-module"></span><h2>EDAspy.optimization.univariate.umda_binary module<a class="headerlink" href="#module-EDAspy.optimization.univariate.umda_binary" title="Permalink to this headline"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="EDAspy.optimization.univariate.umda_binary.UMDAd">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">EDAspy.optimization.univariate.umda_binary.</span></span><span class="sig-name descname"><span class="pre">UMDAd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size_gen</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dead_iter</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_variables</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.array</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_bound</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper_bound</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elite_factor</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disp</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/optimization/univariate/umda_binary.html#UMDAd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.univariate.umda_binary.UMDAd" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">EDAspy.optimization.univariate.umda_binary.</span></span><span class="sig-name descname"><span class="pre">UMDAd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size_gen</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dead_iter</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_variables</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.array</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_bound</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper_bound</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elite_factor</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disp</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallelize</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.array</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/optimization/univariate/umda_binary.html#UMDAd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.univariate.umda_binary.UMDAd" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="EDAspy.optimization.html#EDAspy.optimization.eda.EDA" title="EDAspy.optimization.eda.EDA"><code class="xref py py-class docutils literal notranslate"><span class="pre">EDAspy.optimization.eda.EDA</span></code></a></p>
 <p>Univariate marginal Estimation of Distribution algorithm binary. New individuals are sampled
 from a univariate binary probabilistic model. It can be used for hyper-parameter optimization
@@ -124,6 +124,69 @@ problems such as Feature Subset Selection or Portfolio Optimization.</p>
 <p>[1]: Mühlenbein, H., &amp; Paass, G. (1996, September). From recombination of genes to the
 estimation of distributions I. Binary parameters. In International conference on parallel
 problem solving from nature (pp. 178-187). Springer, Berlin, Heidelberg.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="EDAspy.optimization.univariate.umda_binary.UMDAd.pm">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">pm</span></span><em class="property"><span class="pre">:</span> <span class="pre">EDAspy.optimization.custom.probabilistic_models._probabilistic_model.ProbabilisticModel</span></em><a class="headerlink" href="#EDAspy.optimization.univariate.umda_binary.UMDAd.pm" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the probabilistic model used in the EDA implementation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>probabilistic model.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>ProbabilisticModel</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="EDAspy.optimization.univariate.umda_binary.UMDAd.export_settings">
+<span class="sig-name descname"><span class="pre">export_settings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="headerlink" href="#EDAspy.optimization.univariate.umda_binary.UMDAd.export_settings" title="Permalink to this definition"></a></dt>
+<dd><p>Export the configuration of the algorithm to an object to be loaded in other execution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>configuration dictionary.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="EDAspy.optimization.univariate.umda_binary.UMDAd.init">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">init</span></span><em class="property"><span class="pre">:</span> <span class="pre">EDAspy.optimization.custom.initialization_models._generation_init.GenInit</span></em><a class="headerlink" href="#EDAspy.optimization.univariate.umda_binary.UMDAd.init" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the initializer used in the EDA implementation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>initializer.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>GenInit</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="EDAspy.optimization.univariate.umda_binary.UMDAd.minimize">
+<span class="sig-name descname"><span class="pre">minimize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cost_function</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_runtime</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="EDAspy.optimization.html#EDAspy.optimization.eda_result.EdaResult" title="EDAspy.optimization.eda_result.EdaResult"><span class="pre">EDAspy.optimization.eda_result.EdaResult</span></a><a class="headerlink" href="#EDAspy.optimization.univariate.umda_binary.UMDAd.minimize" title="Permalink to this definition"></a></dt>
+<dd><p>Minimize function to execute the EDA optimization. By default, the optimizer is designed to minimize a cost
+function; if maximization is desired, just add a minus sign to your cost function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cost_function</strong> – cost function to be optimized and accepts an array as argument.</p></li>
+<li><p><strong>output_runtime</strong> – true if information during runtime is desired.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>EdaResult object with results and information.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="EDAspy.optimization.html#EDAspy.optimization.eda_result.EdaResult" title="EDAspy.optimization.eda_result.EdaResult">EdaResult</a></p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -131,7 +194,7 @@ problem solving from nature (pp. 178-187). Springer, Berlin, Heidelberg.</p>
 <span id="edaspy-optimization-univariate-umda-continuous-module"></span><h2>EDAspy.optimization.univariate.umda_continuous module<a class="headerlink" href="#module-EDAspy.optimization.univariate.umda_continuous" title="Permalink to this headline"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="EDAspy.optimization.univariate.umda_continuous.UMDAc">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">EDAspy.optimization.univariate.umda_continuous.</span></span><span class="sig-name descname"><span class="pre">UMDAc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size_gen</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dead_iter</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_variables</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.array</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_bound</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elite_factor</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disp</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/optimization/univariate/umda_continuous.html#UMDAc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.univariate.umda_continuous.UMDAc" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">EDAspy.optimization.univariate.umda_continuous.</span></span><span class="sig-name descname"><span class="pre">UMDAc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size_gen</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dead_iter</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_variables</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.array</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_bound</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elite_factor</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disp</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallelize</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.array</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/optimization/univariate/umda_continuous.html#UMDAc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.univariate.umda_continuous.UMDAc" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="EDAspy.optimization.html#EDAspy.optimization.eda.EDA" title="EDAspy.optimization.eda.EDA"><code class="xref py py-class docutils literal notranslate"><span class="pre">EDAspy.optimization.eda.EDA</span></code></a></p>
 <p>Univariate marginal Estimation of Distribution algorithm continuous. New individuals are sampled
 from a univariate normal probabilistic model. It can be used for hyper-parameter optimization
@@ -139,14 +202,14 @@ or to optimize a function.</p>
 <p>UMDA [1] is a specific type of Estimation of Distribution Algorithm (EDA) where new individuals
 are sampled from univariate normal distributions and are updated in each iteration of the
 algorithm by the best individuals found in the previous iteration. In this implementation each
-individual is an array of 0s and 1s so new individuals are sampled from a univariate probabilistic
+individual is an array of real data so new individuals are sampled from a univariate probabilistic
 model updated in each iteration. Optionally it is possible to set lower bound to the standard
 deviation of the normal distribution for the variables to avoid premature convergence.</p>
 <p>This algorithms has been widely used for different applications such as in [2] where it is
 applied to optimize the parameters of a quantum paremetric circuit and is shown how it outperforms
 other approaches in specific situations.</p>
 <p class="rubric">Example</p>
-<p>This short example runs UMDAc for a toy example of the One-Max problem in the continuous space.</p>
+<p>This short example runs UMDAc for a benchmark function optimization problem in the continuous space.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">EDAspy.benchmarks</span> <span class="kn">import</span> <span class="n">ContinuousBenchmarkingCEC14</span>
 <span class="kn">from</span> <span class="nn">EDAspy.optimization</span> <span class="kn">import</span> <span class="n">UMDAc</span>
 
@@ -164,6 +227,163 @@ A new tool for evolutionary computation (Vol. 2). Springer Science &amp; Busines
 <p>[2]: Vicente P. Soloviev, Pedro Larrañaga and Concha Bielza (2022, July). Quantum Parametric
 Circuit Optimization with Estimation of Distribution Algorithms. In 2022 The Genetic and
 Evolutionary Computation Conference (GECCO). DOI: <a class="reference external" href="https://doi.org/10.1145/3520304.3533963">https://doi.org/10.1145/3520304.3533963</a></p>
+<dl class="py property">
+<dt class="sig sig-object py" id="EDAspy.optimization.univariate.umda_continuous.UMDAc.init">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">init</span></span><em class="property"><span class="pre">:</span> <span class="pre">EDAspy.optimization.custom.initialization_models._generation_init.GenInit</span></em><a class="headerlink" href="#EDAspy.optimization.univariate.umda_continuous.UMDAc.init" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the initializer used in the EDA implementation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>initializer.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>GenInit</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="EDAspy.optimization.univariate.umda_continuous.UMDAc.export_settings">
+<span class="sig-name descname"><span class="pre">export_settings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="headerlink" href="#EDAspy.optimization.univariate.umda_continuous.UMDAc.export_settings" title="Permalink to this definition"></a></dt>
+<dd><p>Export the configuration of the algorithm to an object to be loaded in other execution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>configuration dictionary.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="EDAspy.optimization.univariate.umda_continuous.UMDAc.minimize">
+<span class="sig-name descname"><span class="pre">minimize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cost_function</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_runtime</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="EDAspy.optimization.html#EDAspy.optimization.eda_result.EdaResult" title="EDAspy.optimization.eda_result.EdaResult"><span class="pre">EDAspy.optimization.eda_result.EdaResult</span></a><a class="headerlink" href="#EDAspy.optimization.univariate.umda_continuous.UMDAc.minimize" title="Permalink to this definition"></a></dt>
+<dd><p>Minimize function to execute the EDA optimization. By default, the optimizer is designed to minimize a cost
+function; if maximization is desired, just add a minus sign to your cost function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cost_function</strong> – cost function to be optimized and accepts an array as argument.</p></li>
+<li><p><strong>output_runtime</strong> – true if information during runtime is desired.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>EdaResult object with results and information.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="EDAspy.optimization.html#EDAspy.optimization.eda_result.EdaResult" title="EDAspy.optimization.eda_result.EdaResult">EdaResult</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="EDAspy.optimization.univariate.umda_continuous.UMDAc.pm">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">pm</span></span><em class="property"><span class="pre">:</span> <span class="pre">EDAspy.optimization.custom.probabilistic_models._probabilistic_model.ProbabilisticModel</span></em><a class="headerlink" href="#EDAspy.optimization.univariate.umda_continuous.UMDAc.pm" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the probabilistic model used in the EDA implementation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>probabilistic model.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>ProbabilisticModel</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-EDAspy.optimization.univariate.keda">
+<span id="edaspy-optimization-univariate-keda"></span><h2>EDAspy.optimization.univariate.keda<a class="headerlink" href="#module-EDAspy.optimization.univariate.keda" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="EDAspy.optimization.univariate.keda.UnivariateKEDA">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">EDAspy.optimization.univariate.keda.</span></span><span class="sig-name descname"><span class="pre">UnivariateKEDA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size_gen</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dead_iter</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_variables</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">landscape_bounds</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">tuple</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">(-</span> <span class="pre">100,</span> <span class="pre">100)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elite_factor</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disp</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallelize</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.array</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/optimization/univariate/keda.html#UnivariateKEDA"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.univariate.keda.UnivariateKEDA" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="EDAspy.optimization.html#EDAspy.optimization.eda.EDA" title="EDAspy.optimization.eda.EDA"><code class="xref py py-class docutils literal notranslate"><span class="pre">EDAspy.optimization.eda.EDA</span></code></a></p>
+<p>Univariate Kernel Density Estimation Algorithm (u_KEDA). New individuals are sampled from a KDE model.
+It can be used for hyper-parameter optimization or to optimize a function.</p>
+<p>u_KEDA [1] is a specific type of Estimation of Distribution Algorithm (EDA) where new individuals
+are sampled from univariate KDEs and are updated in each iteration of the algorithm by the best individuals
+found in the previous iteration. In this implementation each individual is an array of real data so new
+individuals are sampled from a univariate probabilistic model updated in each iteration.</p>
+<p class="rubric">Example</p>
+<p>This short example runs UMDAc for a benchmark function optimization problem in the continuous space.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">EDAspy.benchmarks</span> <span class="kn">import</span> <span class="n">ContinuousBenchmarkingCEC14</span>
+<span class="kn">from</span> <span class="nn">EDAspy.optimization</span> <span class="kn">import</span> <span class="n">UnivariateKEDA</span>
+
+<span class="n">n_vars</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">benchmarking</span> <span class="o">=</span> <span class="n">ContinuousBenchmarkingCEC14</span><span class="p">(</span><span class="n">n_vars</span><span class="p">)</span>
+
+<span class="n">keda</span> <span class="o">=</span> <span class="n">UnivariateKEDA</span><span class="p">(</span><span class="n">size_gen</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">dead_iter</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">n_variables</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="c1"># We leave bound by default</span>
+<span class="n">eda_result</span> <span class="o">=</span> <span class="n">keda</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">benchmarking</span><span class="o">.</span><span class="n">cec4</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">References</p>
+<p>[1]: Larrañaga, P., &amp; Lozano, J. A. (Eds.). (2001). Estimation of distribution algorithms:
+A new tool for evolutionary computation (Vol. 2). Springer Science &amp; Business Media.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="EDAspy.optimization.univariate.keda.UnivariateKEDA.init">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">init</span></span><em class="property"><span class="pre">:</span> <span class="pre">EDAspy.optimization.custom.initialization_models._generation_init.GenInit</span></em><a class="headerlink" href="#EDAspy.optimization.univariate.keda.UnivariateKEDA.init" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the initializer used in the EDA implementation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>initializer.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>GenInit</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="EDAspy.optimization.univariate.keda.UnivariateKEDA.pm">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">pm</span></span><em class="property"><span class="pre">:</span> <span class="pre">EDAspy.optimization.custom.probabilistic_models._probabilistic_model.ProbabilisticModel</span></em><a class="headerlink" href="#EDAspy.optimization.univariate.keda.UnivariateKEDA.pm" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the probabilistic model used in the EDA implementation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>probabilistic model.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>ProbabilisticModel</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="EDAspy.optimization.univariate.keda.UnivariateKEDA.export_settings">
+<span class="sig-name descname"><span class="pre">export_settings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">dict</span><a class="headerlink" href="#EDAspy.optimization.univariate.keda.UnivariateKEDA.export_settings" title="Permalink to this definition"></a></dt>
+<dd><p>Export the configuration of the algorithm to an object to be loaded in other execution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>configuration dictionary.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="EDAspy.optimization.univariate.keda.UnivariateKEDA.minimize">
+<span class="sig-name descname"><span class="pre">minimize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cost_function</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_runtime</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="EDAspy.optimization.html#EDAspy.optimization.eda_result.EdaResult" title="EDAspy.optimization.eda_result.EdaResult"><span class="pre">EDAspy.optimization.eda_result.EdaResult</span></a><a class="headerlink" href="#EDAspy.optimization.univariate.keda.UnivariateKEDA.minimize" title="Permalink to this definition"></a></dt>
+<dd><p>Minimize function to execute the EDA optimization. By default, the optimizer is designed to minimize a cost
+function; if maximization is desired, just add a minus sign to your cost function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cost_function</strong> – cost function to be optimized and accepts an array as argument.</p></li>
+<li><p><strong>output_runtime</strong> – true if information during runtime is desired.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>EdaResult object with results and information.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="EDAspy.optimization.html#EDAspy.optimization.eda_result.EdaResult" title="EDAspy.optimization.eda_result.EdaResult">EdaResult</a></p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </section>

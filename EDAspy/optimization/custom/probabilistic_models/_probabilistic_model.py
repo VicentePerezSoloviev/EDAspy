@@ -3,6 +3,7 @@
 
 from abc import ABC, abstractmethod
 import numpy as np
+import pandas as pd
 
 
 class ProbabilisticModel(ABC):
@@ -18,7 +19,7 @@ class ProbabilisticModel(ABC):
         raise Exception("Not implemented method")
 
     @abstractmethod
-    def learn(self, dataset: np.array):
+    def learn(self, dataset: np.array, *args, **kwargs):
         raise Exception("Not implemented method")
 
     def export_settings(self):

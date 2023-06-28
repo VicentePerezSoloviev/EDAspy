@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
+import numpy as np
 
 from ..eda import EDA
 from ..custom.probabilistic_models import MultiGauss
@@ -53,7 +54,9 @@ class EMNA(EDA):
                  elite_factor: float = 0.4,
                  disp: bool = True,
                  lower_bound: float = 0.5,
-                 upper_bound: float = 100):
+                 upper_bound: float = 100,
+                 parallelize: bool = False,
+                 init_data: np.array = None):
         r"""
             :param size_gen: Population size. Number of individuals in each generation.
             :param max_iter: Maximum number of iterations during runtime.
@@ -65,9 +68,13 @@ class EMNA(EDA):
             :param lower_bound: Lower bound imposed in std of the variables to not converge to std=0.
             :param upper_bound: Upper bound imposed in std of the variables.
             :param disp: Set to True to print convergence messages.
+            :param parallelize: True if the evaluation of the solutions is desired to be parallelized in multiple cores.
+            :param init_data: Numpy array containing the data the EDA is desired to be initialized from. By default, an
+            initializer is used.
         """
         super().__init__(size_gen=size_gen, max_iter=max_iter, dead_iter=dead_iter,
-                         n_variables=n_variables, alpha=alpha, elite_factor=elite_factor, disp=disp)
+                         n_variables=n_variables, alpha=alpha, elite_factor=elite_factor, disp=disp,
+                         parallelize=parallelize, init_data=init_data)
 
         assert len(landscape_bounds) == 2, "The size of the landscape bounds tuple is different from 2"
         self.landscape_bounds = landscape_bounds

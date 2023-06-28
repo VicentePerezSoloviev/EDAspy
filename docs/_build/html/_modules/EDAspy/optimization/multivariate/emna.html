@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EDAspy.optimization.multivariate.emna &mdash; EDAspy 1.0.0 documentation</title>
+  <title>EDAspy.optimization.multivariate.emna &mdash; EDAspy 1.1.0 documentation</title>
       <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -70,6 +70,7 @@
   <h1>Source code for EDAspy.optimization.multivariate.emna</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># coding: utf-8</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">..eda</span> <span class="kn">import</span> <span class="n">EDA</span>
 <span class="kn">from</span> <span class="nn">..custom.probabilistic_models</span> <span class="kn">import</span> <span class="n">MultiGauss</span>
@@ -123,7 +124,9 @@
                  <span class="n">elite_factor</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.4</span><span class="p">,</span>
                  <span class="n">disp</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
                  <span class="n">lower_bound</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
-                 <span class="n">upper_bound</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">100</span><span class="p">):</span>
+                 <span class="n">upper_bound</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+                 <span class="n">parallelize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                 <span class="n">init_data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            :param size_gen: Population size. Number of individuals in each generation.</span>
 <span class="sd">            :param max_iter: Maximum number of iterations during runtime.</span>
@@ -135,9 +138,13 @@
 <span class="sd">            :param lower_bound: Lower bound imposed in std of the variables to not converge to std=0.</span>
 <span class="sd">            :param upper_bound: Upper bound imposed in std of the variables.</span>
 <span class="sd">            :param disp: Set to True to print convergence messages.</span>
+<span class="sd">            :param parallelize: True if the evaluation of the solutions is desired to be parallelized in multiple cores.</span>
+<span class="sd">            :param init_data: Numpy array containing the data the EDA is desired to be initialized from. By default, an</span>
+<span class="sd">            initializer is used.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">size_gen</span><span class="o">=</span><span class="n">size_gen</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="n">max_iter</span><span class="p">,</span> <span class="n">dead_iter</span><span class="o">=</span><span class="n">dead_iter</span><span class="p">,</span>
-                         <span class="n">n_variables</span><span class="o">=</span><span class="n">n_variables</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="n">elite_factor</span><span class="o">=</span><span class="n">elite_factor</span><span class="p">,</span> <span class="n">disp</span><span class="o">=</span><span class="n">disp</span><span class="p">)</span>
+                         <span class="n">n_variables</span><span class="o">=</span><span class="n">n_variables</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="n">elite_factor</span><span class="o">=</span><span class="n">elite_factor</span><span class="p">,</span> <span class="n">disp</span><span class="o">=</span><span class="n">disp</span><span class="p">,</span>
+                         <span class="n">parallelize</span><span class="o">=</span><span class="n">parallelize</span><span class="p">,</span> <span class="n">init_data</span><span class="o">=</span><span class="n">init_data</span><span class="p">)</span>
 
         <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">landscape_bounds</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;The size of the landscape bounds tuple is different from 2&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">landscape_bounds</span> <span class="o">=</span> <span class="n">landscape_bounds</span>

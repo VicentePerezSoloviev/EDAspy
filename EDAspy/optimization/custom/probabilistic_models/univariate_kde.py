@@ -28,15 +28,15 @@ class UniKDE(ProbabilisticModel):
         :return: array with the dataset sampled
         :rtype: np.array
         """
-        return self.kernel.resample(size)
+        return self.kernel.resample(size).T
 
-    def learn(self, dataset: np.array):
+    def learn(self, dataset: np.array, *args, **kwargs):
         """
         Estimates the independent KDE for each variable.
 
         :param dataset: dataset from which learn the probabilistic model.
         """
-        self.kernel = gaussian_kde(dataset)
+        self.kernel = gaussian_kde(dataset.T)
 
     def print_structure(self) -> list:
         return list()

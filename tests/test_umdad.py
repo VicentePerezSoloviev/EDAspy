@@ -101,3 +101,24 @@ class TestUMDAd(TestCase):
 
         umda._truncation()
         assert len(umda.generation) == int(umda.size_gen*umda.alpha)
+
+    def test_data_init(self):
+        """
+        Test if it is possible to initialize the EDA with custom data.
+        """
+        n_variables, size_gen, alpha = 10, 4, 0.5
+        gen = np.random.randint(low=0, high=1, size=[size_gen, n_variables])
+        eda = UMDAd(size_gen=size_gen, max_iter=1, dead_iter=1, n_variables=n_variables, alpha=alpha,
+                    init_data=gen)
+        eda.best_mae_global = 0  # to force breaking the loop when dead_iter = 1
+
+        evaluations = []
+        for sol in gen:
+            evaluations.append(one_max(sol))
+        evaluations = np.array(evaluations)
+        ordering = evaluations.argsort()
+        best_indices_truc = ordering[: int(alpha * size_gen)]
+
+        eda.minimize(one_max, output_runtime=False)
+
+        assert (eda.generation == gen[best_indices_truc]).all()

@@ -41,7 +41,7 @@ class UniBin(ProbabilisticModel):
         dataset = np.array(dataset, dtype=int)
         return dataset
 
-    def learn(self, dataset: np.array):
+    def learn(self, dataset: np.array, *args, **kwargs):
         """
         Estimates the independent probability of each variable of being 1.
 

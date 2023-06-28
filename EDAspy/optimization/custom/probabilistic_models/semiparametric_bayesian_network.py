@@ -36,30 +36,30 @@ class SPBN(ProbabilisticModel):
 
         self.id = 5
 
-    def learn(self, dataset: np.array, num_folds: int = 10):
+    def learn(self, dataset: np.array, num_folds: int = 10, *args, **kwargs):
         """
         Learn a semiparametric Bayesian network from the dataset passed as argument.
 
         :param dataset: dataset from which learn the SPBN.
-        :param num_folds: Number of folds used for the SPBN learning. The higher, the more accurate, but also higher
-        CPU demand. By default, it is set to 10.
+        :param num_folds: Number of folds used for the SPBN learning. The higher, the more accurate, but also higher CPU demand. By default, it is set to 10.
+        :param max_iters: number maximum of iterations for the learning process.
         """
-
+        data = pd.DataFrame(dataset, columns=self.variables)
         self.pm = SemiparametricBN(self.variables)
 
         if self.white_list and self.black_list:
-            self.pm = hc(pd.DataFrame(dataset), start=self.pm, operators=["arcs", "node_type"],
+            self.pm = hc(data, start=self.pm, operators=["arcs", "node_type"],
                          arc_whitelist=self.white_list, arc_blacklist=self.black_list, num_folds=num_folds)
         elif self.white_list:
-            self.pm = hc(pd.DataFrame(dataset), start=self.pm, operators=["arcs", "node_type"],
+            self.pm = hc(data, start=self.pm, operators=["arcs", "node_type"],
                          arc_whitelist=self.white_list, num_folds=num_folds)
         elif self.black_list:
-            self.pm = hc(pd.DataFrame(dataset), start=self.pm, operators=["arcs", "node_type"],
+            self.pm = hc(data, start=self.pm, operators=["arcs", "node_type"],
                          arc_blacklist=self.black_list, num_folds=num_folds)
         else:
-            self.pm = hc(pd.DataFrame(dataset), start=self.pm, operators=["arcs", "node_type"], num_folds=num_folds)
+            self.pm = hc(data, start=self.pm, operators=["arcs", "node_type"], num_folds=num_folds)
 
-        self.pm.fit(pd.DataFrame(dataset))
+        self.pm.fit(data)
 
     def print_structure(self) -> list:
         """
@@ -82,7 +82,7 @@ class SPBN(ProbabilisticModel):
         :rtype: np.array
         """
 
-        dataset = self.pm.sample(size).to_pandas()
+        dataset = self.pm.sample(size, ordered=True).to_pandas()
         dataset = dataset[self.variables].to_numpy()
         return dataset
 

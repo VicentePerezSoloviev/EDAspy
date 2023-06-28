@@ -47,7 +47,20 @@ class TestSPEDA(TestCase):
                       alpha=0.5, l=10)
 
         gen = np.random.normal(
-            [0]*speda.n_variables, [10]*speda.n_variables, [speda.size_gen, speda.n_variables]
+            [0] * speda.n_variables, [10] * speda.n_variables, [speda.size_gen, speda.n_variables]
+        )
+        speda.generation = gen
+        benchmarking = ContinuousBenchmarkingCEC14(n_variables)
+        speda._check_generation(benchmarking.cec14_4)
+        assert len(speda.evaluations) == len(speda.generation)
+
+    def test_check_generation_parallel(self):
+        n_variables = 10
+        speda = SPEDA(size_gen=300, max_iter=100, dead_iter=20, n_variables=10, landscape_bounds=(-60, 60),
+                      alpha=0.5, l=10, parallelize=True)
+
+        gen = np.random.normal(
+            [0] * speda.n_variables, [10] * speda.n_variables, [speda.size_gen, speda.n_variables]
         )
         speda.generation = gen
         benchmarking = ContinuousBenchmarkingCEC14(n_variables)
@@ -107,3 +120,27 @@ class TestSPEDA(TestCase):
 
         speda.minimize(benchmarking.cec14_4)
         assert all(elem in speda.pm.print_structure() for elem in white_list)
+
+    def test_data_init(self):
+        """
+        Test if it is possible to initialize the EDA with custom data.
+        """
+        n_variables, size_gen, alpha = 10, 400, 0.5
+        gen = np.random.normal(
+            [0] * n_variables, [10] * n_variables, [size_gen, n_variables]
+        )
+        eda = SPEDA(size_gen=size_gen, max_iter=1, dead_iter=1, n_variables=n_variables, landscape_bounds=(-60, 60),
+                    alpha=0.5, l=1, init_data=gen)
+        benchmarking = ContinuousBenchmarkingCEC14(n_variables)
+        eda.best_mae_global = 0  # to force breaking the loop when dead_iter = 1
+
+        evaluations = []
+        for sol in gen:
+            evaluations.append(benchmarking.cec14_4(sol))
+        evaluations = np.array(evaluations)
+        ordering = evaluations.argsort()
+        best_indices_truc = ordering[: int(alpha * size_gen)]
+
+        eda.minimize(benchmarking.cec14_4, output_runtime=False)
+
+        assert (eda.generation == gen[best_indices_truc]).all()

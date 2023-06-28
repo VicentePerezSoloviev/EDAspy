@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EDAspy.optimization.eda_result &mdash; EDAspy 1.0.0 documentation</title>
+  <title>EDAspy.optimization.eda_result &mdash; EDAspy 1.1.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -85,7 +85,8 @@
                  <span class="n">best_cost</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
                  <span class="n">n_fev</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
                  <span class="n">history</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
-                 <span class="n">settings</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+                 <span class="n">settings</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+                 <span class="n">cpu_time</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
 
         <span class="sd">&quot;&quot;&quot;</span>
 
@@ -94,6 +95,7 @@
 <span class="sd">        :param n_fev: Number of cost function evaluations.</span>
 <span class="sd">        :param history: Best result found in each iteration of the algorithm.</span>
 <span class="sd">        :param settings: Configuration of the parameters of the EDA.</span>
+<span class="sd">        :param cpu_time: CPU time invested in the optimization.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">best_ind</span> <span class="o">=</span> <span class="n">best_ind</span>
@@ -101,11 +103,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">n_fev</span> <span class="o">=</span> <span class="n">n_fev</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">history</span> <span class="o">=</span> <span class="n">history</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">settings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cpu_time</span> <span class="o">=</span> <span class="n">cpu_time</span>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">string</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">NFVALS = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_fev</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; F = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">best_cost</span><span class="p">)</span> <span class="o">+</span> \
-                 <span class="s2">&quot;</span><span class="se">\n\t</span><span class="s2">X = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">best_ind</span><span class="p">)</span> <span class="o">+</span> \
-                 <span class="s2">&quot;</span><span class="se">\n\t</span><span class="s2">Settings: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">)</span> <span class="o">+</span> \
+        <span class="n">string</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">NFVALS = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_fev</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; F = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">best_cost</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;CPU time (s) = &quot;</span> <span class="o">+</span> \
+                 <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cpu_time</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\t</span><span class="s2">X = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">best_ind</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\t</span><span class="s2">Settings: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">)</span> <span class="o">+</span> \
                  <span class="s2">&quot;</span><span class="se">\n\t</span><span class="s2">History best cost per iteration: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">string</span></div>
 </pre></div>

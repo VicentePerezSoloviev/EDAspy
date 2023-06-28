@@ -6,10 +6,14 @@ v1.1.0
 ======
 
 - This version implements the SPEDA algorithm to allow dependencies between variables that fit Gaussian distributions and KDE nodes.
+- This version implements the multivariate version of KEDA, which shares all the characteristics with the SPEDA approach, with the exception that all the nodes have to be estimated with KDE. Gaussian nodes are forbidden.
 - This version implements a function to plot the BN structure learnt in the EDA implementations.
 - This version enforces the tests to avoid bugs in the algorithms.
 - This version implements the possibility of settings white and black boxes to set the mandatory or forbidden arcs in the BN structure learnt in each iteration.
 - This version solves several bugs present in v1.0.2.
+- This version implements the parallelization for all the EDAs.
+- This version allows initialize the algorithm from a custom set of samples.
+- This version implements the multivariate and univariate KEDA algorithms, where variables are estimated using KDE.
 
 v1.0.2
 ======
