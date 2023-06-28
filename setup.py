@@ -26,7 +26,7 @@ setuptools.setup(
     ],
     keywords=['EDA', 'estimation', 'bayesian', 'evolutionary', 'algorithm', 'optimization', 'time_series', 'feature',
               'selection', 'semiparametric', 'Gaussian'],
-    python_requires='>=3.0',
+    python_requires='>=3.8',
     license="MIT",
     include_package_data=True,
     package_data={'': ['benchmarks/input_data/*.txt']}
