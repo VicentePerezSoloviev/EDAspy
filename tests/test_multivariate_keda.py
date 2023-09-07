@@ -76,24 +76,6 @@ class TestMultivariateKEDA(TestCase):
 
         assert (keda.evaluations == evaluations).all()
 
-    def test_truncation(self):
-        """
-        Test if the size after truncation y correct
-        """
-        n_variables = 10
-        keda = MultivariateKEDA(size_gen=50, max_iter=100, dead_iter=20, n_variables=10, landscape_bounds=(-60, 60),
-                                alpha=0.5, l=10)
-
-        gen = np.random.normal(
-            [0] * keda.n_variables, [10] * keda.n_variables, [keda.size_gen, keda.n_variables]
-        )
-        keda.generation = gen
-        benchmarking = ContinuousBenchmarkingCEC14(n_variables)
-        keda._check_generation(benchmarking.cec14_4)
-
-        keda._truncation()
-        assert len(keda.generation) == int(keda.size_gen * keda.alpha)
-
     def test_white_list(self):
         """
         Test if the white list is effective during runtime
@@ -122,3 +104,36 @@ class TestMultivariateKEDA(TestCase):
         # check if all variables have been estimated with CKDE
         for i in keda.pm.pm.nodes():
             assert str(keda.pm.pm.cpd(i).type()) == 'CKDEFactor'
+
+    def test_n_f_eval(self):
+        """
+        Test if the number of function evaluations in real
+        """
+        n_variables, size_gen, alpha, max_iter = 10, 100, 0.5, 10
+        eda = MultivariateKEDA(size_gen=size_gen, max_iter=max_iter, dead_iter=10, n_variables=n_variables, alpha=alpha,
+                   landscape_bounds=(-60, 60), l=10)
+        benchmarking = ContinuousBenchmarkingCEC14(n_variables)
+        self.count = 0
+
+        def f(sol):
+            self.count += 1
+            return benchmarking.cec14_4(sol)
+
+        res = eda.minimize(f, output_runtime=False)
+        print(self.count, res.n_fev, )
+
+        assert self.count == res.n_fev, "Number of function evaluations is not as expected"
+
+        '''import ioh
+        problem = ioh.get_problem(
+            "Sphere",
+            instance=1,
+            dimension=10,
+            problem_class=ioh.ProblemClass.REAL
+        )
+
+        eda = MultivariateKEDA(size_gen=size_gen, max_iter=max_iter, dead_iter=10, n_variables=n_variables, alpha=alpha,
+                   landscape_bounds=(-60, 60), l=10)
+        r = eda.minimize(problem, False)
+
+        assert problem.state.evaluations == r.n_fev, "Number of function evaluations is not as expected"'''

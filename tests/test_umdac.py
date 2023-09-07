@@ -6,6 +6,8 @@ import numpy as np
 
 class TestUMDAc(TestCase):
 
+    count = None
+
     def test_constructor(self):
         n_variables = 10
         umda = UMDAc(size_gen=100, max_iter=100, dead_iter=10, n_variables=n_variables, alpha=0.5,
@@ -53,7 +55,7 @@ class TestUMDAc(TestCase):
 
         umda.minimize(benchmarking.cec14_4, False)
 
-        assert umda.generation.shape[0] == umda.size_gen + (umda.size_gen * umda.elite_factor)
+        assert umda.generation.shape[0] == umda.size_gen
 
     def test_check_generation(self):
         n_vars = 10
@@ -88,23 +90,6 @@ class TestUMDAc(TestCase):
 
         assert (umda.evaluations == evaluations).all()
 
-    def test_truncation(self):
-        """
-        Test if the size after truncation y correct
-        """
-        n_variables = 10
-        umda = UMDAc(size_gen=100, max_iter=100, dead_iter=10, n_variables=n_variables, alpha=0.5)
-
-        gen = np.random.normal(
-            [0] * umda.n_variables, [10] * umda.n_variables, [umda.size_gen, umda.n_variables]
-        )
-        umda.generation = gen
-        benchmarking = ContinuousBenchmarkingCEC14(n_variables)
-        umda._check_generation(benchmarking.cec14_4)
-
-        umda._truncation()
-        assert len(umda.generation) == int(umda.size_gen*umda.alpha)
-
     def test_data_init(self):
         """
         Test if it is possible to initialize the EDA with custom data.
@@ -118,13 +103,37 @@ class TestUMDAc(TestCase):
         benchmarking = ContinuousBenchmarkingCEC14(n_variables)
         eda.best_mae_global = 0  # to force breaking the loop when dead_iter = 1
 
-        evaluations = []
-        for sol in gen:
-            evaluations.append(benchmarking.cec14_4(sol))
-        evaluations = np.array(evaluations)
-        ordering = evaluations.argsort()
-        best_indices_truc = ordering[: int(alpha * size_gen)]
-
         eda.minimize(benchmarking.cec14_4, output_runtime=False)
 
-        assert (eda.generation == gen[best_indices_truc]).all()
+        assert (eda.generation == gen).all()
+
+    def test_n_f_eval(self):
+        """
+        Test if the number of function evaluations in real
+        """
+        n_variables, size_gen, alpha, max_iter = 10, 100, 0.5, 10
+        eda = UMDAc(size_gen=size_gen, max_iter=max_iter, dead_iter=10, n_variables=n_variables, alpha=alpha)
+        benchmarking = ContinuousBenchmarkingCEC14(n_variables)
+        self.count = 0
+
+        def f(sol):
+            self.count += 1
+            return benchmarking.cec14_4(sol)
+
+        res = eda.minimize(f, output_runtime=False)
+        print(self.count, res.n_fev, )
+
+        assert self.count == res.n_fev, "Number of function evaluations is not as expected"
+
+        '''import ioh
+        problem = ioh.get_problem(
+            "Sphere",
+            instance=1,
+            dimension=10,
+            problem_class=ioh.ProblemClass.REAL
+        )
+
+        eda = UMDAc(size_gen=size_gen, max_iter=max_iter, dead_iter=10, n_variables=n_variables, alpha=alpha)
+        r = eda.minimize(problem, False)
+
+        assert problem.state.evaluations == r.n_fev, "Number of function evaluations is not as expected"'''

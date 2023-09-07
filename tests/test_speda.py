@@ -89,24 +89,6 @@ class TestSPEDA(TestCase):
 
         assert (speda.evaluations == evaluations).all()
 
-    def test_truncation(self):
-        """
-        Test if the size after truncation y correct
-        """
-        n_variables = 10
-        speda = SPEDA(size_gen=50, max_iter=100, dead_iter=20, n_variables=10, landscape_bounds=(-60, 60),
-                      alpha=0.5, l=10)
-
-        gen = np.random.normal(
-            [0] * speda.n_variables, [10] * speda.n_variables, [speda.size_gen, speda.n_variables]
-        )
-        speda.generation = gen
-        benchmarking = ContinuousBenchmarkingCEC14(n_variables)
-        speda._check_generation(benchmarking.cec14_4)
-
-        speda._truncation()
-        assert len(speda.generation) == int(speda.size_gen*speda.alpha)
-
     def test_white_list(self):
         """
         Test if the white list is effective during runtime
@@ -144,3 +126,36 @@ class TestSPEDA(TestCase):
         eda.minimize(benchmarking.cec14_4, output_runtime=False)
 
         assert (eda.generation == gen[best_indices_truc]).all()
+
+    def test_n_f_eval(self):
+        """
+        Test if the number of function evaluations in real
+        """
+        n_variables, size_gen, alpha, max_iter = 10, 100, 0.5, 10
+        eda = SPEDA(size_gen=size_gen, max_iter=max_iter, dead_iter=10, n_variables=n_variables, alpha=alpha,
+                    landscape_bounds=(-60, 60), l=10)
+        benchmarking = ContinuousBenchmarkingCEC14(n_variables)
+        self.count = 0
+
+        def f(sol):
+            self.count += 1
+            return benchmarking.cec14_4(sol)
+
+        res = eda.minimize(f, output_runtime=False)
+        print(self.count, res.n_fev, )
+
+        assert self.count == res.n_fev, "Number of function evaluations is not as expected"
+
+        '''import ioh
+        problem = ioh.get_problem(
+            "Sphere",
+            instance=1,
+            dimension=10,
+            problem_class=ioh.ProblemClass.REAL
+        )
+
+        eda = SPEDA(size_gen=size_gen, max_iter=max_iter, dead_iter=10, n_variables=n_variables, alpha=alpha,
+                    landscape_bounds=(-60, 60), l=10)
+        r = eda.minimize(problem, False)
+
+        assert problem.state.evaluations == r.n_fev, "Number of function evaluations is not as expected"'''

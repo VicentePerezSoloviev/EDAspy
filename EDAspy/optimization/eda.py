@@ -50,8 +50,10 @@ class EDA(ABC):
         self.best_ind_global = np.array([0]*self.n_variables)
         # TODO: test if best ind global works
         self.evaluations = np.array(0)
+        self.evaluations_elite = np.array(0)
 
         self.generation = None
+        self.elite_temp = None
 
         if parallelize:
             self._check_generation = self._check_generation_parallel
@@ -69,7 +71,8 @@ class EDA(ABC):
             self._initialize_generation = self._initialize_generation_with_init
 
     def _new_generation(self):
-        self.generation = np.concatenate([self.pm.sample(size=self.size_gen), self.elite_temp])
+        # self.generation = np.concatenate([self.pm.sample(size=self.size_gen), self.elite_temp])
+        self.generation = self.pm.sample(size=self.size_gen)
 
     def _initialize_generation_with_data(self) -> np.array:
         return self.init_data
@@ -84,11 +87,17 @@ class EDA(ABC):
         """
         Selection of the best individuals of the actual generation.
         """
+        # first add the elite selection to be considered
+        self.generation = np.concatenate([self.generation, self.elite_temp])
+        self.evaluations = np.append(self.evaluations, self.evaluations_elite)
+
+        # now we truncate
         ordering = self.evaluations.argsort()
         best_indices_truc = ordering[: self.truncation_length]
         best_indices_elit = ordering[: self.elite_length]
         self.elite_temp = self.generation[best_indices_elit, :]
         self.generation = self.generation[best_indices_truc, :]
+        self.evaluations_elite = np.take(self.evaluations, best_indices_elit)
         self.evaluations = np.take(self.evaluations, best_indices_truc)
 
     # check each individual of the generation
@@ -145,15 +154,27 @@ class EDA(ABC):
 
         t1 = process_time()
         self.generation = self._initialize_generation()
+        print(self.generation.shape)
+        self._check_generation(cost_function)
 
-        for _ in range(self.max_iter):
-            self._check_generation(cost_function)
+        # select just one item to be the elite selection if first iteration
+        self.elite_temp = np.array([self.generation[0, :]])
+        self.evaluations_elite = np.array([self.evaluations.item(0)])
+
+        best_mae_local = best_mae_global = min(self.evaluations)
+        history.append(best_mae_local)
+        best_ind_local = best_ind_global = np.where(self.evaluations == best_mae_local)[0][0]
+
+        for _ in range(self.max_iter - 1):
             self._truncation()
             self._update_pm()
 
-            best_mae_local = min(self.evaluations)
+            self._new_generation()
+            self._check_generation(cost_function)
 
+            best_mae_local = min(self.evaluations)
             history.append(best_mae_local)
+
             best_ind_local = np.where(self.evaluations == best_mae_local)[0][0]
             best_ind_local = self.generation[best_ind_local]
 
@@ -167,8 +188,6 @@ class EDA(ABC):
                 not_better += 1
                 if not_better == self.dead_iter:
                     break
-
-            self._new_generation()
 
             if output_runtime:
                 print('IT: ', _, '\tBest cost: ', self.best_mae_global)
