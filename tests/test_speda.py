@@ -33,7 +33,7 @@ class TestSPEDA(TestCase):
         benchmarking = ContinuousBenchmarkingCEC14(n_variables)
 
         speda.minimize(benchmarking.cec14_4, False)
-        assert len(speda.archive) == 2*int(speda.size_gen*speda.alpha)
+        assert len(speda.archive) == int(speda.size_gen*speda.alpha)
 
         speda = SPEDA(size_gen=300, max_iter=15, dead_iter=15, n_variables=10, landscape_bounds=(-60, 60),
                       alpha=0.5, l=10)
@@ -116,16 +116,9 @@ class TestSPEDA(TestCase):
         benchmarking = ContinuousBenchmarkingCEC14(n_variables)
         eda.best_mae_global = 0  # to force breaking the loop when dead_iter = 1
 
-        evaluations = []
-        for sol in gen:
-            evaluations.append(benchmarking.cec14_4(sol))
-        evaluations = np.array(evaluations)
-        ordering = evaluations.argsort()
-        best_indices_truc = ordering[: int(alpha * size_gen)]
-
         eda.minimize(benchmarking.cec14_4, output_runtime=False)
 
-        assert (eda.generation == gen[best_indices_truc]).all()
+        assert (eda.generation == gen).all()
 
     def test_n_f_eval(self):
         """

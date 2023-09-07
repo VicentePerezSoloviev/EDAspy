@@ -154,7 +154,6 @@ class EDA(ABC):
 
         t1 = process_time()
         self.generation = self._initialize_generation()
-        print(self.generation.shape)
         self._check_generation(cost_function)
 
         # select just one item to be the elite selection if first iteration
