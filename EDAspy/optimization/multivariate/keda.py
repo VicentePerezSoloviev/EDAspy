@@ -104,6 +104,7 @@ class MultivariateKEDA(EDA):
         self.pm.learn(dataset=self.archive)
 
     def _new_generation(self):
-        self.generation = np.concatenate([self.pm.sample(size=self.size_gen), [self.best_ind_global]])
+        # self.generation = np.concatenate([self.pm.sample(size=self.size_gen), [self.best_ind_global]])
+        self.generation = self.pm.sample(size=self.size_gen)
         # as it is not an elitist approach we just add the best individual to show always an improvement in the
         # history of the best solution costs

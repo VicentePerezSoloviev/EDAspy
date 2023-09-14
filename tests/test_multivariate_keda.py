@@ -33,10 +33,10 @@ class TestMultivariateKEDA(TestCase):
         benchmarking = ContinuousBenchmarkingCEC14(n_variables)
 
         keda.minimize(benchmarking.cec14_4, False)
-        assert len(keda.archive) == 2*int(keda.size_gen*keda.alpha)
+        assert len(keda.archive) == int(keda.size_gen*keda.alpha)
 
         keda = MultivariateKEDA(size_gen=300, max_iter=15, dead_iter=15, n_variables=10, landscape_bounds=(-60, 60),
-                                alpha=0.5, l=10)
+                                alpha=0.5, l=5)
 
         keda.minimize(benchmarking.cec14_4, False)
         assert len(keda.archive) == keda.l_len
@@ -95,7 +95,7 @@ class TestMultivariateKEDA(TestCase):
         Test if all the nodes learned during runtime have been estimated using KDE
         """
         n_variables = 10
-        keda = MultivariateKEDA(size_gen=300, max_iter=1, dead_iter=0, n_variables=10, landscape_bounds=(-60, 60),
+        keda = MultivariateKEDA(size_gen=300, max_iter=2, dead_iter=0, n_variables=10, landscape_bounds=(-60, 60),
                                 alpha=0.5, l=10)
 
         benchmarking = ContinuousBenchmarkingCEC14(n_variables)
