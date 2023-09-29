@@ -2,6 +2,20 @@
 Changelog
 *********
 
+v1.1.2
+======
+
+- This version solves several bugs related to the number of function evaluations counter.
+- This version adds the Latin Hypercube sampling as a new initializer.
+- All the continuous optimization algorithms are now initialized using Uniform sampling.
+- This version adds the Discrete Bayesian network probabilistic model.
+- This version adds the Estimation of Bayesian network algorithm for categorical variables.
+- This version adds the categorical variant of the UMDA approach.
+- This version adds the categorical data initializer.
+- This version solves several issues related to the documentations.
+- This version allows to use different upper and lower bounds in each of the dimensions of the algorithm.
+- This version removes old versions of discrete EDAs related to time series selection. Now can be implemented with new and more efficient versions.
+
 v1.1.1
 ======
 

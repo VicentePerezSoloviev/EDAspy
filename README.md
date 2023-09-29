@@ -39,7 +39,10 @@ The following implementations are available in EDAspy:
 * UMDAc: Univariate Marginal Distribution Algorithm continuous [3]. In this EDA all the variables assume a Gaussian distribution and there are not dependencies considered between the variables. Some usages include hyperparameter optimization, for example.
 
 
-* UnivariateKEDA: Univariate Kernel Estimation of Distribution Algorithm [4]. Each variables distribution is estimated using Kernel Density Estimation. 
+* UnivariateKEDA: Univariate Kernel Estimation of Distribution Algorithm [4]. Each variables distribution is estimated using Kernel Density Estimation.
+
+
+* UMDAcat: Univariate Marginal Distribution Algorithm categorical [2]. UMDA variant for categorical data, where more than two possible values per dimension are used (otherwise, use binary version).
 
 
 * EGNA: Estimation of Gaussian Distribution Algorithm [5][6]. This is a complex implementation in which dependencies between the variables are considered during the optimization. In each iteration, a Gaussian Bayesian network is learned and sampled. The variables in the model are assumed to be Gaussian and also de dependencies between them. This implementation is focused in continuous optimization.
@@ -54,7 +57,7 @@ The following implementations are available in EDAspy:
 * MultivariateKEDA: Special case of SPEDA approach in which all nodes are restricted to be estimated using KDE (Gaussian nodes are forbidden) [7]. It is also an archive-based approach.
 
 
-* Categorical EDA. In this implementation we consider some independent categorical variables. Some usages include portfolio optimization, for exampled.
+* EBNA: Estimation of Bayesian Network Algorithm [1]. This version of EDAs is used for categorical data. The probabilistic model used is a Categorical Bayesian network, where conditional dependencies between variables can be analyzed. 
 
 
 Some tools are also available in EDAspy such as the Bayesian network structure plotting, for visualizing the graph learnt in some of the implementations, if needed.
@@ -90,7 +93,7 @@ Clone the repository:
 ```bash
     git clone https://github.com/VicentePerezSoloviev/EDAspy.git
     cd EDAspy
-    git checkout v1.0.0 # You can checkout a specific version if you want
+    git checkout v1.1.2 # You can checkout a specific version if you want
     python setup.py install
 ```
 ## Testing 
@@ -123,4 +126,3 @@ Run the tests with:
 [6] Soloviev, V. P., Larrañaga, P., & Bielza, C. (2022). Estimation of distribution algorithms using Gaussian Bayesian networks to solve industrial optimization problems constrained by environment variables. Journal of Combinatorial Optimization, 44(2), 1077-1098.
 
 [7] Soloviev, Vicente P.& Bielza, Concha & Larrañaga, Pedro (2023). Semiparametric Estimation of Distribution Algorithms for continuous optimization. IEEE Transactions on Evolutionary Computation.
-

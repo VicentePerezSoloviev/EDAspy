@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EDAspy.optimization.eda &mdash; EDAspy 1.1.0 documentation</title>
+  <title>EDAspy.optimization.eda &mdash; EDAspy 1.1.2 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -118,10 +118,12 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">best_mae_global</span> <span class="o">=</span> <span class="mi">999999999999</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">best_ind_global</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">n_variables</span><span class="p">)</span>
-        <span class="c1"># TODO: test if best ind global works</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">evaluations</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evaluations_elite</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">generation</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">elite_temp</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="k">if</span> <span class="n">parallelize</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_check_generation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_generation_parallel</span>
@@ -139,7 +141,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_generation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_generation_with_init</span>
 
     <span class="k">def</span> <span class="nf">_new_generation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">generation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">size_gen</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">elite_temp</span><span class="p">])</span>
+        <span class="c1"># self.generation = np.concatenate([self.pm.sample(size=self.size_gen), self.elite_temp])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pm</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">size_gen</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_initialize_generation_with_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">init_data</span>
@@ -154,11 +157,17 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Selection of the best individuals of the actual generation.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># first add the elite selection to be considered</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">elite_temp</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evaluations</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">evaluations</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluations_elite</span><span class="p">)</span>
+
+        <span class="c1"># now we truncate</span>
         <span class="n">ordering</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluations</span><span class="o">.</span><span class="n">argsort</span><span class="p">()</span>
         <span class="n">best_indices_truc</span> <span class="o">=</span> <span class="n">ordering</span><span class="p">[:</span> <span class="bp">self</span><span class="o">.</span><span class="n">truncation_length</span><span class="p">]</span>
         <span class="n">best_indices_elit</span> <span class="o">=</span> <span class="n">ordering</span><span class="p">[:</span> <span class="bp">self</span><span class="o">.</span><span class="n">elite_length</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">elite_temp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="p">[</span><span class="n">best_indices_elit</span><span class="p">,</span> <span class="p">:]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">generation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="p">[</span><span class="n">best_indices_truc</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evaluations_elite</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">evaluations</span><span class="p">,</span> <span class="n">best_indices_elit</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">evaluations</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">evaluations</span><span class="p">,</span> <span class="n">best_indices_truc</span><span class="p">)</span>
 
     <span class="c1"># check each individual of the generation</span>
@@ -215,15 +224,26 @@
 
         <span class="n">t1</span> <span class="o">=</span> <span class="n">process_time</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">generation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_generation</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_generation</span><span class="p">(</span><span class="n">cost_function</span><span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_iter</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_check_generation</span><span class="p">(</span><span class="n">cost_function</span><span class="p">)</span>
+        <span class="c1"># select just one item to be the elite selection if first iteration</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">elite_temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evaluations_elite</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">evaluations</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="mi">0</span><span class="p">)])</span>
+
+        <span class="n">best_mae_local</span> <span class="o">=</span> <span class="n">best_mae_global</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">evaluations</span><span class="p">)</span>
+        <span class="n">history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">best_mae_local</span><span class="p">)</span>
+        <span class="n">best_ind_local</span> <span class="o">=</span> <span class="n">best_ind_global</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">evaluations</span> <span class="o">==</span> <span class="n">best_mae_local</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_iter</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_truncation</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_update_pm</span><span class="p">()</span>
 
-            <span class="n">best_mae_local</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">evaluations</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_new_generation</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_check_generation</span><span class="p">(</span><span class="n">cost_function</span><span class="p">)</span>
 
+            <span class="n">best_mae_local</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">evaluations</span><span class="p">)</span>
             <span class="n">history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">best_mae_local</span><span class="p">)</span>
+
             <span class="n">best_ind_local</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">evaluations</span> <span class="o">==</span> <span class="n">best_mae_local</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">best_ind_local</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="p">[</span><span class="n">best_ind_local</span><span class="p">]</span>
 
@@ -237,8 +257,6 @@
                 <span class="n">not_better</span> <span class="o">+=</span> <span class="mi">1</span>
                 <span class="k">if</span> <span class="n">not_better</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">dead_iter</span><span class="p">:</span>
                     <span class="k">break</span>
-
-            <span class="bp">self</span><span class="o">.</span><span class="n">_new_generation</span><span class="p">()</span>
 
             <span class="k">if</span> <span class="n">output_runtime</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;IT: &#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">Best cost: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_mae_global</span><span class="p">)</span>

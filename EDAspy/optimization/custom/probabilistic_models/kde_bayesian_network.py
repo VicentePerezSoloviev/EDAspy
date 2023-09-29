@@ -17,6 +17,7 @@ class KDEBN(ProbabilisticModel):
 
         [1]: Atienza, D., Bielza, C., & Larrañaga, P. (2022). PyBNesian: an extensible Python package
         for Bayesian networks. Neurocomputing, 504, 204-209.
+
     """
 
     def __init__(self, variables: list, white_list: list = None, black_list: list = None):
@@ -42,7 +43,7 @@ class KDEBN(ProbabilisticModel):
 
         :param dataset: dataset from which learn the KDEBN.
         :param num_folds: Number of folds used for the SPBN learning. The higher, the more accurate, but also higher
-        CPU demand. By default, it is set to 10.
+            CPU demand. By default, it is set to 10.
         """
         data = pd.DataFrame(dataset, columns=self.variables)
         self.pm = KDENetwork(self.variables)

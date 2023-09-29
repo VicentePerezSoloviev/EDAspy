@@ -48,7 +48,7 @@ class EDA(ABC):
 
         self.best_mae_global = 999999999999
         self.best_ind_global = np.array([0]*self.n_variables)
-        # TODO: test if best ind global works
+
         self.evaluations = np.array(0)
         self.evaluations_elite = np.array(0)
 

@@ -9,7 +9,6 @@ Subpackages
 
    EDAspy.benchmarks
    EDAspy.optimization
-   EDAspy.timeseries
 
 Module contents
 ---------------

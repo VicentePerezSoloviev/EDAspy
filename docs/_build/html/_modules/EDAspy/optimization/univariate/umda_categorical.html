@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EDAspy.optimization.univariate.umda_categorical &mdash; EDAspy 1.1.2 documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../../index.html" class="icon icon-home"> EDAspy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../introduction.html">EDAspy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">Formal documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">EDAspy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+      <li>EDAspy.optimization.univariate.umda_categorical</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for EDAspy.optimization.univariate.umda_categorical</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># coding: utf-8</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="kn">from</span> <span class="nn">..eda</span> <span class="kn">import</span> <span class="n">EDA</span>
+<span class="kn">from</span> <span class="nn">..custom.probabilistic_models</span> <span class="kn">import</span> <span class="n">UniCategorical</span>
+<span class="kn">from</span> <span class="nn">..custom.initialization_models</span> <span class="kn">import</span> <span class="n">CategoricalSampling</span>
+
+
+<div class="viewcode-block" id="UMDAcat"><a class="viewcode-back" href="../../../../EDAspy.optimization.univariate.html#EDAspy.optimization.univariate.umda_categorical.UMDAcat">[docs]</a><span class="k">class</span> <span class="nc">UMDAcat</span><span class="p">(</span><span class="n">EDA</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Categorical version of UMDA algorithm. Each variable approximated an independent probability</span>
+<span class="sd">    distribution where each variables can have more than two possible values (otherwise better to</span>
+<span class="sd">    use binary version of UMDA).</span>
+
+<span class="sd">    Example:</span>
+
+<span class="sd">        This example uses some uses a toy example to show how to use the UMDAcat implementation.</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            from EDAspy.optimization import UMDAcat</span>
+
+<span class="sd">            def categorical_cost_function(solution: np.array):</span>
+<span class="sd">                cost_dict = {</span>
+<span class="sd">                    &#39;Color&#39;: {&#39;Red&#39;: 0.1, &#39;Green&#39;: 0.5, &#39;Blue&#39;: 0.3},</span>
+<span class="sd">                    &#39;Shape&#39;: {&#39;Circle&#39;: 0.3, &#39;Square&#39;: 0.2, &#39;Triangle&#39;: 0.4},</span>
+<span class="sd">                    &#39;Size&#39;: {&#39;Small&#39;: 0.4, &#39;Medium&#39;: 0.2, &#39;Large&#39;: 0.1}</span>
+<span class="sd">                }</span>
+<span class="sd">                keys = list(cost_dict.keys())</span>
+<span class="sd">                choices = {keys[i]: solution[i] for i in range(len(solution))}</span>
+
+<span class="sd">                total_cost = 0.0</span>
+<span class="sd">                for variable, choice in choices.items():</span>
+<span class="sd">                    total_cost += cost_dict[variable][choice]</span>
+
+<span class="sd">                return total_cost</span>
+
+<span class="sd">            variables = [&#39;Color&#39;, &#39;Shape&#39;, &#39;Size&#39;]</span>
+<span class="sd">            possible_values = np.array([</span>
+<span class="sd">                [&#39;Red&#39;, &#39;Green&#39;, &#39;Blue&#39;],</span>
+<span class="sd">                [&#39;Circle&#39;, &#39;Square&#39;, &#39;Triangle&#39;],</span>
+<span class="sd">                [&#39;Small&#39;, &#39;Medium&#39;, &#39;Large&#39;]], dtype=object</span>
+<span class="sd">            )</span>
+
+<span class="sd">            frequency = np.array([</span>
+<span class="sd">                [.33, .33, .33],</span>
+<span class="sd">                [.33, .33, .33],</span>
+<span class="sd">                [.33, .33, .33]], dtype=object</span>
+<span class="sd">            )</span>
+
+<span class="sd">            n_variables = len(variables)</span>
+
+<span class="sd">            umda_cat = UMDAcat(size_gen=10, max_iter=100, dead_iter=10, n_variables=n_variables, alpha=0.5,</span>
+<span class="sd">                               frequency=frequency, possible_values=possible_values)</span>
+
+<span class="sd">            umda_cat_result = umda_cat.minimize(categorical_cost_function, True)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">size_gen</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                 <span class="n">max_iter</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                 <span class="n">dead_iter</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                 <span class="n">n_variables</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                 <span class="n">possible_values</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">],</span>
+                 <span class="n">frequency</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">],</span>
+                 <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
+                 <span class="n">elite_factor</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.4</span><span class="p">,</span>
+                 <span class="n">disp</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                 <span class="n">parallelize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                 <span class="n">init_data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param size_gen: Population size. Number of individuals in each generation.</span>
+<span class="sd">        :param max_iter: Maximum number of iterations during runtime.</span>
+<span class="sd">        :param dead_iter: Stopping criteria. Number of iterations with no improvement after which, the algorithm finish.</span>
+<span class="sd">        :param n_variables: Number of variables to be optimized.</span>
+<span class="sd">        :param possible_values: 2D structure where each row represents the possible values that can have each dimension.</span>
+<span class="sd">        :param frequency: 2D structure with same size as possible_values and represent the frequency of each element.</span>
+<span class="sd">        :param alpha: Percentage of population selected to update the probabilistic model.</span>
+<span class="sd">        :param elite_factor: Percentage of previous population selected to add to new generation (elite approach).</span>
+<span class="sd">        :param disp: Set to True to print convergence messages.</span>
+<span class="sd">        :param parallelize: True if the evaluation of the solutions is desired to be parallelized in multiple cores.</span>
+<span class="sd">        :param init_data: Numpy array containing the data the EDA is desired to be initialized from. By default, an</span>
+<span class="sd">        initializer is used.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">size_gen</span><span class="o">=</span><span class="n">size_gen</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="n">max_iter</span><span class="p">,</span> <span class="n">dead_iter</span><span class="o">=</span><span class="n">dead_iter</span><span class="p">,</span>
+                         <span class="n">n_variables</span><span class="o">=</span><span class="n">n_variables</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="n">elite_factor</span><span class="o">=</span><span class="n">elite_factor</span><span class="p">,</span> <span class="n">disp</span><span class="o">=</span><span class="n">disp</span><span class="p">,</span>
+                         <span class="n">parallelize</span><span class="o">=</span><span class="n">parallelize</span><span class="p">,</span> <span class="n">init_data</span><span class="o">=</span><span class="n">init_data</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">vars</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_variables</span><span class="p">)]</span>
+        <span class="c1"># self.landscape_bounds = landscape_bounds</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pm</span> <span class="o">=</span> <span class="n">UniCategorical</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vars</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init</span> <span class="o">=</span> <span class="n">CategoricalSampling</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_variables</span><span class="p">,</span> <span class="n">possible_values</span><span class="o">=</span><span class="n">possible_values</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="n">frequency</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright BSD 3-Clause License.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

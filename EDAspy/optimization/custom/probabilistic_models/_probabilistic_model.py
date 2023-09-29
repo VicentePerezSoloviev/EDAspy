@@ -25,3 +25,7 @@ class ProbabilisticModel(ABC):
     def export_settings(self):
         return self.id
 
+    @abstractmethod
+    def print_structure(self) -> list:
+        raise Exception("Not implemented method")
+

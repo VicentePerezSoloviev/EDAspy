@@ -6,3 +6,4 @@ pybnesian==0.4.2
 scikit_learn
 scipy
 setuptools
+pgmpy

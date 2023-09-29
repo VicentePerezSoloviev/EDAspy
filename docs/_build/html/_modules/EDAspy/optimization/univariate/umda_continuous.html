@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EDAspy.optimization.univariate.umda_continuous &mdash; EDAspy 1.1.0 documentation</title>
+  <title>EDAspy.optimization.univariate.umda_continuous &mdash; EDAspy 1.1.2 documentation</title>
       <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -34,8 +34,15 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <!-- Local TOC -->
-              <div class="local-toc"></div>
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../introduction.html">EDAspy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">Formal documentation</a></li>
+</ul>
+
         </div>
       </div>
     </nav>
@@ -65,8 +72,10 @@
 <span class="c1"># coding: utf-8</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span>
+
 <span class="kn">from</span> <span class="nn">..custom.probabilistic_models</span> <span class="kn">import</span> <span class="n">UniGauss</span>
-<span class="kn">from</span> <span class="nn">..custom.initialization_models</span> <span class="kn">import</span> <span class="n">UniGaussGenInit</span>
+<span class="kn">from</span> <span class="nn">..custom.initialization_models</span> <span class="kn">import</span> <span class="n">UniformGenInit</span><span class="p">,</span> <span class="n">UniGaussGenInit</span>
 <span class="kn">from</span> <span class="nn">..eda</span> <span class="kn">import</span> <span class="n">EDA</span>
 
 
@@ -99,8 +108,9 @@
 <span class="sd">            n_vars = 10</span>
 <span class="sd">            benchmarking = ContinuousBenchmarkingCEC14(n_vars)</span>
 
-<span class="sd">            umda = UMDAc(size_gen=100, max_iter=100, dead_iter=10, n_variables=10, alpha=0.5)</span>
-<span class="sd">            # We leave bound by default</span>
+<span class="sd">            umda = UMDAc(size_gen=100, max_iter=100, dead_iter=10, n_variables=10, alpha=0.5,</span>
+<span class="sd">                         lower_bound=-100, upper_bound=100)</span>
+
 <span class="sd">            eda_result = umda.minimize(benchmarking.cec4, True)</span>
 
 <span class="sd">    References:</span>
@@ -118,47 +128,49 @@
                  <span class="n">max_iter</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
                  <span class="n">dead_iter</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
                  <span class="n">n_variables</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                 <span class="n">lower_bound</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">],</span>
+                 <span class="n">upper_bound</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">],</span>
                  <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
                  <span class="n">vector</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-                 <span class="n">lower_bound</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
+                 <span class="n">lower_factor</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
                  <span class="n">elite_factor</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.4</span><span class="p">,</span>
                  <span class="n">disp</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
                  <span class="n">parallelize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
                  <span class="n">init_data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Args:</span>
-<span class="sd">            size_gen: Population size of each generation.</span>
-<span class="sd">            max_iter: Maximum number of function evaluations.</span>
-<span class="sd">            dead_iter: Stopping criteria. Number of iterations after with no improvement after which EDA stops.</span>
-<span class="sd">            n_variables: Number of variables to be optimized.</span>
-<span class="sd">            alpha: Percentage of population selected to update the probabilistic model.</span>
-<span class="sd">            vector: Array with shape (2, n_variables) where rows are mean and std of the parameters to be optimized.</span>
-<span class="sd">            lower_bound: Lower bound imposed in std of the variables to not converge to std=0.</span>
-<span class="sd">            elite_factor: Percentage of previous population selected to add to new generation (elite approach).</span>
-<span class="sd">            disp: Set to True to print convergence messages.</span>
-<span class="sd">            parallelize: True if the evaluation of the solutions is desired to be parallelized in multiple cores.</span>
-<span class="sd">            init_data: Numpy array containing the data the EDA is desired to be initialized from. By default, an</span>
-<span class="sd">            initializer is used.</span>
+<span class="sd">        :param size_gen: Population size of each generation.</span>
+<span class="sd">        :param max_iter: Maximum number of function evaluations.</span>
+<span class="sd">        :param dead_iter: Stopping criteria. Number of iterations after with no improvement after which EDA stops.</span>
+<span class="sd">        :param n_variables: Number of variables to be optimized.</span>
+<span class="sd">        :param lower_bound: lower bound for the uniform distribution sampling.</span>
+<span class="sd">        :param upper_bound: lower bound for the uniform distribution sampling.</span>
+<span class="sd">        :param alpha: Percentage of population selected to update the probabilistic model.</span>
+<span class="sd">        :param vector: Array with shape (2, n_variables) where rows are mean and std of the parameters to be optimized.</span>
+<span class="sd">        :param lower_factor: Lower bound imposed in std of the variables to not converge to std=0.</span>
+<span class="sd">        :param elite_factor: Percentage of previous population selected to add to new generation (elite approach).</span>
+<span class="sd">        :param disp: Set to True to print convergence messages.</span>
+<span class="sd">        :param parallelize: True if the evaluation of the solutions is desired to be parallelized in multiple cores.</span>
+<span class="sd">        :param init_data: Numpy array containing the data the EDA is desired to be initialized from. By default, an</span>
+<span class="sd">        initializer is used.</span>
+<span class="sd">        :type lower_bound: List of lower bounds of size equal to number of variables OR single bound to all dimensions.</span>
+<span class="sd">        :type upper_bound: List of upper bounds of size equal to number of variables OR single bound to all dimensions.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">vector</span> <span class="o">=</span> <span class="n">vector</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span> <span class="o">=</span> <span class="n">lower_bound</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span> <span class="o">=</span> <span class="n">lower_factor</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">names_vars</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n_variables</span><span class="p">))</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">size_gen</span><span class="o">=</span><span class="n">size_gen</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="n">max_iter</span><span class="p">,</span> <span class="n">dead_iter</span><span class="o">=</span><span class="n">dead_iter</span><span class="p">,</span> <span class="n">n_variables</span><span class="o">=</span><span class="n">n_variables</span><span class="p">,</span>
                          <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="n">elite_factor</span><span class="o">=</span><span class="n">elite_factor</span><span class="p">,</span> <span class="n">disp</span><span class="o">=</span><span class="n">disp</span><span class="p">,</span> <span class="n">parallelize</span><span class="o">=</span><span class="n">parallelize</span><span class="p">,</span>
                          <span class="n">init_data</span><span class="o">=</span><span class="n">init_data</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vector</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_variables</span><span class="p">))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">vector</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">n_variables</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">vector</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">100</span><span class="p">]</span> <span class="o">*</span> <span class="n">n_variables</span>  <span class="c1"># high value to ensure variance</span>
-        <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vector</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">vector</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_variables</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">init</span> <span class="o">=</span> <span class="n">UniGaussGenInit</span><span class="p">(</span><span class="n">n_variables</span><span class="p">,</span> <span class="n">means_vector</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vector</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:],</span> <span class="n">stds_vector</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vector</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">init</span> <span class="o">=</span> <span class="n">UniformGenInit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_variables</span><span class="p">,</span> <span class="n">lower_bound</span><span class="o">=</span><span class="n">lower_bound</span><span class="p">,</span> <span class="n">upper_bound</span><span class="o">=</span><span class="n">upper_bound</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">init</span> <span class="o">=</span> <span class="n">UniGaussGenInit</span><span class="p">(</span><span class="n">n_variables</span><span class="p">,</span> <span class="n">means_vector</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vector</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:],</span> <span class="n">stds_vector</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vector</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:])</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">pm</span> <span class="o">=</span> <span class="n">UniGauss</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">names_vars</span><span class="p">,</span> <span class="n">lower_bound</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pm</span> <span class="o">=</span> <span class="n">UniGauss</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">names_vars</span><span class="p">,</span> <span class="n">lower_factor</span><span class="p">)</span></div>
 </pre></div>
 
            </div>

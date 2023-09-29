@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Changelog &mdash; EDAspy 1.1.0 documentation</title>
+  <title>Changelog &mdash; EDAspy 1.1.2 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -19,7 +19,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Getting started" href="installation.html" />
-    <link rel="prev" title="Using EDAs for time series and times series transformation selection" href="time_series_opt.html" /> 
+    <link rel="prev" title="Using EMNA for continuous optimization" href="emna_opt.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -42,6 +42,7 @@
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">EDAspy</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#v1-1-2">v1.1.2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v1-1-1">v1.1.1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v1-0-2">v1.0.2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v1-0-1">v1.0.1</a></li>
@@ -82,6 +83,21 @@
              
   <section id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline"></a></h1>
+<section id="v1-1-2">
+<h2>v1.1.2<a class="headerlink" href="#v1-1-2" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p>This version solves several bugs related to the number of function evaluations counter.</p></li>
+<li><p>This version adds the Latin Hypercube sampling as a new initializer.</p></li>
+<li><p>All the continuous optimization algorithms are now initialized using Uniform sampling.</p></li>
+<li><p>This version adds the Discrete Bayesian network probabilistic model.</p></li>
+<li><p>This version adds the Estimation of Bayesian network algorithm for categorical variables.</p></li>
+<li><p>This version adds the categorical variant of the UMDA approach.</p></li>
+<li><p>This version adds the categorical data initializer.</p></li>
+<li><p>This version solves several issues related to the documentations.</p></li>
+<li><p>This version allows to use different upper and lower bounds in each of the dimensions of the algorithm.</p></li>
+<li><p>This version removes old versions of discrete EDAs related to time series selection. Now can be implemented with new and more efficient versions.</p></li>
+</ul>
+</section>
 <section id="v1-1-1">
 <h2>v1.1.1<a class="headerlink" href="#v1-1-1" title="Permalink to this headline"></a></h2>
 <ul class="simple">
@@ -160,7 +176,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="time_series_opt.html" class="btn btn-neutral float-left" title="Using EDAs for time series and times series transformation selection" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="emna_opt.html" class="btn btn-neutral float-left" title="Using EMNA for continuous optimization" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="installation.html" class="btn btn-neutral float-right" title="Getting started" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

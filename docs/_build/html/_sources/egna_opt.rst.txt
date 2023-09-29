@@ -22,7 +22,7 @@ We initialize the EDA with the following parameters:
 .. code-block:: python3
 
     egna = EGNA(size_gen=300, max_iter=100, dead_iter=20, n_variables=10,
-            landscape_bounds=(-60, 60))
+                lower_bound=-60, upper_bound=60)
 
     eda_result = egna.minimize(benchmarking.cec14_4, True)
 

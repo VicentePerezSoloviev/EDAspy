@@ -53,4 +53,11 @@ class UniBin(ProbabilisticModel):
         self.pm[self.pm > self.upper_bound] = self.upper_bound
 
     def print_structure(self) -> list:
+        """
+        Prints the arcs between the nodes that represent the variables in the dataset. This function
+        must be used after the learning process. Univariate approaches generate no-edged graphs.
+
+        :return: list of arcs between variables
+        :rtype: list
+        """
         return list()

@@ -6,6 +6,7 @@ from ..custom.probabilistic_models import KDEBN
 from ..custom.initialization_models import UniformGenInit
 
 import numpy as np
+from typing import Union, List
 
 
 class MultivariateKEDA(EDA):
@@ -28,7 +29,7 @@ class MultivariateKEDA(EDA):
             benchmarking = ContinuousBenchmarkingCEC14(10)
 
             keda = MultivariateKEDA(size_gen=300, max_iter=100, dead_iter=20, n_variables=10,
-                                    landscape_bounds=(-60, 60), l=10)
+                                    lower_bound=-100, upper_bound=100, l=10)
 
             eda_result = keda.minimize(benchmarking.cec14_4, True)
 
@@ -47,7 +48,8 @@ class MultivariateKEDA(EDA):
                  max_iter: int,
                  dead_iter: int,
                  n_variables: int,
-                 landscape_bounds: tuple,
+                 lower_bound: Union[np.array, List[float], float],
+                 upper_bound: Union[np.array, List[float], float],
                  l: float,
                  alpha: float = 0.5,
                  disp: bool = True,
@@ -56,22 +58,25 @@ class MultivariateKEDA(EDA):
                  parallelize: bool = False,
                  init_data: np.array = None):
         r"""
-            :param size_gen: Population size. Number of individuals in each generation.
-            :param max_iter: Maximum number of iterations during runtime.
-            :param dead_iter: Stopping criteria. Number of iterations with no improvement after which, the algorithm finishes.
-            :param n_variables: Number of variables to be optimized.
-            :param landscape_bounds: Landscape bounds only for initialization. Limits in the search space.
-            :param alpha: Percentage of population selected to update the probabilistic model.
-            :param l: this implementation is an archive-base approach. Thus, in each generation updates the
-            probabilistic model with the best solutions of the previous l generations. If this characteristic is not
-            desired, then l=1.
-            :param alpha: Percentage of population selected to update the probabilistic model in each generation.
-            :param disp: Set to True to print convergence messages.
-            :param black_list: list of tuples with the forbidden arcs in the KDEBN during runtime.
-            :param white_list: list of tuples with the mandatory arcs in the KDEBN during runtime.
-            :param parallelize: True if the evaluation of the solutions is desired to be parallelized in multiple cores.
-            :param init_data: Numpy array containing the data the EDA is desired to be initialized from. By default, an
-            initializer is used.
+        :param size_gen: Population size. Number of individuals in each generation.
+        :param max_iter: Maximum number of iterations during runtime.
+        :param dead_iter: Stopping criteria. Number of iterations with no improvement after which, the algorithm finishes.
+        :param n_variables: Number of variables to be optimized.
+        :param lower_bound: lower bound for the uniform distribution sampling.
+        :param upper_bound: lower bound for the uniform distribution sampling.
+        :param alpha: Percentage of population selected to update the probabilistic model.
+        :param l: this implementation is an archive-base approach. Thus, in each generation updates the
+        probabilistic model with the best solutions of the previous l generations. If this characteristic is not
+        desired, then l=1.
+        :param alpha: Percentage of population selected to update the probabilistic model in each generation.
+        :param disp: Set to True to print convergence messages.
+        :param black_list: list of tuples with the forbidden arcs in the KDEBN during runtime.
+        :param white_list: list of tuples with the mandatory arcs in the KDEBN during runtime.
+        :param parallelize: True if the evaluation of the solutions is desired to be parallelized in multiple cores.
+        :param init_data: Numpy array containing the data the EDA is desired to be initialized from. By default, an
+        initializer is used.
+        :type lower_bound: List of lower bounds of size equal to number of variables OR single bound to all dimensions.
+        :type upper_bound: List of upper bounds of size equal to number of variables OR single bound to all dimensions.
         """
 
         super().__init__(size_gen=size_gen, max_iter=max_iter, dead_iter=dead_iter,
@@ -79,7 +84,7 @@ class MultivariateKEDA(EDA):
                          parallelize=parallelize, init_data=init_data)
 
         self.vars = [str(i) for i in range(n_variables)]
-        self.landscape_bounds = landscape_bounds
+        # self.landscape_bounds = landscape_bounds
         self.pm = KDEBN(self.vars, black_list=black_list, white_list=white_list)
 
         self.l_len = l*int(size_gen*self.alpha)  # maximum number of individuals in the archive
@@ -88,8 +93,7 @@ class MultivariateKEDA(EDA):
         # In this implementation the individuals of the first generation are sampled from a uniform distribution
         # to not skew the following estimation of distributions.
 
-        self.init = UniformGenInit(self.n_variables, lower_bound=self.landscape_bounds[0],
-                                   upper_bound=self.landscape_bounds[1])
+        self.init = UniformGenInit(self.n_variables, lower_bound=lower_bound, upper_bound=upper_bound)
 
     def _update_archive(self):
         self.archive = np.append(self.archive, self.elite_temp, axis=0)

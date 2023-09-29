@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EDAspy &mdash; EDAspy 1.1.0 documentation</title>
+  <title>EDAspy &mdash; EDAspy 1.1.2 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -49,6 +49,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#testing">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bibliography">Bibliography</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
@@ -85,7 +86,7 @@
 <h1>EDAspy<a class="headerlink" href="#edaspy" title="Permalink to this headline"></a></h1>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline"></a></h2>
-<p>EDAspy presents some implementations of the Estimation of Distribution Algorithms (EDAs). EDAs are a type of
+<p>EDAspy presents some implementations of the Estimation of Distribution Algorithms (EDAs) [1]. EDAs are a type of
 evolutionary algorithms. Depending on the type of the probabilistic model embedded in the EDA, and the type of
 variables considered, we will use a different EDA implementation.</p>
 <p>The pseudocode of EDAs is the following:</p>
@@ -101,12 +102,17 @@ variables considered, we will use a different EDA implementation.</p>
 <p>EDAspy also incorporates a set of benchmarks in order to compare the algorithms trying to minimize these cost functions.</p>
 <p>The following implementations are available in EDAspy:</p>
 <ul class="simple">
-<li><p>UMDAd: Univariate Marginal Distribution Algorithm binary. It can be used as a simple example of EDA where the variables are binary and there are not dependencies between variables. Some usages include feature selection, for example.</p></li>
-<li><p>UMDAc: Univariate Marginal Distribution Algorithm continuous. In this EDA all the variables assume a Gaussian distribution and there are not dependencies considered between the variables. Some usages include hyperparameter optimization, for example.</p></li>
-<li><p>EGNA: Estimation of Gaussian Distribution Algorithm. This is a complex implementation in which dependencies between the variables are considered during the optimization. In each iteration, a Gaussian Bayesian network is learned and sampled. The variables in the model are assumed to be Gaussian and also de dependencies between them. This implementation is focused in continuous optimization.</p></li>
-<li><p>EMNA: Estimation of Multivariate Normal Algorithm. This is a similar implementation to EGNA, in which instead of using a Gaussian Bayesian network, a multivariate Gaussian distribution is iteratively learned and sampled. As in EGNA, the dependencies between variables are considered and assumed to be linear Gaussian. This implementation is focused in continuous optimization.</p></li>
-<li><p>Categorical EDA. In this implementation we consider some independent categorical variables. Some usages include portfolio optimization, for exampled.</p></li>
+<li><p>UMDAd: Univariate Marginal Distribution Algorithm binary [2]. It can be used as a simple example of EDA where the variables are binary and there are not dependencies between variables. Some usages include feature selection, for example.</p></li>
+<li><p>UMDAc: Univariate Marginal Distribution Algorithm continuous [3]. In this EDA all the variables assume a Gaussian distribution and there are not dependencies considered between the variables. Some usages include hyperparameter optimization, for example.</p></li>
+<li><p>UnivariateKEDA: Univariate Kernel Estimation of Distribution Algorithm [4]. Each variables distribution is estimated using Kernel Density Estimation.</p></li>
+<li><p>UMDAcat: Univariate Marginal Distribution Algorithm categorical [2]. UMDA variant for categorical data, where more than two possible values per dimension are used (otherwise, use binary version).</p></li>
+<li><p>EGNA: Estimation of Gaussian Distribution Algorithm [5][6]. This is a complex implementation in which dependencies between the variables are considered during the optimization. In each iteration, a Gaussian Bayesian network is learned and sampled. The variables in the model are assumed to be Gaussian and also de dependencies between them. This implementation is focused in continuous optimization.</p></li>
+<li><p>EMNA: Estimation of Multivariate Normal Algorithm [1]. This is a similar implementation to EGNA, in which instead of using a Gaussian Bayesian network, a multivariate Gaussian distribution is iteratively learned and sampled. As in EGNA, the dependencies between variables are considered and assumed to be linear Gaussian. This implementation is focused in continuous optimization.</p></li>
+<li><p>SPEDA: Semiparametric Estimation of Distribution Algorithm [7]. This multivariate EDA allows estimating the density of a variable using either KDE or Gaussians, and allow dependencies between both types of variables. It is an archive-based approach where the probabilistic model is updated given the best individuals of l previous generations.</p></li>
+<li><p>MultivariateKEDA: Special case of SPEDA approach in which all nodes are restricted to be estimated using KDE (Gaussian nodes are forbidden) [7]. It is also an archive-based approach.</p></li>
+<li><p>EBNA: Estimation of Bayesian Network Algorithm [1]. This version of EDAs is used for categorical data. The probabilistic model used is a Categorical Bayesian network, where conditional dependencies between variables can be analyzed.</p></li>
 </ul>
+<p>Some tools are also available in EDAspy such as the Bayesian network structure plotting, for visualizing the graph learnt in some of the implementations, if needed.</p>
 </section>
 <section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline"></a></h2>
@@ -124,7 +130,7 @@ variables considered, we will use a different EDA implementation.</p>
 <section id="prerequisites">
 <h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline"></a></h3>
 <ul class="simple">
-<li><p>Python 3.6, 3.7, 3.8 or 3.9.</p></li>
+<li><p>Python &gt;= 3.0</p></li>
 <li><p>Pybnesian, numpy, pandas.</p></li>
 </ul>
 </section>
@@ -133,7 +139,7 @@ variables considered, we will use a different EDA implementation.</p>
 <p>Clone the repository:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/VicentePerezSoloviev/EDAspy.git
 <span class="nb">cd</span> EDAspy
-git checkout v1.0.0 <span class="c1"># You can checkout a specific version if you want</span>
+git checkout v1.1.2 <span class="c1"># You can checkout a specific version if you want</span>
 python setup.py install
 </pre></div>
 </div>
@@ -150,6 +156,16 @@ pip:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest
 </pre></div>
 </div>
+</section>
+<section id="bibliography">
+<h2>Bibliography<a class="headerlink" href="#bibliography" title="Permalink to this headline"></a></h2>
+<p>[1] Larrañaga, P., &amp; Lozano, J. A. (Eds.). (2001). Estimation of distribution algorithms: A new tool for evolutionary computation (Vol. 2). Springer Science &amp; Business Media.</p>
+<p>[2] Mühlenbein, H., &amp; Paass, G. (1996). From recombination of genes to the estimation of distributions I. Binary parameters. In Parallel Problem Solving from Nature—PPSN IV: International Conference on Evolutionary Computation—The 4th International Conference on Parallel Problem Solving from Nature Berlin, Germany, September 22–26, 1996 Proceedings 4 (pp. 178-187). Springer Berlin Heidelberg.</p>
+<p>[3] Mühlenbein, H., Bendisch, J., &amp; Voigt, H. M. (1996). From recombination of genes to the estimation of distributions II. Continuous parameters. In Parallel Problem Solving from Nature—PPSN IV: International Conference on Evolutionary Computation—The 4th International Conference on Parallel Problem Solving from Nature Berlin, Germany, September 22–26, 1996 Proceedings 4 (pp. 188-197). Springer Berlin Heidelberg.</p>
+<p>[4] Luo, N., &amp; Qian, F. (2009, August). Evolutionary algorithm using kernel density estimation model in continuous domain. In 2009 7th Asian Control Conference (pp. 1526-1531). IEEE.</p>
+<p>[5] Larranaga, P. (2000). Optimization in continuous domains by learning and simulation of Gaussian networks. In Proc. of the 2000 Genetic and Evolutionary Computation Conference Workshop Program.</p>
+<p>[6] Soloviev, V. P., Larrañaga, P., &amp; Bielza, C. (2022). Estimation of distribution algorithms using Gaussian Bayesian networks to solve industrial optimization problems constrained by environment variables. Journal of Combinatorial Optimization, 44(2), 1077-1098.</p>
+<p>[7] Soloviev, Vicente P.&amp; Bielza, Concha &amp; Larrañaga, Pedro (2023). Semiparametric Estimation of Distribution Algorithms for continuous optimization. IEEE Transactions on Evolutionary Computation.</p>
 </section>
 </section>
 

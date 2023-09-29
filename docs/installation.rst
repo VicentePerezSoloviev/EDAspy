@@ -15,7 +15,7 @@ Prerequisites
 -------------
 
 - Python 3.6, 3.7, 3.8 or 3.9.
-- Pybnesian, numpy, pandas.
+- Pybnesian, numpy, pandas, pgmpy.
 
 Building
 --------
@@ -26,7 +26,7 @@ Clone the repository:
 
     git clone https://github.com/VicentePerezSoloviev/EDAspy.git
     cd EDAspy
-    git checkout v1.0.0 # You can checkout a specific version if you want
+    git checkout v1.1.2  # You can checkout a specific version if you want
     python setup.py install
 
 Testing

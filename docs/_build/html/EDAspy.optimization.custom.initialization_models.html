@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EDAspy.optimization.custom.initialization_models package &mdash; EDAspy 1.1.0 documentation</title>
+  <title>EDAspy.optimization.custom.initialization_models package &mdash; EDAspy 1.1.2 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -48,7 +48,6 @@
 <li class="toctree-l3 current"><a class="reference internal" href="EDAspy.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="EDAspy.benchmarks.html">EDAspy.benchmarks package</a></li>
 <li class="toctree-l4 current"><a class="reference internal" href="EDAspy.optimization.html">EDAspy.optimization package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="EDAspy.timeseries.html">EDAspy.timeseries package</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="EDAspy.html#module-EDAspy">Module contents</a></li>
@@ -90,6 +89,63 @@
 <h1>EDAspy.optimization.custom.initialization_models package<a class="headerlink" href="#edaspy-optimization-custom-initialization-models-package" title="Permalink to this headline"></a></h1>
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline"></a></h2>
+</section>
+<section id="module-EDAspy.optimization.custom.initialization_models.categorical_geninit">
+<span id="edaspy-optimization-custom-initialization-models-categorical-geninit-module"></span><h2>EDAspy.optimization.custom.initialization_models.categorical_geninit module<a class="headerlink" href="#module-EDAspy.optimization.custom.initialization_models.categorical_geninit" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="EDAspy.optimization.custom.initialization_models.categorical_geninit.CategoricalSampling">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">EDAspy.optimization.custom.initialization_models.categorical_geninit.</span></span><span class="sig-name descname"><span class="pre">CategoricalSampling</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_variables</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">possible_values</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.array</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequency</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.array</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/optimization/custom/initialization_models/categorical_geninit.html#CategoricalSampling"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.custom.initialization_models.categorical_geninit.CategoricalSampling" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">EDAspy.optimization.custom.initialization_models._generation_init.GenInit</span></code></p>
+<p>Initial generation simulator based on the Latin Hypercube Sampling process.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="EDAspy.optimization.custom.initialization_models.categorical_geninit.CategoricalSampling.sample">
+<span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.array</span><a class="reference internal" href="_modules/EDAspy/optimization/custom/initialization_models/categorical_geninit.html#CategoricalSampling.sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.custom.initialization_models.categorical_geninit.CategoricalSampling.sample" title="Permalink to this definition"></a></dt>
+<dd><p>Sample several times the initializer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>size</strong> – number of samplings.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>array with the dataset sampled</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-EDAspy.optimization.custom.initialization_models.latin_hypercube_sampling_geninit">
+<span id="edaspy-optimization-custom-initialization-models-latin-hypercube-sampling-geninit-module"></span><h2>EDAspy.optimization.custom.initialization_models.latin_hypercube_sampling_geninit module<a class="headerlink" href="#module-EDAspy.optimization.custom.initialization_models.latin_hypercube_sampling_geninit" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="EDAspy.optimization.custom.initialization_models.latin_hypercube_sampling_geninit.LatinHypercubeSampling">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">EDAspy.optimization.custom.initialization_models.latin_hypercube_sampling_geninit.</span></span><span class="sig-name descname"><span class="pre">LatinHypercubeSampling</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_variables</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_bound</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.array</span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">-</span> <span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper_bound</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/optimization/custom/initialization_models/latin_hypercube_sampling_geninit.html#LatinHypercubeSampling"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.custom.initialization_models.latin_hypercube_sampling_geninit.LatinHypercubeSampling" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">EDAspy.optimization.custom.initialization_models._generation_init.GenInit</span></code></p>
+<p>Initial generation simulator based on the Latin Hypercube Sampling process.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="EDAspy.optimization.custom.initialization_models.latin_hypercube_sampling_geninit.LatinHypercubeSampling.sample">
+<span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">post_process</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.array</span><a class="reference internal" href="_modules/EDAspy/optimization/custom/initialization_models/latin_hypercube_sampling_geninit.html#LatinHypercubeSampling.sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.custom.initialization_models.latin_hypercube_sampling_geninit.LatinHypercubeSampling.sample" title="Permalink to this definition"></a></dt>
+<dd><p>Sample several times the initializer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>size</strong> – number of samplings.</p></li>
+<li><p><strong>post_process</strong> – Post processing to ensure diversity between solutions using Lloyd-Max algorithm.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>array with the dataset sampled</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 <section id="module-EDAspy.optimization.custom.initialization_models.multi_gauss_geninit">
 <span id="edaspy-optimization-custom-initialization-models-multi-gauss-geninit-module"></span><h2>EDAspy.optimization.custom.initialization_models.multi_gauss_geninit module<a class="headerlink" href="#module-EDAspy.optimization.custom.initialization_models.multi_gauss_geninit" title="Permalink to this headline"></a></h2>
@@ -176,7 +232,7 @@
 <span id="edaspy-optimization-custom-initialization-models-uniform-geninit-module"></span><h2>EDAspy.optimization.custom.initialization_models.uniform_geninit module<a class="headerlink" href="#module-EDAspy.optimization.custom.initialization_models.uniform_geninit" title="Permalink to this headline"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="EDAspy.optimization.custom.initialization_models.uniform_geninit.UniformGenInit">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">EDAspy.optimization.custom.initialization_models.uniform_geninit.</span></span><span class="sig-name descname"><span class="pre">UniformGenInit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_variables</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_bound</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">-</span> <span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper_bound</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/optimization/custom/initialization_models/uniform_geninit.html#UniformGenInit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.custom.initialization_models.uniform_geninit.UniformGenInit" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">EDAspy.optimization.custom.initialization_models.uniform_geninit.</span></span><span class="sig-name descname"><span class="pre">UniformGenInit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_variables</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_bound</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.array</span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">-</span> <span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper_bound</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/optimization/custom/initialization_models/uniform_geninit.html#UniformGenInit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.custom.initialization_models.uniform_geninit.UniformGenInit" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">EDAspy.optimization.custom.initialization_models._generation_init.GenInit</span></code></p>
 <p>Initial generation simulator based on independent uniform distributions.</p>
 <dl class="py method">

@@ -11,9 +11,9 @@ links.
 
    hyperparameter_umdac
    feature_selection_umdad
+   categorical_optimization
    eda_custom
    speda_opt
-   multivariate_keda_opt.rst
+   multivariate_keda_opt
    egna_opt
    emna_opt
-   time_series_opt

@@ -22,7 +22,8 @@ We initialize the EDA with the following parameters:
 
 .. code-block:: python3
 
-    umda = UMDAc(size_gen=100, max_iter=100, dead_iter=10, n_variables=10, alpha=0.5)
+    umda = UMDAc(size_gen=100, max_iter=100, dead_iter=10, n_variables=10, alpha=0.5,
+                 lower_bound=-60, upper_bound=60)
     # We leave bound by default
     eda_result = umda.minimize(cost_function=benchmarking.cec14_4, output_runtime=True)
 

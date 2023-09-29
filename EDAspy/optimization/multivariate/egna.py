@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 import numpy as np
+from typing import List, Union
 
 from ..eda import EDA
 from ..custom.probabilistic_models import GBN
@@ -31,7 +32,7 @@ class EGNA(EDA):
             benchmarking = ContinuousBenchmarkingCEC14(10)
 
             egna = EGNA(size_gen=300, max_iter=100, dead_iter=20, n_variables=10,
-                        landscape_bounds=(-60, 60))
+                        lower_bound=-100, upper_bound=100)
 
             eda_result = egna.minimize(benchmarking.cec14_4, True)
 
@@ -50,7 +51,8 @@ class EGNA(EDA):
                  max_iter: int,
                  dead_iter: int,
                  n_variables: int,
-                 landscape_bounds: tuple,
+                 lower_bound: Union[np.array, List[float], float],
+                 upper_bound: Union[np.array, List[float], float],
                  alpha: float = 0.5,
                  elite_factor: float = 0.4,
                  disp: bool = True,
@@ -59,19 +61,22 @@ class EGNA(EDA):
                  parallelize: bool = False,
                  init_data: np.array = None):
         r"""
-            :param size_gen: Population size. Number of individuals in each generation.
-            :param max_iter: Maximum number of iterations during runtime.
-            :param dead_iter: Stopping criteria. Number of iterations with no improvement after which, the algorithm finish.
-            :param n_variables: Number of variables to be optimized.
-            :param landscape_bounds: Landscape bounds only for initialization. Limits in the search space.
-            :param alpha: Percentage of population selected to update the probabilistic model.
-            :param elite_factor: Percentage of previous population selected to add to new generation (elite approach).
-            :param disp: Set to True to print convergence messages.
-            :param black_list: list of tuples with the forbidden arcs in the GBN during runtime.
-            :param white_list: list of tuples with the mandatory arcs in the GBN during runtime.
-            :param parallelize: True if the evaluation of the solutions is desired to be parallelized in multiple cores.
-            :param init_data: Numpy array containing the data the EDA is desired to be initialized from. By default, an
-            initializer is used.
+        :param size_gen: Population size. Number of individuals in each generation.
+        :param max_iter: Maximum number of iterations during runtime.
+        :param dead_iter: Stopping criteria. Number of iterations with no improvement after which, the algorithm finish.
+        :param n_variables: Number of variables to be optimized.
+        :param lower_bound: lower bound for the uniform distribution sampling.
+        :param upper_bound: lower bound for the uniform distribution sampling.
+        :param alpha: Percentage of population selected to update the probabilistic model.
+        :param elite_factor: Percentage of previous population selected to add to new generation (elite approach).
+        :param disp: Set to True to print convergence messages.
+        :param black_list: list of tuples with the forbidden arcs in the GBN during runtime.
+        :param white_list: list of tuples with the mandatory arcs in the GBN during runtime.
+        :param parallelize: True if the evaluation of the solutions is desired to be parallelized in multiple cores.
+        :param init_data: Numpy array containing the data the EDA is desired to be initialized from. By default, an
+        initializer is used.
+        :type lower_bound: List of lower bounds of size equal to number of variables OR single bound to all dimensions.
+        :type upper_bound: List of upper bounds of size equal to number of variables OR single bound to all dimensions.
         """
 
         super().__init__(size_gen=size_gen, max_iter=max_iter, dead_iter=dead_iter,
@@ -79,7 +84,6 @@ class EGNA(EDA):
                          parallelize=parallelize, init_data=init_data)
 
         self.vars = [str(i) for i in range(n_variables)]
-        self.landscape_bounds = landscape_bounds
+        # self.landscape_bounds = landscape_bounds
         self.pm = GBN(self.vars, black_list=black_list, white_list=white_list)
-        self.init = UniformGenInit(self.n_variables, lower_bound=self.landscape_bounds[0],
-                                   upper_bound=self.landscape_bounds[1])
+        self.init = UniformGenInit(self.n_variables, lower_bound=lower_bound, upper_bound=upper_bound)

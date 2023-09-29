@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EDAspy.optimization.custom.initialization_models.uniform_geninit &mdash; EDAspy 1.1.0 documentation</title>
+  <title>EDAspy.optimization.custom.initialization_models.uniform_geninit &mdash; EDAspy 1.1.2 documentation</title>
       <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -73,6 +73,7 @@
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">._generation_init</span> <span class="kn">import</span> <span class="n">GenInit</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span>
 
 
 <div class="viewcode-block" id="UniformGenInit"><a class="viewcode-back" href="../../../../../EDAspy.optimization.custom.initialization_models.html#EDAspy.optimization.custom.initialization_models.uniform_geninit.UniformGenInit">[docs]</a><span class="k">class</span> <span class="nc">UniformGenInit</span><span class="p">(</span><span class="n">GenInit</span><span class="p">):</span>
@@ -83,16 +84,24 @@
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">n_variables</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-                 <span class="n">lower_bound</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mi">100</span><span class="p">,</span>
-                 <span class="n">upper_bound</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">100</span>
+                 <span class="n">lower_bound</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">100</span><span class="p">,</span>
+                 <span class="n">upper_bound</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span>
                  <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :param n_variables: Number of variables.</span>
 <span class="sd">        :param lower_bound: lower bound for the uniform distribution sampling.</span>
 <span class="sd">        :param upper_bound: lower bound for the uniform distribution sampling.</span>
+<span class="sd">        :rtype lower_bound: List of lower bounds of size equal to number of variables OR single bound to all dimensions.</span>
+<span class="sd">        :rtype upper_bound: List of upper bounds of size equal to number of variables OR single bound to all dimensions.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">n_variables</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">lower_bound</span><span class="p">)</span> <span class="ow">is</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">lower_bound</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">lower_bound</span><span class="p">)</span> <span class="o">==</span> <span class="n">n_variables</span><span class="p">,</span> <span class="s2">&quot;Number of lower bounds does not match the dimension size.&quot;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">upper_bound</span><span class="p">)</span> <span class="ow">is</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">upper_bound</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">upper_bound</span><span class="p">)</span> <span class="o">==</span> <span class="n">n_variables</span><span class="p">,</span> <span class="s2">&quot;Number of upper bounds does not match the dimension size.&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">lower_bound</span> <span class="o">=</span> <span class="n">lower_bound</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">upper_bound</span> <span class="o">=</span> <span class="n">upper_bound</span>

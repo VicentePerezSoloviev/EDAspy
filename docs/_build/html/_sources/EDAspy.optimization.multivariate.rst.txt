@@ -13,10 +13,10 @@ EDAspy.optimization.multivariate.speda module
    :show-inheritance:
    :inherited-members:
 
-EDAspy.optimization.multivariate.keda module
+EDAspy.optimization.multivariate.ebna module
 ----------------------------------------------
 
-.. automodule:: EDAspy.optimization.multivariate.keda
+.. automodule:: EDAspy.optimization.multivariate.ebna
    :members:
    :undoc-members:
    :show-inheritance:

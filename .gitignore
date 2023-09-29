@@ -1,3 +1,6 @@
 prueba.py
 .idea/
 .idea
+.dist
+.pytest_cache
+.gitignore

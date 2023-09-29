@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EDAspy.optimization package &mdash; EDAspy 1.1.0 documentation</title>
+  <title>EDAspy.optimization package &mdash; EDAspy 1.1.2 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -48,7 +48,6 @@
 <li class="toctree-l3 current"><a class="reference internal" href="EDAspy.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="EDAspy.benchmarks.html">EDAspy.benchmarks package</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">EDAspy.optimization package</a></li>
-<li class="toctree-l4"><a class="reference internal" href="EDAspy.timeseries.html">EDAspy.timeseries package</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="EDAspy.html#module-EDAspy">Module contents</a></li>
@@ -94,6 +93,8 @@
 <li class="toctree-l2"><a class="reference internal" href="EDAspy.optimization.custom.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="EDAspy.optimization.custom.initialization_models.html">EDAspy.optimization.custom.initialization_models package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="EDAspy.optimization.custom.initialization_models.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="EDAspy.optimization.custom.initialization_models.html#module-EDAspy.optimization.custom.initialization_models.categorical_geninit">EDAspy.optimization.custom.initialization_models.categorical_geninit module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="EDAspy.optimization.custom.initialization_models.html#module-EDAspy.optimization.custom.initialization_models.latin_hypercube_sampling_geninit">EDAspy.optimization.custom.initialization_models.latin_hypercube_sampling_geninit module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="EDAspy.optimization.custom.initialization_models.html#module-EDAspy.optimization.custom.initialization_models.multi_gauss_geninit">EDAspy.optimization.custom.initialization_models.multi_gauss_geninit module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="EDAspy.optimization.custom.initialization_models.html#module-EDAspy.optimization.custom.initialization_models.uni_bin_geninit">EDAspy.optimization.custom.initialization_models.uni_bin_geninit module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="EDAspy.optimization.custom.initialization_models.html#module-EDAspy.optimization.custom.initialization_models.uni_gauss_geninit">EDAspy.optimization.custom.initialization_models.uni_gauss_geninit module</a></li>
@@ -103,11 +104,15 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="EDAspy.optimization.custom.probabilistic_models.html">EDAspy.optimization.custom.probabilistic_models package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="EDAspy.optimization.custom.probabilistic_models.html#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="EDAspy.optimization.custom.probabilistic_models.html#module-EDAspy.optimization.custom.probabilistic_models.semiparametric_bayesian_network">EDAspy.optimization.custom.probabilistic_models.semiparametric_bayesian_network module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="EDAspy.optimization.custom.probabilistic_models.html#module-EDAspy.optimization.custom.probabilistic_models.discrete_bayesian_network">EDAspy.optimization.custom.probabilistic_models.discrete_bayesian_network module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="EDAspy.optimization.custom.probabilistic_models.html#module-EDAspy.optimization.custom.probabilistic_models.gaussian_bayesian_network">EDAspy.optimization.custom.probabilistic_models.gaussian_bayesian_network module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="EDAspy.optimization.custom.probabilistic_models.html#module-EDAspy.optimization.custom.probabilistic_models.kde_bayesian_network">EDAspy.optimization.custom.probabilistic_models.kde_bayesian_network module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="EDAspy.optimization.custom.probabilistic_models.html#module-EDAspy.optimization.custom.probabilistic_models.multivariate_gaussian">EDAspy.optimization.custom.probabilistic_models.multivariate_gaussian module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="EDAspy.optimization.custom.probabilistic_models.html#module-EDAspy.optimization.custom.probabilistic_models.semiparametric_bayesian_network">EDAspy.optimization.custom.probabilistic_models.semiparametric_bayesian_network module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="EDAspy.optimization.custom.probabilistic_models.html#module-EDAspy.optimization.custom.probabilistic_models.univariate_binary">EDAspy.optimization.custom.probabilistic_models.univariate_binary module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="EDAspy.optimization.custom.probabilistic_models.html#module-EDAspy.optimization.custom.probabilistic_models.univariate_categorical">EDAspy.optimization.custom.probabilistic_models.univariate_categorical module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="EDAspy.optimization.custom.probabilistic_models.html#module-EDAspy.optimization.custom.probabilistic_models.univariate_gaussian">EDAspy.optimization.custom.probabilistic_models.univariate_gaussian module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="EDAspy.optimization.custom.probabilistic_models.html#module-EDAspy.optimization.custom.probabilistic_models.univariate_kde">EDAspy.optimization.custom.probabilistic_models.univariate_kde module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="EDAspy.optimization.custom.probabilistic_models.html#module-EDAspy.optimization.custom.probabilistic_models">Module contents</a></li>
 </ul>
 </li>
@@ -121,8 +126,8 @@
 <li class="toctree-l1"><a class="reference internal" href="EDAspy.optimization.multivariate.html">EDAspy.optimization.multivariate package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="EDAspy.optimization.multivariate.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="EDAspy.optimization.multivariate.html#module-EDAspy.optimization.multivariate.speda">EDAspy.optimization.multivariate.speda module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="EDAspy.optimization.multivariate.html#module-EDAspy.optimization.multivariate.ebna">EDAspy.optimization.multivariate.ebna module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="EDAspy.optimization.multivariate.html#module-EDAspy.optimization.multivariate.keda">EDAspy.optimization.multivariate.keda module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="EDAspy.optimization.multivariate.html#id1">EDAspy.optimization.multivariate.keda module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="EDAspy.optimization.multivariate.html#module-EDAspy.optimization.multivariate.egna">EDAspy.optimization.multivariate.egna module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="EDAspy.optimization.multivariate.html#module-EDAspy.optimization.multivariate.emna">EDAspy.optimization.multivariate.emna module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="EDAspy.optimization.multivariate.html#module-EDAspy.optimization.multivariate">Module contents</a></li>
@@ -131,6 +136,7 @@
 <li class="toctree-l1"><a class="reference internal" href="EDAspy.optimization.univariate.html">EDAspy.optimization.univariate package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="EDAspy.optimization.univariate.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="EDAspy.optimization.univariate.html#module-EDAspy.optimization.univariate.umda_binary">EDAspy.optimization.univariate.umda_binary module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="EDAspy.optimization.univariate.html#module-EDAspy.optimization.univariate.umda_categorical">EDAspy.optimization.univariate.umda_categorical module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="EDAspy.optimization.univariate.html#module-EDAspy.optimization.univariate.umda_continuous">EDAspy.optimization.univariate.umda_continuous module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="EDAspy.optimization.univariate.html#module-EDAspy.optimization.univariate.keda">EDAspy.optimization.univariate.keda</a></li>
 <li class="toctree-l2"><a class="reference internal" href="EDAspy.optimization.univariate.html#module-EDAspy.optimization.univariate">Module contents</a></li>

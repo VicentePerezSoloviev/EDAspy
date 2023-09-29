@@ -4,6 +4,22 @@ EDAspy.optimization.custom.initialization\_models package
 Submodules
 ----------
 
+EDAspy.optimization.custom.initialization\_models.categorical\_geninit module
+------------------------------------------------------------------------------
+
+.. automodule:: EDAspy.optimization.custom.initialization_models.categorical_geninit
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+EDAspy.optimization.custom.initialization\_models.latin\_hypercube\_sampling\_geninit module
+---------------------------------------------------------------------------------------------
+
+.. automodule:: EDAspy.optimization.custom.initialization_models.latin_hypercube_sampling_geninit
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 EDAspy.optimization.custom.initialization\_models.multi\_gauss\_geninit module
 ------------------------------------------------------------------------------
 

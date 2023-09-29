@@ -60,20 +60,19 @@ class UMDAd(EDA):
                  parallelize: bool = False,
                  init_data: np.array = None):
         r"""
-        Args:
-            size_gen: Population size of each generation.
-            max_iter: Maximum number of function evaluations.
-            dead_iter: Stopping criteria. Number of iterations after with no improvement after which EDA stops.
-            n_variables: Number of variables to be optimized.
-            alpha: Percentage of population selected to update the probabilistic model.
-            vector: Array with shape (n_variables, ) where rows are mean and std of the parameters to be optimized.
-            lower_bound: Lower bound imposed to the probabilities of the variables. If not desired, set to 0.
-            upper_bound: Upper bound imposed to the probabilities of the variables. If not desired, set to 1.
-            elite_factor: Percentage of previous population selected to add to new generation (elite approach).
-            disp: Set to True to print convergence messages.
-            parallelize: True if the evaluation of the solutions is desired to be parallelized in multiple cores.
-            init_data: Numpy array containing the data the EDA is desired to be initialized from. By default, an
-            initializer is used.
+        :param size_gen: Population size of each generation.
+        :param max_iter: Maximum number of function evaluations.
+        :param dead_iter: Stopping criteria. Number of iterations after with no improvement after which EDA stops.
+        :param n_variables: Number of variables to be optimized.
+        :param alpha: Percentage of population selected to update the probabilistic model.
+        :param vector: Array with shape (n_variables, ) where rows are mean and std of the parameters to be optimized.
+        :param lower_bound: Lower bound imposed to the probabilities of the variables. If not desired, set to 0.
+        :param upper_bound: Upper bound imposed to the probabilities of the variables. If not desired, set to 1.
+        :param elite_factor: Percentage of previous population selected to add to new generation (elite approach).
+        :param disp: Set to True to print convergence messages.
+        :param parallelize: True if the evaluation of the solutions is desired to be parallelized in multiple cores.
+        :param init_data: Numpy array containing the data the EDA is desired to be initialized from. By default, an
+        initializer is used.
         """
 
         super().__init__(size_gen=size_gen, max_iter=max_iter, dead_iter=dead_iter, n_variables=n_variables,

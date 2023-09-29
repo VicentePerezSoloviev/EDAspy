@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 import numpy as np
+from typing import Union, List
 
 from ..custom.probabilistic_models import UniKDE
 from ..custom.initialization_models import UniformGenInit
@@ -29,7 +30,8 @@ class UnivariateKEDA(EDA):
             n_vars = 10
             benchmarking = ContinuousBenchmarkingCEC14(n_vars)
 
-            keda = UnivariateKEDA(size_gen=100, max_iter=100, dead_iter=10, n_variables=10, alpha=0.5)
+            keda = UnivariateKEDA(size_gen=100, max_iter=100, dead_iter=10, n_variables=10, alpha=0.5,
+                                  lower_bound=-100, upper_bound=100)
             # We leave bound by default
             eda_result = keda.minimize(benchmarking.cec4, True)
 
@@ -44,35 +46,36 @@ class UnivariateKEDA(EDA):
                  max_iter: int,
                  dead_iter: int,
                  n_variables: int,
+                 lower_bound: Union[np.array, List[float], float],
+                 upper_bound: Union[np.array, List[float], float],
                  alpha: float = 0.5,
-                 landscape_bounds: tuple = (-100, 100),
                  elite_factor: float = 0.4,
                  disp: bool = True,
                  parallelize: bool = False,
                  init_data: np.array = None):
         r"""
-        Args:
-            size_gen: Population size of each generation.
-            max_iter: Maximum number of function evaluations.
-            dead_iter: Stopping criteria. Number of iterations after with no improvement after which EDA stops.
-            n_variables: Number of variables to be optimized.
-            alpha: Percentage of population selected to update the probabilistic model.
-            landscape_bounds: Landscape bounds.
-            elite_factor: Percentage of previous population selected to add to new generation (elite approach).
-            disp: Set to True to print convergence messages.
-            parallelize: True if the evaluation of the solutions is desired to be parallelized in multiple cores.
-            init_data: Numpy array containing the data the EDA is desired to be initialized from. By default, an
-            initializer is used.
+        :param size_gen: Population size of each generation.
+        :param max_iter: Maximum number of function evaluations.
+        :param dead_iter: Stopping criteria. Number of iterations after with no improvement after which EDA stops.
+        :param n_variables: Number of variables to be optimized.
+        :param alpha: Percentage of population selected to update the probabilistic model.
+        :param lower_bound: lower bound for the uniform distribution sampling.
+        :param upper_bound: lower bound for the uniform distribution sampling.
+        :param elite_factor: Percentage of previous population selected to add to new generation (elite approach).
+        :param disp: Set to True to print convergence messages.
+        :param parallelize: True if the evaluation of the solutions is desired to be parallelized in multiple cores.
+        :param init_data: Numpy array containing the data the EDA is desired to be initialized from. By default, an
+        initializer is used.
+        :type lower_bound: List of lower bounds of size equal to number of variables OR single bound to all dimensions.
+        :type upper_bound: List of upper bounds of size equal to number of variables OR single bound to all dimensions.
         """
 
-        self.landscape_bounds = landscape_bounds
+        # self.landscape_bounds = landscape_bounds
         self.names_vars = list(range(n_variables))
 
         super().__init__(size_gen=size_gen, max_iter=max_iter, dead_iter=dead_iter, n_variables=n_variables,
                          alpha=alpha, elite_factor=elite_factor, disp=disp, parallelize=parallelize,
                          init_data=init_data)
 
-        self.init = UniformGenInit(n_variables=n_variables,
-                                   lower_bound=landscape_bounds[0], upper_bound=landscape_bounds[1])
-
+        self.init = UniformGenInit(n_variables=n_variables, lower_bound=lower_bound, upper_bound=upper_bound)
         self.pm = UniKDE(self.names_vars)

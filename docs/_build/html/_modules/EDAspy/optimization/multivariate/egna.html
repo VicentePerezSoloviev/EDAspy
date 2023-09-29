@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EDAspy.optimization.multivariate.egna &mdash; EDAspy 1.1.0 documentation</title>
+  <title>EDAspy.optimization.multivariate.egna &mdash; EDAspy 1.1.2 documentation</title>
       <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -71,6 +71,7 @@
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># coding: utf-8</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">from</span> <span class="nn">..eda</span> <span class="kn">import</span> <span class="n">EDA</span>
 <span class="kn">from</span> <span class="nn">..custom.probabilistic_models</span> <span class="kn">import</span> <span class="n">GBN</span>
@@ -101,7 +102,7 @@
 <span class="sd">            benchmarking = ContinuousBenchmarkingCEC14(10)</span>
 
 <span class="sd">            egna = EGNA(size_gen=300, max_iter=100, dead_iter=20, n_variables=10,</span>
-<span class="sd">                        landscape_bounds=(-60, 60))</span>
+<span class="sd">                        lower_bound=-100, upper_bound=100)</span>
 
 <span class="sd">            eda_result = egna.minimize(benchmarking.cec14_4, True)</span>
 
@@ -120,7 +121,8 @@
                  <span class="n">max_iter</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
                  <span class="n">dead_iter</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
                  <span class="n">n_variables</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-                 <span class="n">landscape_bounds</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span>
+                 <span class="n">lower_bound</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">],</span>
+                 <span class="n">upper_bound</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">],</span>
                  <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
                  <span class="n">elite_factor</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.4</span><span class="p">,</span>
                  <span class="n">disp</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
@@ -129,19 +131,22 @@
                  <span class="n">parallelize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
                  <span class="n">init_data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            :param size_gen: Population size. Number of individuals in each generation.</span>
-<span class="sd">            :param max_iter: Maximum number of iterations during runtime.</span>
-<span class="sd">            :param dead_iter: Stopping criteria. Number of iterations with no improvement after which, the algorithm finish.</span>
-<span class="sd">            :param n_variables: Number of variables to be optimized.</span>
-<span class="sd">            :param landscape_bounds: Landscape bounds only for initialization. Limits in the search space.</span>
-<span class="sd">            :param alpha: Percentage of population selected to update the probabilistic model.</span>
-<span class="sd">            :param elite_factor: Percentage of previous population selected to add to new generation (elite approach).</span>
-<span class="sd">            :param disp: Set to True to print convergence messages.</span>
-<span class="sd">            :param black_list: list of tuples with the forbidden arcs in the GBN during runtime.</span>
-<span class="sd">            :param white_list: list of tuples with the mandatory arcs in the GBN during runtime.</span>
-<span class="sd">            :param parallelize: True if the evaluation of the solutions is desired to be parallelized in multiple cores.</span>
-<span class="sd">            :param init_data: Numpy array containing the data the EDA is desired to be initialized from. By default, an</span>
-<span class="sd">            initializer is used.</span>
+<span class="sd">        :param size_gen: Population size. Number of individuals in each generation.</span>
+<span class="sd">        :param max_iter: Maximum number of iterations during runtime.</span>
+<span class="sd">        :param dead_iter: Stopping criteria. Number of iterations with no improvement after which, the algorithm finish.</span>
+<span class="sd">        :param n_variables: Number of variables to be optimized.</span>
+<span class="sd">        :param lower_bound: lower bound for the uniform distribution sampling.</span>
+<span class="sd">        :param upper_bound: lower bound for the uniform distribution sampling.</span>
+<span class="sd">        :param alpha: Percentage of population selected to update the probabilistic model.</span>
+<span class="sd">        :param elite_factor: Percentage of previous population selected to add to new generation (elite approach).</span>
+<span class="sd">        :param disp: Set to True to print convergence messages.</span>
+<span class="sd">        :param black_list: list of tuples with the forbidden arcs in the GBN during runtime.</span>
+<span class="sd">        :param white_list: list of tuples with the mandatory arcs in the GBN during runtime.</span>
+<span class="sd">        :param parallelize: True if the evaluation of the solutions is desired to be parallelized in multiple cores.</span>
+<span class="sd">        :param init_data: Numpy array containing the data the EDA is desired to be initialized from. By default, an</span>
+<span class="sd">        initializer is used.</span>
+<span class="sd">        :type lower_bound: List of lower bounds of size equal to number of variables OR single bound to all dimensions.</span>
+<span class="sd">        :type upper_bound: List of upper bounds of size equal to number of variables OR single bound to all dimensions.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">size_gen</span><span class="o">=</span><span class="n">size_gen</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="n">max_iter</span><span class="p">,</span> <span class="n">dead_iter</span><span class="o">=</span><span class="n">dead_iter</span><span class="p">,</span>
@@ -149,10 +154,9 @@
                          <span class="n">parallelize</span><span class="o">=</span><span class="n">parallelize</span><span class="p">,</span> <span class="n">init_data</span><span class="o">=</span><span class="n">init_data</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">vars</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_variables</span><span class="p">)]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">landscape_bounds</span> <span class="o">=</span> <span class="n">landscape_bounds</span>
+        <span class="c1"># self.landscape_bounds = landscape_bounds</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pm</span> <span class="o">=</span> <span class="n">GBN</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vars</span><span class="p">,</span> <span class="n">black_list</span><span class="o">=</span><span class="n">black_list</span><span class="p">,</span> <span class="n">white_list</span><span class="o">=</span><span class="n">white_list</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">init</span> <span class="o">=</span> <span class="n">UniformGenInit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_variables</span><span class="p">,</span> <span class="n">lower_bound</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">landscape_bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-                                   <span class="n">upper_bound</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">landscape_bounds</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init</span> <span class="o">=</span> <span class="n">UniformGenInit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_variables</span><span class="p">,</span> <span class="n">lower_bound</span><span class="o">=</span><span class="n">lower_bound</span><span class="p">,</span> <span class="n">upper_bound</span><span class="o">=</span><span class="n">upper_bound</span><span class="p">)</span></div>
 </pre></div>
 
            </div>

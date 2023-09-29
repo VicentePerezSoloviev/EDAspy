@@ -13,6 +13,15 @@ EDAspy.optimization.univariate.umda\_binary module
    :show-inheritance:
    :inherited-members:
 
+EDAspy.optimization.univariate.umda\_categorical module
+--------------------------------------------------------
+
+.. automodule:: EDAspy.optimization.univariate.umda_categorical
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :inherited-members:
+
 EDAspy.optimization.univariate.umda\_continuous module
 ------------------------------------------------------
 
@@ -23,7 +32,7 @@ EDAspy.optimization.univariate.umda\_continuous module
    :inherited-members:
 
 EDAspy.optimization.univariate.keda
-------------------------------------------------------
+------------------------------------
 
 .. automodule:: EDAspy.optimization.univariate.keda
    :members:

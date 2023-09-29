@@ -2,8 +2,10 @@
 # coding: utf-8
 
 import numpy as np
+from typing import Union, List
+
 from ..custom.probabilistic_models import UniGauss
-from ..custom.initialization_models import UniGaussGenInit
+from ..custom.initialization_models import UniformGenInit, UniGaussGenInit
 from ..eda import EDA
 
 
@@ -36,8 +38,9 @@ class UMDAc(EDA):
             n_vars = 10
             benchmarking = ContinuousBenchmarkingCEC14(n_vars)
 
-            umda = UMDAc(size_gen=100, max_iter=100, dead_iter=10, n_variables=10, alpha=0.5)
-            # We leave bound by default
+            umda = UMDAc(size_gen=100, max_iter=100, dead_iter=10, n_variables=10, alpha=0.5,
+                         lower_bound=-100, upper_bound=100)
+
             eda_result = umda.minimize(benchmarking.cec4, True)
 
     References:
@@ -55,44 +58,46 @@ class UMDAc(EDA):
                  max_iter: int,
                  dead_iter: int,
                  n_variables: int,
+                 lower_bound: Union[np.array, List[float], float],
+                 upper_bound: Union[np.array, List[float], float],
                  alpha: float = 0.5,
                  vector: np.array = None,
-                 lower_bound: float = 0.5,
+                 lower_factor: float = 0.5,
                  elite_factor: float = 0.4,
                  disp: bool = True,
                  parallelize: bool = False,
                  init_data: np.array = None):
         r"""
-        Args:
-            size_gen: Population size of each generation.
-            max_iter: Maximum number of function evaluations.
-            dead_iter: Stopping criteria. Number of iterations after with no improvement after which EDA stops.
-            n_variables: Number of variables to be optimized.
-            alpha: Percentage of population selected to update the probabilistic model.
-            vector: Array with shape (2, n_variables) where rows are mean and std of the parameters to be optimized.
-            lower_bound: Lower bound imposed in std of the variables to not converge to std=0.
-            elite_factor: Percentage of previous population selected to add to new generation (elite approach).
-            disp: Set to True to print convergence messages.
-            parallelize: True if the evaluation of the solutions is desired to be parallelized in multiple cores.
-            init_data: Numpy array containing the data the EDA is desired to be initialized from. By default, an
-            initializer is used.
+        :param size_gen: Population size of each generation.
+        :param max_iter: Maximum number of function evaluations.
+        :param dead_iter: Stopping criteria. Number of iterations after with no improvement after which EDA stops.
+        :param n_variables: Number of variables to be optimized.
+        :param lower_bound: lower bound for the uniform distribution sampling.
+        :param upper_bound: lower bound for the uniform distribution sampling.
+        :param alpha: Percentage of population selected to update the probabilistic model.
+        :param vector: Array with shape (2, n_variables) where rows are mean and std of the parameters to be optimized.
+        :param lower_factor: Lower bound imposed in std of the variables to not converge to std=0.
+        :param elite_factor: Percentage of previous population selected to add to new generation (elite approach).
+        :param disp: Set to True to print convergence messages.
+        :param parallelize: True if the evaluation of the solutions is desired to be parallelized in multiple cores.
+        :param init_data: Numpy array containing the data the EDA is desired to be initialized from. By default, an
+        initializer is used.
+        :type lower_bound: List of lower bounds of size equal to number of variables OR single bound to all dimensions.
+        :type upper_bound: List of upper bounds of size equal to number of variables OR single bound to all dimensions.
         """
 
         self.vector = vector
-        self.lower_bound = lower_bound
+        self.lower_bound = lower_factor
         self.names_vars = list(range(n_variables))
 
         super().__init__(size_gen=size_gen, max_iter=max_iter, dead_iter=dead_iter, n_variables=n_variables,
                          alpha=alpha, elite_factor=elite_factor, disp=disp, parallelize=parallelize,
                          init_data=init_data)
 
-        if self.vector is None:
-            self.vector = np.zeros((2, n_variables))
-            self.vector[0, :] = [0] * n_variables
-            self.vector[1, :] = [100] * n_variables  # high value to ensure variance
-        else:
+        if self.vector is not None:
             assert self.vector.shape == (2, n_variables)
+            self.init = UniGaussGenInit(n_variables, means_vector=self.vector[0, :], stds_vector=self.vector[1, :])
+        else:
+            self.init = UniformGenInit(self.n_variables, lower_bound=lower_bound, upper_bound=upper_bound)
 
-        self.init = UniGaussGenInit(n_variables, means_vector=self.vector[0, :], stds_vector=self.vector[1, :])
-
-        self.pm = UniGauss(self.names_vars, lower_bound)
+        self.pm = UniGauss(self.names_vars, lower_factor)

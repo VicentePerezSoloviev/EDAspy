@@ -23,7 +23,7 @@ We initialize the EDA with the following parameters:
 .. code-block:: python3
 
     speda = SPEDA(size_gen=300, max_iter=100, dead_iter=20, n_variables=10,
-                  landscape_bounds=(-60, 60), l=10)
+                  lower_bound=-60, upper_bound=60, l=10)
 
     eda_result = speda.minimize(benchmarking.cec14_4, True)
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EDAspy.optimization.univariate.umda_binary &mdash; EDAspy 1.1.0 documentation</title>
+  <title>EDAspy.optimization.univariate.umda_binary &mdash; EDAspy 1.1.2 documentation</title>
       <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -130,20 +130,19 @@
                  <span class="n">parallelize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
                  <span class="n">init_data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Args:</span>
-<span class="sd">            size_gen: Population size of each generation.</span>
-<span class="sd">            max_iter: Maximum number of function evaluations.</span>
-<span class="sd">            dead_iter: Stopping criteria. Number of iterations after with no improvement after which EDA stops.</span>
-<span class="sd">            n_variables: Number of variables to be optimized.</span>
-<span class="sd">            alpha: Percentage of population selected to update the probabilistic model.</span>
-<span class="sd">            vector: Array with shape (n_variables, ) where rows are mean and std of the parameters to be optimized.</span>
-<span class="sd">            lower_bound: Lower bound imposed to the probabilities of the variables. If not desired, set to 0.</span>
-<span class="sd">            upper_bound: Upper bound imposed to the probabilities of the variables. If not desired, set to 1.</span>
-<span class="sd">            elite_factor: Percentage of previous population selected to add to new generation (elite approach).</span>
-<span class="sd">            disp: Set to True to print convergence messages.</span>
-<span class="sd">            parallelize: True if the evaluation of the solutions is desired to be parallelized in multiple cores.</span>
-<span class="sd">            init_data: Numpy array containing the data the EDA is desired to be initialized from. By default, an</span>
-<span class="sd">            initializer is used.</span>
+<span class="sd">        :param size_gen: Population size of each generation.</span>
+<span class="sd">        :param max_iter: Maximum number of function evaluations.</span>
+<span class="sd">        :param dead_iter: Stopping criteria. Number of iterations after with no improvement after which EDA stops.</span>
+<span class="sd">        :param n_variables: Number of variables to be optimized.</span>
+<span class="sd">        :param alpha: Percentage of population selected to update the probabilistic model.</span>
+<span class="sd">        :param vector: Array with shape (n_variables, ) where rows are mean and std of the parameters to be optimized.</span>
+<span class="sd">        :param lower_bound: Lower bound imposed to the probabilities of the variables. If not desired, set to 0.</span>
+<span class="sd">        :param upper_bound: Upper bound imposed to the probabilities of the variables. If not desired, set to 1.</span>
+<span class="sd">        :param elite_factor: Percentage of previous population selected to add to new generation (elite approach).</span>
+<span class="sd">        :param disp: Set to True to print convergence messages.</span>
+<span class="sd">        :param parallelize: True if the evaluation of the solutions is desired to be parallelized in multiple cores.</span>
+<span class="sd">        :param init_data: Numpy array containing the data the EDA is desired to be initialized from. By default, an</span>
+<span class="sd">        initializer is used.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">size_gen</span><span class="o">=</span><span class="n">size_gen</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="n">max_iter</span><span class="p">,</span> <span class="n">dead_iter</span><span class="o">=</span><span class="n">dead_iter</span><span class="p">,</span> <span class="n">n_variables</span><span class="o">=</span><span class="n">n_variables</span><span class="p">,</span>
