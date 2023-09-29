@@ -4,7 +4,7 @@
 import numpy as np
 import pandas as pd
 from pgmpy.models import BayesianNetwork
-from pgmpy.estimators import BicScore, ExhaustiveSearch, MaximumLikelihoodEstimator
+from pgmpy.estimators import HillClimbSearch, MaximumLikelihoodEstimator
 
 from ._probabilistic_model import ProbabilisticModel
 
@@ -47,9 +47,8 @@ class BN(ProbabilisticModel):
         self.pm.add_nodes_from(self.variables)
 
         # learn structure
-        bic = BicScore(data)
-        es = ExhaustiveSearch(data, scoring_method=bic)
-        best_structure = es.estimate()
+        es = HillClimbSearch(data)
+        best_structure = es.estimate(scoring_method='bicscore', max_iter=1000, show_progress=False)
 
         for edge in best_structure.edges():
             self.pm.add_edge(edge[0], edge[1])

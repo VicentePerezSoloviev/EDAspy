@@ -92,7 +92,7 @@ Clone the repository:
 
     git clone https://github.com/VicentePerezSoloviev/EDAspy.git
     cd EDAspy
-    git checkout v1.1.2 # You can checkout a specific version if you want
+    git checkout v1.1.3 # You can checkout a specific version if you want
     python setup.py install
 
 Testing
