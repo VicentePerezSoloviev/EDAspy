@@ -4,6 +4,7 @@
 [![PyPI license](https://img.shields.io/pypi/l/EDAspy.svg)](https://pypi.python.org/pypi/EDAspy/)
 [![Downloads](https://static.pepy.tech/badge/edaspy)](https://pepy.tech/project/edaspy)
 [![Documentation Status](https://readthedocs.org/projects/edaspy/badge/?version=latest)](https://edaspy.readthedocs.io/en/latest/?badge=latest)
+[![CodeFactor](https://www.codefactor.io/repository/github/vicenteperezsoloviev/edaspy/badge)](https://www.codefactor.io/repository/github/vicenteperezsoloviev/edaspy)
 
 # EDAspy
 
