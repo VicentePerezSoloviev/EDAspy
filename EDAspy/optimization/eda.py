@@ -188,8 +188,12 @@ class EDA(ABC):
                 if not_better == self.dead_iter:
                     break
 
+            worst_cost = max(self.evaluations)
+            if worst_cost == self.best_mae_global:
+                break
+
             if output_runtime:
-                print('IT: ', _, '\tBest cost: ', self.best_mae_global)
+                print('IT:  ', _, '\tBest cost: ', self.best_mae_global, '\tWorst cost: ', worst_cost)
 
         if self.disp:
             print("\tNFEVALS = " + str(len(history) * self.size_gen) + " F = " + str(self.best_mae_global))
