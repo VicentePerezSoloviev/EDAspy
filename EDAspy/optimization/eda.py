@@ -46,6 +46,8 @@ class EDA(ABC):
         assert dead_iter <= self.max_iter, 'dead_iter must be lower than max_iter'
         self.dead_iter = dead_iter
 
+        self.iter = 0
+
         self.best_mae_global = 999999999999
         self.best_ind_global = np.array([0]*self.n_variables)
 
@@ -164,7 +166,7 @@ class EDA(ABC):
         history.append(best_mae_local)
         best_ind_local = best_ind_global = np.where(self.evaluations == best_mae_local)[0][0]
 
-        for _ in range(self.max_iter - 1):
+        for self.iter in range(self.max_iter - 1):
             self._truncation()
             self._update_pm()
 
@@ -189,7 +191,7 @@ class EDA(ABC):
                     break
 
             if output_runtime:
-                print('IT: ', _, '\tBest cost: ', self.best_mae_global)
+                print('IT: ', self.iter, '\tBest cost: ', self.best_mae_global)
 
         if self.disp:
             print("\tNFEVALS = " + str(len(history) * self.size_gen) + " F = " + str(self.best_mae_global))
