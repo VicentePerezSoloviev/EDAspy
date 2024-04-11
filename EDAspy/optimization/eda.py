@@ -138,13 +138,14 @@ class EDA(ABC):
             "parallelize": self.parallelize
         }
 
-    def minimize(self, cost_function: callable, output_runtime: bool = True, *args, **kwargs) -> EdaResult:
+    def minimize(self, cost_function: callable, output_runtime: bool = True, sanitize: callable = None, *args, **kwargs) -> EdaResult:
         """
         Minimize function to execute the EDA optimization. By default, the optimizer is designed to minimize a cost
         function; if maximization is desired, just add a minus sign to your cost function.
 
         :param cost_function: cost function to be optimized and accepts an array as argument.
         :param output_runtime: true if information during runtime is desired.
+        :param sanitize: run before updating model, can be used to adjust the representation of the generation
         :return: EdaResult object with results and information.
         :rtype: EdaResult
         """
@@ -166,6 +167,8 @@ class EDA(ABC):
 
         for _ in range(self.max_iter - 1):
             self._truncation()
+            if sanitize is not None:
+                sanitize(self.generation)
             self._update_pm()
 
             self._new_generation()
