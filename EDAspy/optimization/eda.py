@@ -31,6 +31,7 @@ class EDA(ABC):
                  disp: bool = True,
                  parallelize: bool = False,
                  init_data: np.array = None,
+                 w_noise: float = .5,
                  *args, **kwargs):
 
         self.disp = disp
@@ -42,6 +43,12 @@ class EDA(ABC):
         self.elite_factor = elite_factor
         self.elite_length = int(size_gen * elite_factor)
         self.parallelize = parallelize
+
+        # Gaussian white noise definition
+        if (w_noise != 0) and (w_noise is not None):
+            self.w_noise = w_noise
+        else:
+            self.w_noise = 0
 
         assert dead_iter <= self.max_iter, 'dead_iter must be lower than max_iter'
         self.dead_iter = dead_iter
@@ -138,13 +145,15 @@ class EDA(ABC):
             "parallelize": self.parallelize
         }
 
-    def minimize(self, cost_function: callable, output_runtime: bool = True, *args, **kwargs) -> EdaResult:
+    def minimize(self, cost_function: callable, output_runtime: bool = True, ftol: float = 1e-8,
+                 *args, **kwargs) -> EdaResult:
         """
         Minimize function to execute the EDA optimization. By default, the optimizer is designed to minimize a cost
         function; if maximization is desired, just add a minus sign to your cost function.
 
         :param cost_function: cost function to be optimized and accepts an array as argument.
         :param output_runtime: true if information during runtime is desired.
+        :param ftol: termination tolerance
         :return: EdaResult object with results and information.
         :rtype: EdaResult
         """
@@ -160,12 +169,23 @@ class EDA(ABC):
         self.elite_temp = np.array([self.generation[0, :]])
         self.evaluations_elite = np.array([self.evaluations.item(0)])
 
-        best_mae_local = best_mae_global = min(self.evaluations)
+        best_mae_local = self.best_mae_global = min(self.evaluations)
         history.append(best_mae_local)
-        best_ind_local = best_ind_global = np.where(self.evaluations == best_mae_local)[0][0]
+        best_ind_local = self.best_ind_global = np.where(self.evaluations == best_mae_local)[0][0]
 
-        for _ in range(self.max_iter - 1):
+        if self.w_noise == 0:
+            white_noise = 0
+        elif self.w_noise == -1:
+            white_noise = ""
+        else:
+            white_noise = np.random.normal(0, self.w_noise, size=(self.truncation_length, self.n_variables))
+
+        if output_runtime:
+            print('IT: 0\tBest cost: ', self.best_mae_global)
+
+        for _ in range(1, self.max_iter):
             self._truncation()
+            self.generation += white_noise  # We add Gaussian white noise for avoiding genetic drift (optional)
             self._update_pm()
 
             self._new_generation()
@@ -178,7 +198,7 @@ class EDA(ABC):
             best_ind_local = self.generation[best_ind_local]
 
             # update the best values ever
-            if best_mae_local < self.best_mae_global:
+            if best_mae_local < self.best_mae_global * (1 + ftol):
                 self.best_mae_global = best_mae_local
                 self.best_ind_global = best_ind_local
                 not_better = 0

@@ -13,3 +13,4 @@ from .kde_bayesian_network import KDEBN
 from .univariate_kde import UniKDE
 from .discrete_bayesian_network import BN
 from .univariate_categorical import UniCategorical
+from.adaptive_univariate_gaussian import AdaptUniGauss

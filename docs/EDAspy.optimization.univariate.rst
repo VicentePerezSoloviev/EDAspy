@@ -40,6 +40,15 @@ EDAspy.optimization.univariate.keda
    :show-inheritance:
    :inherited-members:
 
+EDAspy.optimization.univariate.pbil
+------------------------------------
+
+.. automodule:: EDAspy.optimization.univariate.pbil
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :inherited-members:
+
 Module contents
 ---------------
 

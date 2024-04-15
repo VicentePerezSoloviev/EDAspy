@@ -4,6 +4,14 @@ EDAspy.optimization.custom.probabilistic\_models package
 Submodules
 ----------
 
+EDAspy.optimization.custom.probabilistic\_models.adaptive\univariate\gaussian module
+------------------------------------------------------------------------------------
+
+.. automodule:: EDAspy.optimization.custom.probabilistic_models.adaptive_univariate_gaussian
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 EDAspy.optimization.custom.probabilistic\_models.discrete\_bayesian\_network module
 ------------------------------------------------------------------------------------
 

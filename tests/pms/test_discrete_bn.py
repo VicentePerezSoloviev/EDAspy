@@ -7,7 +7,7 @@ class TestBN(TestCase):
 
     np.random.seed(42)
 
-    def test_sample(self):
+    def test_sample_bic(self):
         """
         Test if the samplings order is the same as the input used.
         """
@@ -28,7 +28,38 @@ class TestBN(TestCase):
         data = init.sample(100)
 
         bn = BN(variables=variables)
-        bn.learn(data)
+        bn.learn(data, score="bicscore")
+
+        samples = bn.sample(100)
+
+        for i in range(len(variables)):
+            # check if unique values are the same
+            assert len(set(possible_values[i]) - set(samples[:, i])) + \
+                   len(set(samples[:, i]) - set(possible_values[i])) == 0, "Unique values and possible " \
+                                                                           "values do not match"
+
+    def test_sample_bdeu(self):
+        """
+        Test if the samplings order is the same as the input used.
+        """
+        variables = ['A', 'B', 'C']
+        possible_values = np.array([
+            ['q', 'w', 'e'],
+            ['a', 's', 'd', 'f'],
+            ['b', 'v']], dtype=object
+        )
+
+        frequency = np.array([
+            [.25, .5, .25],
+            [.25, .25, .25, .25],
+            [.4, .6]], dtype=object
+        )
+
+        init = CategoricalSampling(n_variables=len(variables), possible_values=possible_values, frequency=frequency)
+        data = init.sample(100)
+
+        bn = BN(variables=variables)
+        bn.learn(data, score="bdeuscore")
 
         samples = bn.sample(100)
 
@@ -46,13 +77,13 @@ class TestBN(TestCase):
         possible_values = np.array([
             ['q', 'w', 'e'],
             ['a', 's', 'd', 'f'],
-            ['b', 'v']]
+            ['b', 'v']], dtype=object
         )
 
         frequency = np.array([
             [0.2, 0.5, 0.3],
             [.25, .25, .25, .25],
-            [.1, .9]]
+            [.1, .9]], dtype=object
         )
 
         n_rows = 100

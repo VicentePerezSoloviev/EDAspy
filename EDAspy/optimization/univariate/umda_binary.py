@@ -77,7 +77,7 @@ class UMDAd(EDA):
 
         super().__init__(size_gen=size_gen, max_iter=max_iter, dead_iter=dead_iter, n_variables=n_variables,
                          alpha=alpha, elite_factor=elite_factor, disp=disp, parallelize=parallelize,
-                         init_data=init_data)
+                         init_data=init_data, w_noise=0)
 
         self.lower_bound = lower_bound
         self.upper_bound = upper_bound

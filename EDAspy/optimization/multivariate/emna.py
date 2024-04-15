@@ -58,7 +58,8 @@ class EMNA(EDA):
                  lower_factor: float = 0.5,
                  upper_factor: float = 100,
                  parallelize: bool = False,
-                 init_data: np.array = None):
+                 init_data: np.array = None,
+                 w_noise: float = .5):
         r"""
         :param size_gen: Population size. Number of individuals in each generation.
         :param max_iter: Maximum number of iterations during runtime.
@@ -74,12 +75,14 @@ class EMNA(EDA):
         :param parallelize: True if the evaluation of the solutions is desired to be parallelized in multiple cores.
         :param init_data: Numpy array containing the data the EDA is desired to be initialized from. By default, an
         initializer is used.
+        :param w_noise: Intensity of the Gaussian white noise added to each generation in order to avoid genetic drift.
+        :type w_noise: float
         :type lower_bound: List of lower bounds of size equal to number of variables OR single bound to all dimensions.
         :type upper_bound: List of upper bounds of size equal to number of variables OR single bound to all dimensions.
         """
         super().__init__(size_gen=size_gen, max_iter=max_iter, dead_iter=dead_iter,
                          n_variables=n_variables, alpha=alpha, elite_factor=elite_factor, disp=disp,
-                         parallelize=parallelize, init_data=init_data)
+                         parallelize=parallelize, init_data=init_data, w_noise=w_noise)
 
         self.lower_bound = lower_factor
         self.upper_bound = upper_factor

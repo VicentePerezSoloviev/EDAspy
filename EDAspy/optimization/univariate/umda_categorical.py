@@ -88,7 +88,7 @@ class UMDAcat(EDA):
 
         super().__init__(size_gen=size_gen, max_iter=max_iter, dead_iter=dead_iter,
                          n_variables=n_variables, alpha=alpha, elite_factor=elite_factor, disp=disp,
-                         parallelize=parallelize, init_data=init_data)
+                         parallelize=parallelize, init_data=init_data, w_noise=-1)
 
         self.vars = [str(i) for i in range(n_variables)]
         # self.landscape_bounds = landscape_bounds

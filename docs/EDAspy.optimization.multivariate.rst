@@ -48,6 +48,15 @@ EDAspy.optimization.multivariate.emna module
    :show-inheritance:
    :inherited-members:
 
+EDAspy.optimization.multivariate.boa module
+----------------------------------------------
+
+.. automodule:: EDAspy.optimization.multivariate.boa
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :inherited-members:
+
 Module contents
 ---------------
 

@@ -43,6 +43,6 @@ class CategoricalSampling(GenInit):
         """
         data = {}
         for i in range(self.n_variables):
-            data[i] = np.random.choice(self.possible_values[i], size=size)
+            data[i] = np.random.choice(self.possible_values[i], size=size, p=self.frequency[i])
 
         return pd.DataFrame(data).to_numpy()

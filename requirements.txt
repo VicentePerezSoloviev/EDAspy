@@ -1,9 +1,7 @@
-matplotlib
 networkx
-numpy
 pandas
-pybnesian==0.4.2
-scikit_learn
-scipy
-setuptools
 pgmpy
+pyarrow==9.0.0
+pybnesian==0.4.3
+scipy
+multiprocess

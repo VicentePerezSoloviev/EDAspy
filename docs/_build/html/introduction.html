@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EDAspy &mdash; EDAspy 1.1.3 documentation</title>
+  <title>EDAspy &mdash; EDAspy 1.1.4 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -43,18 +43,13 @@
 <li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#getting-started">Getting started</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#build-from-source">Build from Source</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#building">Building</a></li>
-</ul>
-</li>
 <li class="toctree-l2"><a class="reference internal" href="#testing">Testing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#bibliography">Bibliography</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installing EDAspy</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">Formal documentation</a></li>
 </ul>
 
@@ -111,8 +106,11 @@ variables considered, we will use a different EDA implementation.</p>
 <li><p>SPEDA: Semiparametric Estimation of Distribution Algorithm [7]. This multivariate EDA allows estimating the density of a variable using either KDE or Gaussians, and allow dependencies between both types of variables. It is an archive-based approach where the probabilistic model is updated given the best individuals of l previous generations.</p></li>
 <li><p>MultivariateKEDA: Special case of SPEDA approach in which all nodes are restricted to be estimated using KDE (Gaussian nodes are forbidden) [7]. It is also an archive-based approach.</p></li>
 <li><p>EBNA: Estimation of Bayesian Network Algorithm [1]. This version of EDAs is used for categorical data. The probabilistic model used is a Categorical Bayesian network, where conditional dependencies between variables can be analyzed.</p></li>
+<li><p>BOA: Bayesian Optimization Algorithm [8]. This version of EDAs is used for categorical data. The probabilistic model used is a Categorical Bayesian network, where Bayesian Dirichlet score is used, in contrast to EBNA.</p></li>
+<li><p>PBIL: Population-based incremental learning [9]. This version is a modification of UMDA strategy, where the mean of the Gaussian distribution is computed not only considering the best individuals, but also the worst one.</p></li>
 </ul>
 <p>Some tools are also available in EDAspy such as the Bayesian network structure plotting, for visualizing the graph learnt in some of the implementations, if needed.</p>
+<p>Although some categorical EDAs are implemented, the package is focused in continuous optimization. Below, we show a CPU time analysis for the different approaches implemented for continuous optimization. Note that the CPU time can be reduced using parallelization (available as a parameter in the EDA initialization). Reference [7] shows a comparison about the performance of the algorithms in terms of cost function minimization.</p>
 </section>
 <section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline"></a></h2>
@@ -120,30 +118,9 @@ variables considered, we will use a different EDA implementation.</p>
 </section>
 <section id="getting-started">
 <h2>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline"></a></h2>
-<p>For installing EDAspy from Pypi execute the following command using pip:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install EDAspy
-</pre></div>
-</div>
-</section>
-<section id="build-from-source">
-<h2>Build from Source<a class="headerlink" href="#build-from-source" title="Permalink to this headline"></a></h2>
-<section id="prerequisites">
-<h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline"></a></h3>
-<ul class="simple">
-<li><p>Python &gt;= 3.0</p></li>
-<li><p>Pybnesian, numpy, pandas.</p></li>
-</ul>
-</section>
-<section id="building">
-<h3>Building<a class="headerlink" href="#building" title="Permalink to this headline"></a></h3>
-<p>Clone the repository:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/VicentePerezSoloviev/EDAspy.git
-<span class="nb">cd</span> EDAspy
-git checkout v1.1.3 <span class="c1"># You can checkout a specific version if you want</span>
-python setup.py install
-</pre></div>
-</div>
-</section>
+<p>We provide a detailed installation guide for EDAspy in <a class="reference external" href="https://edaspy.readthedocs.io/en/latest/installation.html">https://edaspy.readthedocs.io/en/latest/installation.html</a></p>
+<p>Please refer to the installation discussion (<a class="reference external" href="https://github.com/VicentePerezSoloviev/EDAspy/discussions/18">https://github.com/VicentePerezSoloviev/EDAspy/discussions/18</a>) section
+to discuss further issues with the developer community.</p>
 </section>
 <section id="testing">
 <h2>Testing<a class="headerlink" href="#testing" title="Permalink to this headline"></a></h2>
@@ -166,6 +143,8 @@ pip:</p>
 <p>[5] Larranaga, P. (2000). Optimization in continuous domains by learning and simulation of Gaussian networks. In Proc. of the 2000 Genetic and Evolutionary Computation Conference Workshop Program.</p>
 <p>[6] Soloviev, V. P., Larrañaga, P., &amp; Bielza, C. (2022). Estimation of distribution algorithms using Gaussian Bayesian networks to solve industrial optimization problems constrained by environment variables. Journal of Combinatorial Optimization, 44(2), 1077-1098.</p>
 <p>[7] Soloviev, Vicente P.&amp; Bielza, Concha &amp; Larrañaga, Pedro (2023). Semiparametric Estimation of Distribution Algorithms for continuous optimization. IEEE Transactions on Evolutionary Computation.</p>
+<p>[8] Martin Pelikan, David E. Goldberg, and Erick Cantú-Paz (1999). BOA: the Bayesian optimization algorithm. In Proc. of the Genetic and Evolutionary Computation Congress (pp. 525–532).</p>
+<p>[9] Sebag, M., &amp; Ducoulombier, A. (1998, September). Extending population-based incremental learning to continuous search spaces. In International Conference on Parallel Problem Solving from Nature (pp. 418-427). Springer.</p>
 </section>
 </section>
 

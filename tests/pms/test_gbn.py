@@ -73,3 +73,26 @@ class TestGBN(TestCase):
 
         assert all(elem in gbn.print_structure() for elem in white_list)
         assert not all(elem in gbn.print_structure() for elem in black_list)
+
+    def test_map(self):
+        """
+        Test if the MAP output matches the results from the ranges of the variables
+        """
+
+        n_rows, n_vars = 10, 3
+        var_names = ['A', 'B', 'C']
+
+        data = pd.DataFrame(np.random.random((n_rows, n_vars)), columns=var_names)
+        data['A'] *= 10
+        data['A'] = abs(data['A'])
+        data['B'] *= 100
+        data['B'] = abs(data['B'])
+        data['C'] *= 1000
+        data['C'] = abs(data['C'])
+
+        gbn = GBN(var_names)
+        gbn.learn(data)
+
+        print(gbn.maximum_a_posteriori([8, 108], ["A", "B"]))
+
+        print(gbn.maximum_a_posteriori([8, 1100], ["A", "C"]))

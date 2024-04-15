@@ -52,6 +52,7 @@ class GBN(ProbabilisticModel):
             self.sample = self._sample_normal
 
         self.id = 4
+        self.fitted = False
 
     def learn(self, dataset: np.array, *args, **kwargs):
         """
@@ -74,6 +75,8 @@ class GBN(ProbabilisticModel):
 
         self.pm.fit(data)
         self.top_order = self.pm.graph().topological_sort()
+
+        self.fitted = True
 
     def print_structure(self) -> list:
         """
@@ -223,3 +226,10 @@ class GBN(ProbabilisticModel):
         sigma_1_2 = sigma_11 - np.dot(sigma_12, np.dot(inv_sigma_22, sigma_21))
 
         return mu_1_2, sigma_1_2
+
+    def maximum_a_posteriori(self, evidence, var_names):
+        # TODO: test this
+        assert self.fitted, "The Bayesian network has not been fitted yet. Please, learn it first."
+
+        mu_map, sigma_map = self.inference(evidence=evidence, var_names=var_names)
+        return mu_map

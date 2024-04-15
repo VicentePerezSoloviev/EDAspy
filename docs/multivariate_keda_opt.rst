@@ -1,6 +1,6 @@
-****************************************
-Using SPEDA for continuous optimization
-****************************************
+***************************************************
+Using Multivariate KEDA for continuous optimization
+***************************************************
 
 In this notebook we use the MultivariateKEDA approach to optimize a wellknown benchmark. Note that KEDA
 learns and samples a KDE estimated Bayesian network in each iteration. Import the algorithm and the

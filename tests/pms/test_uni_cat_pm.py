@@ -11,13 +11,13 @@ class TestUniCategoricalPM(TestCase):
         possible_values = np.array([
             ['q', 'w', 'e'],
             ['a', 's', 'd', 'f'],
-            ['b', 'v']]
+            ['b', 'v']], dtype=object
         )
 
         frequency = np.array([
             [0.2, 0.5, 0.3],
             [.25, .25, .25, .25],
-            [.1, .9]]
+            [.1, .9]], dtype=object
         )
 
         n_rows = 100
@@ -38,13 +38,13 @@ class TestUniCategoricalPM(TestCase):
         possible_values = np.array([
             ['q', 'w', 'e'],
             ['a', 's', 'd', 'f'],
-            ['b', 'v']]
+            ['b', 'v']], dtype=object
         )
 
         frequency = np.array([
             [0.2, 0.5, 0.3],
             [.25, .25, .25, .25],
-            [.1, .9]]
+            [.1, .9]], dtype=object
         )
 
         n_rows = 100

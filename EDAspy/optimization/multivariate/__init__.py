@@ -8,3 +8,4 @@ from .emna import EMNA
 from .speda import SPEDA
 from .keda import MultivariateKEDA
 from .ebna import EBNA
+from .boa import BOA

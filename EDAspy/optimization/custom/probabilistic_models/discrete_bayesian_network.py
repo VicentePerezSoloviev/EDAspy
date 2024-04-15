@@ -32,11 +32,12 @@ class BN(ProbabilisticModel):
 
         self.id = 7
 
-    def learn(self, dataset: np.array, *args, **kwargs):
+    def learn(self, dataset: np.array, score: str = "bicscore", *args, **kwargs):
         """
         Learn a discrete Bayesian network from the dataset passed as argument.
 
         :param dataset: dataset from which learn the GBN.
+        :param score: score used for the score-based structure learning algorithm
         """
         data = pd.DataFrame(dataset, columns=self.variables, dtype="category")
 
@@ -48,7 +49,7 @@ class BN(ProbabilisticModel):
 
         # learn structure
         es = HillClimbSearch(data)
-        best_structure = es.estimate(scoring_method='bicscore', max_iter=1000, show_progress=False)
+        best_structure = es.estimate(scoring_method=score, max_iter=1000, show_progress=False)
 
         for edge in best_structure.edges():
             self.pm.add_edge(edge[0], edge[1])

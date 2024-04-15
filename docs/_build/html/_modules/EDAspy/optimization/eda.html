@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EDAspy.optimization.eda &mdash; EDAspy 1.1.3 documentation</title>
+  <title>EDAspy.optimization.eda &mdash; EDAspy 1.1.4 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -39,7 +39,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">EDAspy</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installing EDAspy</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Formal documentation</a></li>
 </ul>
 
@@ -101,6 +101,7 @@
                  <span class="n">disp</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
                  <span class="n">parallelize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
                  <span class="n">init_data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">w_noise</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">.</span><span class="mi">5</span><span class="p">,</span>
                  <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">disp</span> <span class="o">=</span> <span class="n">disp</span>
@@ -112,6 +113,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">elite_factor</span> <span class="o">=</span> <span class="n">elite_factor</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">elite_length</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">size_gen</span> <span class="o">*</span> <span class="n">elite_factor</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parallelize</span> <span class="o">=</span> <span class="n">parallelize</span>
+
+        <span class="c1"># Gaussian white noise definition</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">w_noise</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">w_noise</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">w_noise</span> <span class="o">=</span> <span class="n">w_noise</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">w_noise</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="k">assert</span> <span class="n">dead_iter</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_iter</span><span class="p">,</span> <span class="s1">&#39;dead_iter must be lower than max_iter&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dead_iter</span> <span class="o">=</span> <span class="n">dead_iter</span>
@@ -208,13 +215,15 @@
             <span class="s2">&quot;parallelize&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">parallelize</span>
         <span class="p">}</span></div>
 
-<div class="viewcode-block" id="EDA.minimize"><a class="viewcode-back" href="../../../EDAspy.optimization.html#EDAspy.optimization.eda.EDA.minimize">[docs]</a>    <span class="k">def</span> <span class="nf">minimize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cost_function</span><span class="p">:</span> <span class="n">callable</span><span class="p">,</span> <span class="n">output_runtime</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EdaResult</span><span class="p">:</span>
+<div class="viewcode-block" id="EDA.minimize"><a class="viewcode-back" href="../../../EDAspy.optimization.html#EDAspy.optimization.eda.EDA.minimize">[docs]</a>    <span class="k">def</span> <span class="nf">minimize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cost_function</span><span class="p">:</span> <span class="n">callable</span><span class="p">,</span> <span class="n">output_runtime</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">ftol</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-8</span><span class="p">,</span>
+                 <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EdaResult</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Minimize function to execute the EDA optimization. By default, the optimizer is designed to minimize a cost</span>
 <span class="sd">        function; if maximization is desired, just add a minus sign to your cost function.</span>
 
 <span class="sd">        :param cost_function: cost function to be optimized and accepts an array as argument.</span>
 <span class="sd">        :param output_runtime: true if information during runtime is desired.</span>
+<span class="sd">        :param ftol: termination tolerance</span>
 <span class="sd">        :return: EdaResult object with results and information.</span>
 <span class="sd">        :rtype: EdaResult</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -230,12 +239,23 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">elite_temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">evaluations_elite</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">evaluations</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="mi">0</span><span class="p">)])</span>
 
-        <span class="n">best_mae_local</span> <span class="o">=</span> <span class="n">best_mae_global</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">evaluations</span><span class="p">)</span>
+        <span class="n">best_mae_local</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_mae_global</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">evaluations</span><span class="p">)</span>
         <span class="n">history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">best_mae_local</span><span class="p">)</span>
-        <span class="n">best_ind_local</span> <span class="o">=</span> <span class="n">best_ind_global</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">evaluations</span> <span class="o">==</span> <span class="n">best_mae_local</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">best_ind_local</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_ind_global</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">evaluations</span> <span class="o">==</span> <span class="n">best_mae_local</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 
-        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_iter</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">w_noise</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">white_noise</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">w_noise</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">white_noise</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">white_noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">w_noise</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">truncation_length</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_variables</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">output_runtime</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;IT: 0</span><span class="se">\t</span><span class="s1">Best cost: &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_mae_global</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_iter</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_truncation</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">generation</span> <span class="o">+=</span> <span class="n">white_noise</span>  <span class="c1"># We add Gaussian white noise for avoiding genetic drift (optional)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_update_pm</span><span class="p">()</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">_new_generation</span><span class="p">()</span>
@@ -248,7 +268,7 @@
             <span class="n">best_ind_local</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="p">[</span><span class="n">best_ind_local</span><span class="p">]</span>
 
             <span class="c1"># update the best values ever</span>
-            <span class="k">if</span> <span class="n">best_mae_local</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_mae_global</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">best_mae_local</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_mae_global</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">ftol</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">best_mae_global</span> <span class="o">=</span> <span class="n">best_mae_local</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">best_ind_global</span> <span class="o">=</span> <span class="n">best_ind_local</span>
                 <span class="n">not_better</span> <span class="o">=</span> <span class="mi">0</span>

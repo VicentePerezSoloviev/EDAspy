@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EDAspy.optimization.custom.probabilistic_models package &mdash; EDAspy 1.1.3 documentation</title>
+  <title>EDAspy.optimization.custom.probabilistic_models package &mdash; EDAspy 1.1.4 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -15,6 +15,7 @@
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -42,7 +43,7 @@
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">EDAspy</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installing EDAspy</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">Formal documentation</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="EDAspy.html">EDAspy package</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="EDAspy.html#subpackages">Subpackages</a><ul class="current">
@@ -90,6 +91,68 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline"></a></h2>
 </section>
+<section id="module-EDAspy.optimization.custom.probabilistic_models.adaptive_univariate_gaussian">
+<span id="edaspy-optimization-custom-probabilistic-models-adaptiveunivariategaussian-module"></span><h2>EDAspy.optimization.custom.probabilistic_models.adaptiveunivariategaussian module<a class="headerlink" href="#module-EDAspy.optimization.custom.probabilistic_models.adaptive_univariate_gaussian" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="EDAspy.optimization.custom.probabilistic_models.adaptive_univariate_gaussian.AdaptUniGauss">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">EDAspy.optimization.custom.probabilistic_models.adaptive_univariate_gaussian.</span></span><span class="sig-name descname"><span class="pre">AdaptUniGauss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variables</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_bound</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/optimization/custom/probabilistic_models/adaptive_univariate_gaussian.html#AdaptUniGauss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.custom.probabilistic_models.adaptive_univariate_gaussian.AdaptUniGauss" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">EDAspy.optimization.custom.probabilistic_models._probabilistic_model.ProbabilisticModel</span></code></p>
+<p>This class implements the adaptive univariate Gaussians. With this implementation we are updating N univariate
+Gaussians in each iteration. When a dataset is given, each column is updated independently. The implementation
+involves a matrix with two rows, in which the first row are the means and the second one, are the standard
+deviations. Each Gaussian mean is updates as follows, where the two best individuals and the worst are considered.</p>
+<div class="math notranslate nohighlight">
+\[\mu_{l+1} = (1 - \alpha) \mu_l + \alpha (x^{best, 1}_l + x^{best, 2}_l - x^{worst}_l)\]</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="EDAspy.optimization.custom.probabilistic_models.adaptive_univariate_gaussian.AdaptUniGauss.sample">
+<span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">numpy.array</span><a class="reference internal" href="_modules/EDAspy/optimization/custom/probabilistic_models/adaptive_univariate_gaussian.html#AdaptUniGauss.sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.custom.probabilistic_models.adaptive_univariate_gaussian.AdaptUniGauss.sample" title="Permalink to this definition"></a></dt>
+<dd><p>Samples new solutions from the probabilistic model. In each solution, each variable is sampled
+from its respective normal distribution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>size</strong> – number of samplings of the probabilistic model.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>array with the dataset sampled</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="EDAspy.optimization.custom.probabilistic_models.adaptive_univariate_gaussian.AdaptUniGauss.learn">
+<span class="sig-name descname"><span class="pre">learn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.array</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/optimization/custom/probabilistic_models/adaptive_univariate_gaussian.html#AdaptUniGauss.learn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.custom.probabilistic_models.adaptive_univariate_gaussian.AdaptUniGauss.learn" title="Permalink to this definition"></a></dt>
+<dd><p>Estimates the independent Gaussian for each variable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> – dataset from which learn the probabilistic model.</p></li>
+<li><p><strong>alpha</strong> – adaptive parameter in formula</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="EDAspy.optimization.custom.probabilistic_models.adaptive_univariate_gaussian.AdaptUniGauss.print_structure">
+<span class="sig-name descname"><span class="pre">print_structure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">list</span><a class="reference internal" href="_modules/EDAspy/optimization/custom/probabilistic_models/adaptive_univariate_gaussian.html#AdaptUniGauss.print_structure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.custom.probabilistic_models.adaptive_univariate_gaussian.AdaptUniGauss.print_structure" title="Permalink to this definition"></a></dt>
+<dd><p>Prints the arcs between the nodes that represent the variables in the dataset. This function
+must be used after the learning process. Univariate approaches generate no-edged graphs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>list of arcs between variables</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
 <section id="module-EDAspy.optimization.custom.probabilistic_models.discrete_bayesian_network">
 <span id="edaspy-optimization-custom-probabilistic-models-discrete-bayesian-network-module"></span><h2>EDAspy.optimization.custom.probabilistic_models.discrete_bayesian_network module<a class="headerlink" href="#module-EDAspy.optimization.custom.probabilistic_models.discrete_bayesian_network" title="Permalink to this headline"></a></h2>
 <dl class="py class">
@@ -102,11 +165,14 @@
 Proceedings of the 14th python in science conference (scipy 2015) (Vol. 10). Citeseer.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="EDAspy.optimization.custom.probabilistic_models.discrete_bayesian_network.BN.learn">
-<span class="sig-name descname"><span class="pre">learn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.array</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/optimization/custom/probabilistic_models/discrete_bayesian_network.html#BN.learn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.custom.probabilistic_models.discrete_bayesian_network.BN.learn" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">learn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'bicscore'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/optimization/custom/probabilistic_models/discrete_bayesian_network.html#BN.learn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.custom.probabilistic_models.discrete_bayesian_network.BN.learn" title="Permalink to this definition"></a></dt>
 <dd><p>Learn a discrete Bayesian network from the dataset passed as argument.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>dataset</strong> – dataset from which learn the GBN.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> – dataset from which learn the GBN.</p></li>
+<li><p><strong>score</strong> – score used for the score-based structure learning algorithm</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -240,6 +306,11 @@ must be used after the learning process.</p>
 :return: (posterior mean, posterior covariance matrix)
 :rtype: (np.array, np.array)</p>
 </dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="EDAspy.optimization.custom.probabilistic_models.gaussian_bayesian_network.GBN.maximum_a_posteriori">
+<span class="sig-name descname"><span class="pre">maximum_a_posteriori</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">evidence</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_names</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/EDAspy/optimization/custom/probabilistic_models/gaussian_bayesian_network.html#GBN.maximum_a_posteriori"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#EDAspy.optimization.custom.probabilistic_models.gaussian_bayesian_network.GBN.maximum_a_posteriori" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 

@@ -2,6 +2,21 @@
 Changelog
 *********
 
+v1.1.4
+======
+
+- Add BOA and PBIL variants
+- Solve sphinx bug from readthedocs
+- Detailed the installation of the library
+- Added tolerance for the cost function comparison in minimize function
+- Added noise as an option for continuous optimizers
+- Solve bug related to ReadTheDocs _static issues in conf.py
+
+v1.1.3
+======
+
+- Solve bug in previous version with structure learning in discrete BN.
+
 v1.1.2
 ======
 

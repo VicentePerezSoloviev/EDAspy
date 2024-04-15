@@ -57,8 +57,14 @@ The following implementations are available in EDAspy:
 * EBNA: Estimation of Bayesian Network Algorithm [1]. This version of EDAs is used for categorical data. The probabilistic model used is a Categorical Bayesian network, where conditional dependencies between variables can be analyzed.
 
 
+* BOA: Bayesian Optimization Algorithm [8]. This version of EDAs is used for categorical data. The probabilistic model used is a Categorical Bayesian network, where Bayesian Dirichlet score is used, in contrast to EBNA.
+
+
+* PBIL: Population-based incremental learning [9]. This version is a modification of UMDA strategy, where the mean of the Gaussian distribution is computed not only considering the best individuals, but also the worst one.
+
 Some tools are also available in EDAspy such as the Bayesian network structure plotting, for visualizing the graph learnt in some of the implementations, if needed.
 
+Although some categorical EDAs are implemented, the package is focused in continuous optimization. Below, we show a CPU time analysis for the different approaches implemented for continuous optimization. Note that the CPU time can be reduced using parallelization (available as a parameter in the EDA initialization). Reference [7] shows a comparison about the performance of the algorithms in terms of cost function minimization.
 
 Examples
 ========
@@ -68,32 +74,11 @@ Some examples are available in https://github.com/VicentePerezSoloviev/EDAspy/tr
 Getting started
 ===============
 
-For installing EDAspy from Pypi execute the following command using pip:
+We provide a detailed installation guide for EDAspy in https://edaspy.readthedocs.io/en/latest/installation.html
 
-.. code-block:: bash
+Please refer to the installation discussion (https://github.com/VicentePerezSoloviev/EDAspy/discussions/18) section
+to discuss further issues with the developer community.
 
-    pip install EDAspy
-
-Build from Source
-==================
-
-Prerequisites
--------------
-
-- Python >= 3.0
-- Pybnesian, numpy, pandas.
-
-Building
---------
-
-Clone the repository:
-
-.. code-block:: bash
-
-    git clone https://github.com/VicentePerezSoloviev/EDAspy.git
-    cd EDAspy
-    git checkout v1.1.3 # You can checkout a specific version if you want
-    python setup.py install
 
 Testing
 =======
@@ -103,13 +88,14 @@ pip:
 
 .. code-block:: bash
 
-  pip install pytest
+    pip install pytest
+
 
 Run the tests with:
 
 .. code-block:: bash
 
-  pytest
+    pytest
 
 
 Bibliography
@@ -128,3 +114,7 @@ Bibliography
 [6] Soloviev, V. P., Larrañaga, P., & Bielza, C. (2022). Estimation of distribution algorithms using Gaussian Bayesian networks to solve industrial optimization problems constrained by environment variables. Journal of Combinatorial Optimization, 44(2), 1077-1098.
 
 [7] Soloviev, Vicente P.& Bielza, Concha & Larrañaga, Pedro (2023). Semiparametric Estimation of Distribution Algorithms for continuous optimization. IEEE Transactions on Evolutionary Computation.
+
+[8] Martin Pelikan, David E. Goldberg, and Erick Cantú-Paz (1999). BOA: the Bayesian optimization algorithm. In Proc. of the Genetic and Evolutionary Computation Congress (pp. 525–532).
+
+[9] Sebag, M., & Ducoulombier, A. (1998, September). Extending population-based incremental learning to continuous search spaces. In International Conference on Parallel Problem Solving from Nature (pp. 418-427). Springer.
