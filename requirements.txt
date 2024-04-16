@@ -5,3 +5,5 @@ pyarrow==9.0.0
 pybnesian==0.4.3
 scipy
 multiprocess
+matplotlib
+numpy
