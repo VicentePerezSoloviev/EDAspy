@@ -27,8 +27,10 @@ setuptools.setup(
     keywords=['EDA', 'estimation', 'bayesian', 'evolutionary', 'algorithm', 'optimization', 'time_series', 'feature',
               'selection', 'semiparametric', 'Gaussian'],
     python_requires='>=3.8, <3.11',
-    setup_requires=["networkx", "pandas", "pgmpy", "pyarrow==9.0.0", "pybnesian==0.4.3", "scipy", "multiprocess"],
-    install_requires=["networkx", "pandas", "pgmpy", "pyarrow==9.0.0", "pybnesian==0.4.3", "scipy", "multiprocess"],
+    setup_requires=["networkx", "pandas", "pgmpy", "pyarrow==9.0.0", "pybnesian==0.4.3", "scipy", "multiprocess",
+                    "matplotlib", "numpy"],
+    install_requires=["networkx", "pandas", "pgmpy", "pyarrow==9.0.0", "pybnesian==0.4.3", "scipy", "multiprocess",
+                      "matplotlib", "numpy"],
     license="MIT",
     include_package_data=True,
     package_data={'': ['benchmarks/input_data/*.txt']}
