@@ -114,21 +114,16 @@ Run the tests with:
 
 ## How to cite?
 
+```
 @article{soloviev2024edaspy,
-
   title={{EDAspy: An extensible python package for estimation of distribution algorithms}},
-  
   author={Soloviev, Vicente P and Larra{\~n}aga, Pedro and Bielza, Concha},
-  
   journal={Neurocomputing},
-  
   pages={128043},
-  
   year={2024},
-  
   publisher={Elsevier}
-  
 }
+```
 
 ## Bibliography
 
