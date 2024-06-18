@@ -112,6 +112,17 @@ Run the tests with:
   pytest
 ```
 
+## How to cite?
+
+@article{soloviev2024edaspy,
+  title={{EDAspy: An extensible python package for estimation of distribution algorithms}},
+  author={Soloviev, Vicente P and Larra{\~n}aga, Pedro and Bielza, Concha},
+  journal={Neurocomputing},
+  pages={128043},
+  year={2024},
+  publisher={Elsevier}
+}
+
 ## Bibliography
 
 [1] Larrañaga, P., & Lozano, J. A. (Eds.). (2001). Estimation of distribution algorithms: A new tool for evolutionary computation (Vol. 2). Springer Science & Business Media.
